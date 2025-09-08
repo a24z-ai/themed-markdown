@@ -68,7 +68,6 @@ import rehypeSanitize from 'rehype-sanitize';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-import 'highlight.js/styles/atom-one-dark.css';
 import { useTheme, useThemeSafe, Theme } from '../../industryTheme';
 import { KeyboardBinding } from '../types/keyboard';
 import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
