@@ -62,12 +62,55 @@ export const WithMermaid: Story = {
 Here's a flowchart that fits to the parent height by default:
 
 \`\`\`mermaid
-graph TD
-    A[Start] --> B{Is it working?}
-    B -->|Yes| C[Great!]
-    B -->|No| D[Fix it]
-    D --> B
-    C --> E[End]
+graph TB
+    subgraph "Client Browser"
+        UI[React UI Components]
+        Router[Astro Router]
+    end
+    
+    subgraph "Alexandria Frontend (Astro + React)"
+        HomePage[Home Page<br/>index.astro]
+        RepoPage[Repository Page<br/>repo.astro]
+        
+        Alexandria[Alexandria.tsx<br/>Main Component]
+        RepoViewer[RepositoryViewer.tsx<br/>Repository Browser]
+        ViewDisplay[ViewDisplay.tsx<br/>Document Viewer]
+        
+        HomePage --> Alexandria
+        RepoPage --> RepoViewer
+        RepoViewer --> ViewDisplay
+    end
+    
+    subgraph "Data Layer"
+        API[AlexandriaAPI Client<br/>alexandria-api.ts]
+        Alexandria --> API
+        RepoViewer --> API
+        ViewDisplay --> API
+    end
+    
+    subgraph "External Services"
+        GitGallery[git-gallery.com<br/>Alexandria API]
+        GitHub[GitHub<br/>Raw Content]
+        
+        API --> GitGallery
+        API --> GitHub
+    end
+    
+    subgraph "Repository Structure"
+        GitRepo[GitHub Repository]
+        ViewsJSON[.a24z/views.json]
+        Docs[Documentation Files<br/>*.md]
+        
+        GitRepo --> ViewsJSON
+        GitRepo --> Docs
+    end
+    
+    GitGallery --> GitRepo
+    GitHub --> Docs
+    
+    UI --> Router
+    Router --> HomePage
+    Router --> RepoPage
 \`\`\``,
     slideIdPrefix: 'story',
     slideIndex: 0,

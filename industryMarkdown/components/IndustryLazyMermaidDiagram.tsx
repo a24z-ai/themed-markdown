@@ -162,7 +162,6 @@ export function IndustryLazyMermaidDiagram({
         <IndustryMermaidDiagram
           code={code}
           id={id}
-          themeMode="dark"
           onCopyError={onCopyError}
           onError={setHasError}
           fitMode={fitMode}

@@ -13,7 +13,6 @@ interface IndustryMermaidDiagramProps {
   code: string;
   id: string;
   theme?: Theme;
-  themeMode?: 'light' | 'dark';
   onCopyError?: (mermaidCode: string, errorMessage: string) => void;
   onError?: (hasError: boolean) => void;
   rootMargin?: string;
@@ -42,7 +41,6 @@ export function IndustryMermaidDiagram({
   code,
   id,
   theme: themeOverride,
-  themeMode = 'dark',
   onCopyError,
   onError,
   rootMargin = '200px',
@@ -55,8 +53,6 @@ export function IndustryMermaidDiagram({
   const [hasRendered, setHasRendered] = useState(false);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const darkMode = themeMode === 'dark';
 
   // Callback ref to set up intersection observer when element is attached
   const containerRef = React.useCallback(
@@ -117,9 +113,8 @@ export function IndustryMermaidDiagram({
         // Configure mermaid
         mermaid.initialize({
           startOnLoad: false,
-          theme: darkMode ? 'dark' : 'default',
-          themeVariables: darkMode
-            ? {
+          theme: 'base',
+          themeVariables:  {
                 primaryColor: '#1e1e1e',
                 primaryTextColor: '#e0e0e0',
                 primaryBorderColor: '#444',
@@ -138,7 +133,7 @@ export function IndustryMermaidDiagram({
                 errorBkgColor: '#552222',
                 errorTextColor: '#ff6666',
               }
-            : {},
+          ,
           securityLevel: 'loose',
           logLevel: 'error',
         });
@@ -220,7 +215,7 @@ export function IndustryMermaidDiagram({
     };
 
     renderDiagram();
-  }, [hasRendered, code, id, darkMode, theme, containerElement, onError, fitMode, isModalMode]);
+  }, [hasRendered, code, id, theme, containerElement, onError, fitMode, isModalMode]);
 
   // Handle copy error action
   useEffect(() => {

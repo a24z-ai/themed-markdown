@@ -225,7 +225,7 @@ export function IndustryZoomableMermaidDiagram({
                     overflow: 'visible', // Allow SVG to be visible even when scaled
                   }}
                 >
-                  <IndustryMermaidDiagram code={code} id={id} themeMode="dark" isModalMode={true} />
+                  <IndustryMermaidDiagram code={code} id={id} isModalMode={true} />
                 </div>
               </div>
             </TransformComponent>
