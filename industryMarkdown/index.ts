@@ -55,5 +55,19 @@ export type {
   MarkdownSlideLocation,
 } from './types/presentation';
 
-// Theme system is now imported from the local industryTheme module
+// Theme system exports
 export type { Theme } from '../industryTheme';
+export { theme as defaultTheme } from '../industryTheme';
+export { 
+  ThemeProvider, 
+  useTheme, 
+  useThemeSafe,
+  getThemeWithMode,
+  withTheme 
+} from '../industryTheme/ThemeProvider';
+export {
+  scaleThemeFonts,
+  increaseFontScale,
+  decreaseFontScale,
+  resetFontScale
+} from '../industryTheme';

@@ -1,6 +1,6 @@
 {
   "name": "themed-markdown",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Industry-themed markdown renderer with presentation capabilities",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -8,10 +8,10 @@
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
-    "./industryMarkdown": "./dist/industryMarkdown/index.js",
-    "./industryTheme": "./dist/industryTheme/index.js"
+    "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
     "build": "bun run clean && bun run build:esm && bun run build:cjs && bun run build:types && bun run copy:css && bun run copy:types",
