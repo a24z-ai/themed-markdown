@@ -18,6 +18,7 @@ interface IndustryMermaidDiagramProps {
   onError?: (hasError: boolean) => void;
   rootMargin?: string;
   isModalMode?: boolean;
+  fitMode?: 'height' | 'width'; // Control whether to fit to parent height or width
 }
 
 // Define mermaid type
@@ -46,6 +47,7 @@ export function IndustryMermaidDiagram({
   onError,
   rootMargin = '200px',
   isModalMode = false,
+  fitMode = 'height', // Default to fitting parent height
 }: IndustryMermaidDiagramProps) {
   const theme = themeOverride || defaultTheme;
   const [errorDetails, setErrorDetails] = useState<{ code: string; message: string } | null>(null);
@@ -159,11 +161,30 @@ export function IndustryMermaidDiagram({
         // Override mermaid's max-width constraint to allow full container usage
         const svgElement = graphDiv.querySelector('svg');
         if (svgElement) {
-          svgElement.style.maxWidth = 'none';
+          
+          // Remove mermaid's default constraints but set reasonable limits
+          svgElement.style.maxWidth = '100%';
+          svgElement.style.maxHeight = '80vh';
+          svgElement.style.width = 'auto';
+          svgElement.style.height = 'auto';
+          svgElement.style.display = 'block';
+          svgElement.style.margin = '0 auto';
+          
           if (isModalMode) {
+            // Modal mode always uses full width
             svgElement.style.width = '100%';
             svgElement.style.height = 'auto';
+          } else if (fitMode === 'width') {
+            // Fit to parent width
+            svgElement.style.width = '100%';
+            svgElement.style.maxHeight = 'none';
+          } else if (fitMode === 'height') {
+            // Fit to viewport height
+            svgElement.style.maxHeight = '60vh';
+            svgElement.style.width = 'auto';
           }
+        } else {
+          console.warn('No SVG element found after mermaid render');
         }
 
         setErrorDetails(null);
@@ -199,7 +220,7 @@ export function IndustryMermaidDiagram({
     };
 
     renderDiagram();
-  }, [hasRendered, code, id, darkMode, theme, containerElement, onError]);
+  }, [hasRendered, code, id, darkMode, theme, containerElement, onError, fitMode, isModalMode]);
 
   // Handle copy error action
   useEffect(() => {
@@ -223,10 +244,8 @@ export function IndustryMermaidDiagram({
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     width: '100%',
-    minHeight: hasRendered ? undefined : '200px',
-    display: hasRendered ? 'block' : 'flex',
-    justifyContent: hasRendered ? undefined : 'center',
-    alignItems: hasRendered ? undefined : 'center',
+    minHeight: '200px',
+    display: 'block',
     backgroundColor: hasRendered ? 'transparent' : theme.colors.backgroundSecondary,
     border: hasRendered ? 'none' : `1px solid ${theme.colors.border}`,
     borderRadius: theme.radii[2],

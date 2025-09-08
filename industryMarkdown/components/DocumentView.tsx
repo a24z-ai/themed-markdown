@@ -1,6 +1,7 @@
 import React, { useRef, useCallback } from 'react';
 
 import { Theme } from '../../industryTheme';
+import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
 
@@ -29,9 +30,9 @@ export interface DocumentViewProps {
   enableHtmlPopout?: boolean;
   enableKeyboardScrolling?: boolean;
   onLinkClick?: (href: string, event?: MouseEvent) => void;
-  handleRunBashCommand?: (command: string, options?: any) => Promise<any>;
+  handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
-  repositoryInfo?: any;
+  repositoryInfo?: RepositoryInfo;
 }
 
 export const DocumentView: React.FC<DocumentViewProps> = ({

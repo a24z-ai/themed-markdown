@@ -11,7 +11,7 @@ const meta: Meta<typeof IndustryMarkdownSlide> = {
   decorators: [
     Story => (
       <ThemeProvider>
-        <div style={{ height: '600px', width: '800px' }}>
+        <div style={{ height: '100vh', width: '100%' }}>
           <Story />
         </div>
       </ThemeProvider>
@@ -57,9 +57,9 @@ And some inline \`code\` as well.`,
 
 export const WithMermaid: Story = {
   args: {
-    content: `# Mermaid Diagram
+    content: `# Mermaid Diagram (Default Height Fit)
 
-Here's a flowchart:
+Here's a flowchart that fits to the parent height by default:
 
 \`\`\`mermaid
 graph TD
@@ -70,6 +70,69 @@ graph TD
     C --> E[End]
 \`\`\``,
     slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+    onShowMermaidInPanel: undefined,
+  },
+};
+
+export const WithMermaidWidthFit: Story = {
+  args: {
+    content: `# Mermaid Diagram (Width Fit)
+
+Here's a wide flowchart that would fit to parent width:
+
+\`\`\`mermaid
+graph LR
+    A[Start] --> B[Process 1] --> C[Process 2] --> D[Process 3]
+    D --> E[Process 4] --> F[Process 5] --> G[Process 6]
+    G --> H[Process 7] --> I[Process 8] --> J[End]
+    
+    B --> K[Alternative Path]
+    K --> L[Merge Point] --> F
+    
+    D --> M[Another Branch]
+    M --> N[Complex Processing]
+    N --> O[More Steps]
+    O --> H
+\`\`\`
+
+Note: To use width fitting, pass fitMode="width" to the mermaid component.`,
+    slideIdPrefix: 'story-width',
+    slideIndex: 0,
+    isVisible: true,
+    onShowMermaidInPanel: undefined,
+  },
+};
+
+export const WithMermaidTallDiagram: Story = {
+  args: {
+    onShowMermaidInPanel: undefined,
+    content: `# Tall Mermaid Diagram (Height Fit)
+
+A tall diagram that benefits from height-based fitting:
+
+\`\`\`mermaid
+graph TD
+    A[Start] --> B[Step 1]
+    B --> C[Step 2]
+    C --> D[Step 3]
+    D --> E[Step 4]
+    E --> F[Step 5]
+    F --> G[Step 6]
+    G --> H[Step 7]
+    H --> I[Step 8]
+    I --> J[Step 9]
+    J --> K[Step 10]
+    K --> L[Step 11]
+    L --> M[Step 12]
+    M --> N[Step 13]
+    N --> O[Step 14]
+    O --> P[End]
+\`\`\`
+
+With height fitting (default), this tall diagram scales to fit the viewport height.`,
+    slideIdPrefix: 'story-tall',
     slideIndex: 0,
     isVisible: true,
   },

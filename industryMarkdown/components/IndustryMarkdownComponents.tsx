@@ -2,7 +2,17 @@ import { Copy, Monitor, FileText, Check } from 'lucide-react';
 import React, { useMemo, useState, useRef } from 'react';
 
 import { Theme } from '../../industryTheme';
-import { RepositoryInfo } from '../types/presentation';
+import {
+  MarkdownComponentProps,
+  HeadingProps,
+  ListItemProps,
+  LinkProps,
+  ImageProps,
+  CodeProps,
+  SourceProps,
+  CheckboxElementProps,
+} from '../types/markdownComponents';
+import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
 import { parseBashCommands } from '../utils/bashCommandParser';
 import { extractTextFromChildren, LinkWithLoadingIndicator } from '../utils/componentUtils';
 import { transformImageUrl } from '../utils/imageUrlUtils';
@@ -21,13 +31,8 @@ interface IndustryMarkdownComponentsProps {
   openPlaceholderModal?: (placeholders: string[], promptContent: string) => void;
   handleRunBashCommand?: (
     command: string,
-    options?: {
-      id?: string;
-      showInTerminal?: boolean;
-      cwd?: string;
-      background?: boolean;
-    },
-  ) => Promise<any>;
+    options?: BashCommandOptions,
+  ) => Promise<BashCommandResult>;
   enableHtmlPopout: boolean;
   slideHeaderMarginTopOverride?: number;
   index: number;
@@ -161,7 +166,7 @@ export const createIndustryMarkdownComponents = ({
 
   return {
     // Headings using industryTheme
-    h1: ({ children, ...props }: any) => (
+    h1: ({ children, ...props }: HeadingProps) => (
       <h1
         style={{
           color: theme.colors.text,
@@ -177,7 +182,7 @@ export const createIndustryMarkdownComponents = ({
         {children}
       </h1>
     ),
-    h2: ({ children, ...props }: any) => (
+    h2: ({ children, ...props }: HeadingProps) => (
       <h2
         style={{
           color: theme.colors.text,
@@ -194,7 +199,7 @@ export const createIndustryMarkdownComponents = ({
         {children}
       </h2>
     ),
-    h3: ({ children, ...props }: any) => (
+    h3: ({ children, ...props }: HeadingProps) => (
       <h3
         style={{
           color: theme.colors.text,
@@ -212,7 +217,7 @@ export const createIndustryMarkdownComponents = ({
     ),
 
     // Paragraphs
-    p: ({ children, ...props }: any) => (
+    p: ({ children, ...props }: MarkdownComponentProps) => (
       <p
         style={{
           color: theme.colors.text,
@@ -228,7 +233,7 @@ export const createIndustryMarkdownComponents = ({
     ),
 
     // Lists
-    ul: ({ children, ...props }: any) => (
+    ul: ({ children, ...props }: MarkdownComponentProps) => (
       <ul
         style={{
           color: theme.colors.text,
@@ -244,7 +249,7 @@ export const createIndustryMarkdownComponents = ({
         {children}
       </ul>
     ),
-    ol: ({ children, ...props }: any) => (
+    ol: ({ children, ...props }: MarkdownComponentProps) => (
       <ol
         style={{
           color: theme.colors.text,
@@ -260,13 +265,13 @@ export const createIndustryMarkdownComponents = ({
         {children}
       </ol>
     ),
-    li: ({ children, ...props }: any) => {
+    li: ({ children, ...props }: ListItemProps) => {
       // Check if this is a task list item
       const isTaskListItem =
         Array.isArray(children) &&
         children.length > 0 &&
         React.isValidElement(children[0]) &&
-        (children[0] as any)?.props?.type === 'checkbox';
+        (children[0] as React.ReactElement<CheckboxElementProps>)?.props?.type === 'checkbox';
 
       if (isTaskListItem) {
         const checkbox = children[0];
@@ -282,10 +287,10 @@ export const createIndustryMarkdownComponents = ({
           }
         });
 
-        const checked = (checkbox as any)?.props?.checked || false;
+        const checked = (checkbox as React.ReactElement<CheckboxElementProps>)?.props?.checked || false;
         const lineNumber =
-          (props as any).sourcePosition?.start?.line ||
-          (props as any).node?.position?.start?.line ||
+          props.sourcePosition?.start?.line ||
+          (props.node as { position?: { start?: { line?: number } } })?.position?.start?.line ||
           1;
 
         const id = `${slideIdPrefix}-checkbox-${lineNumber}`;
@@ -363,7 +368,7 @@ export const createIndustryMarkdownComponents = ({
     },
 
     // Tables
-    table: ({ children, ...props }: any) => (
+    table: ({ children, ...props }: MarkdownComponentProps) => (
       <div
         style={{
           overflowX: 'auto',
@@ -385,7 +390,7 @@ export const createIndustryMarkdownComponents = ({
         </table>
       </div>
     ),
-    thead: ({ children, ...props }: any) => (
+    thead: ({ children, ...props }: MarkdownComponentProps) => (
       <thead
         style={{
           backgroundColor: theme.colors.backgroundSecondary,
@@ -395,7 +400,7 @@ export const createIndustryMarkdownComponents = ({
         {children}
       </thead>
     ),
-    th: ({ children, ...props }: any) => (
+    th: ({ children, ...props }: MarkdownComponentProps) => (
       <th
         style={{
           padding: theme.space[3],
@@ -409,7 +414,7 @@ export const createIndustryMarkdownComponents = ({
         {children}
       </th>
     ),
-    td: ({ children, ...props }: any) => (
+    td: ({ children, ...props }: MarkdownComponentProps) => (
       <td
         style={{
           padding: theme.space[3],
@@ -423,22 +428,21 @@ export const createIndustryMarkdownComponents = ({
     ),
 
     // Links
-    a: ({ children, href, ...props }: any) => (
+    a: ({ children, href, ...props }: LinkProps) => (
       <LinkWithLoadingIndicator
-        href={href}
-        linkColor={theme.colors.primary}
-        onLinkClick={onLinkClick}
-        {...props}
+        href={href || ''}
+        onClick={onLinkClick ? (h, e) => onLinkClick(h, e as unknown as MouseEvent) : undefined}
+        className={props.className}
       >
         {children}
       </LinkWithLoadingIndicator>
     ),
 
     // Images
-    img: ({ src, alt, ...props }: any) => (
+    img: ({ src, alt, ...props }: ImageProps) => (
       <OptimizedMarkdownImage
-        src={src}
-        alt={alt}
+        src={src || ''}
+        alt={alt || ''}
         repositoryInfo={repositoryInfo}
         theme={theme}
         {...props}
@@ -446,10 +450,10 @@ export const createIndustryMarkdownComponents = ({
     ),
 
     // Picture elements
-    picture: ({ children, ...props }: any) => <picture {...props}>{children}</picture>,
+    picture: ({ children, ...props }: MarkdownComponentProps) => <picture {...props}>{children}</picture>,
 
     // Source elements
-    source: ({ srcset, srcSet, ...props }: any) => {
+    source: ({ srcset, srcSet, ...props }: SourceProps) => {
       // Handle both srcset and srcSet props (React might pass either)
       const srcsetValue = srcset || srcSet;
 
@@ -474,7 +478,7 @@ export const createIndustryMarkdownComponents = ({
     },
 
     // Code blocks and inline code
-    code: ({ node, className, children, ...props }: any) => {
+    code: ({ node, className, children, ...props }: CodeProps) => {
       const hasLanguageClass =
         className && (className.includes('language-') || className.includes('hljs'));
       const codeString = extractTextFromChildren(children);
@@ -501,8 +505,9 @@ export const createIndustryMarkdownComponents = ({
         isCodeBlock = false;
       } else {
         isCodeBlock = hasLanguageClass || codeString.length > 50;
+        const nodeWithParent = node as { parent?: { tagName?: string; parent?: { tagName?: string } } };
         const isInsideParagraph =
-          node?.parent?.tagName === 'p' || node?.parent?.parent?.tagName === 'p';
+          nodeWithParent?.parent?.tagName === 'p' || nodeWithParent?.parent?.parent?.tagName === 'p';
         isInline = !isCodeBlock || isInsideParagraph;
       }
 

@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 import { Theme } from '../../industryTheme';
+import { BashCommandOptions, BashCommandResult } from '../types/presentation';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
 
@@ -28,7 +29,7 @@ export interface SlidePresentationProps {
   enableHtmlPopout?: boolean;
   enableKeyboardScrolling?: boolean;
   onLinkClick?: (href: string, event?: MouseEvent) => void;
-  handleRunBashCommand?: (command: string, options?: any) => Promise<any>;
+  handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
 }
 

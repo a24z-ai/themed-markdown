@@ -34,7 +34,7 @@ export const LinkWithLoadingIndicator: React.FC<{
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
       e.preventDefault();
-      onClick(href, e as any);
+      onClick(href, e);
     }
   };
 

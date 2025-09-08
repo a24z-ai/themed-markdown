@@ -71,7 +71,7 @@ import remarkGfm from 'remark-gfm';
 import 'highlight.js/styles/atom-one-dark.css';
 import { useTheme, useThemeSafe, Theme } from '../../industryTheme';
 import { KeyboardBinding } from '../types/keyboard';
-import { RepositoryInfo } from '../types/presentation';
+import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
 import { parseMarkdownChunks } from '../utils/markdownUtils';
 
 import { IndustryHtmlModal, useIndustryHtmlModal } from './IndustryHtmlModal';
@@ -94,13 +94,8 @@ export interface IndustryMarkdownSlideProps {
   onShowMermaidInPanel?: (code: string, title?: string) => void;
   handleRunBashCommand?: (
     command: string,
-    options?: {
-      id?: string;
-      showInTerminal?: boolean;
-      cwd?: string;
-      background?: boolean;
-    },
-  ) => Promise<any>;
+    options?: BashCommandOptions,
+  ) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
 
   // === Feature Toggles ===
@@ -857,17 +852,20 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
             );
           }
           if (chunk.type === 'mermaid_chunk') {
-            return (
-              <IndustryLazyMermaidDiagram
-                key={chunk.id}
-                id={chunk.id}
-                code={chunk.code}
-                onCopyError={onCopyMermaidError}
-                rootMargin={rootMargin}
-                onShowInPanel={onShowMermaidInPanel}
-                theme={theme}
-              />
-            );
+            const mermaidProps: React.ComponentProps<typeof IndustryLazyMermaidDiagram> = {
+              id: chunk.id,
+              code: chunk.code,
+              onCopyError: onCopyMermaidError,
+              rootMargin: rootMargin,
+              theme: theme,
+            };
+            
+            // Only add onShowInPanel if onShowMermaidInPanel is provided
+            if (onShowMermaidInPanel) {
+              mermaidProps.onShowInPanel = onShowMermaidInPanel;
+            }
+            
+            return <IndustryLazyMermaidDiagram key={chunk.id} {...mermaidProps} />;
           }
           return null;
         })
