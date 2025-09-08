@@ -1,0 +1,246 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import React from 'react';
+
+import { ThemeProvider } from '../../industryTheme';
+
+import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
+
+const meta: Meta<typeof IndustryMarkdownSlide> = {
+  title: 'IndustryMarkdown/IndustryMarkdownSlide',
+  component: IndustryMarkdownSlide,
+  decorators: [
+    Story => (
+      <ThemeProvider>
+        <div style={{ height: '600px', width: '800px' }}>
+          <Story />
+        </div>
+      </ThemeProvider>
+    ),
+  ],
+  parameters: {
+    layout: 'fullscreen',
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    content: '# Hello World\n\nThis is a test slide with some **bold text** and *italic text*.',
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
+export const WithCode: Story = {
+  args: {
+    content: `# Code Example
+
+Here's some JavaScript code:
+
+\`\`\`javascript
+function greet(name) {
+  console.log("Hello, " + name + "!");
+}
+
+greet("World");
+\`\`\`
+
+And some inline \`code\` as well.`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
+export const WithMermaid: Story = {
+  args: {
+    content: `# Mermaid Diagram
+
+Here's a flowchart:
+
+\`\`\`mermaid
+graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Fix it]
+    D --> B
+    C --> E[End]
+\`\`\``,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
+export const WithTaskList: Story = {
+  args: {
+    content: `# Task List
+
+- [x] Completed task
+- [ ] Pending task
+- [ ] Another pending task
+  - [x] Subtask completed
+  - [ ] Subtask pending`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+    onCheckboxChange: (slideIndex, lineNumber, checked) => {
+      console.log('Checkbox changed:', { slideIndex, lineNumber, checked });
+    },
+  },
+};
+
+export const WithTable: Story = {
+  args: {
+    content: `# Data Table
+
+| Name | Age | City |
+|------|-----|------|
+| Alice | 30 | New York |
+| Bob | 25 | San Francisco |
+| Charlie | 35 | Chicago |`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
+export const LongContent: Story = {
+  args: {
+    content: `# Long Content Example
+
+This slide demonstrates scrolling behavior with lots of content.
+
+## Section 1
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+## Section 2
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+
+## Section 3
+
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
+
+## Section 4
+
+Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
+export const WithASCIITable: Story = {
+  args: {
+    content: `# ASCII Box Drawing Table
+
+This slide tests ASCII tables with box-drawing characters to ensure they render properly without cramping.
+
+## Grid Layout Architecture
+
+\`\`\`
+┌───────────┬───────────┬───────────┬───────────┐
+│   [0,0]   │   [0,1]   │   [0,2]   │   [0,3]   │
+│ Provider  │ Pattern   │  Cache    │  Loader   │
+│   Core    │ Resolver  │  Manager  │  Config   │
+├───────────┼───────────┼───────────┼───────────┤
+│   [1,0]   │   [1,1]   │   [1,2]   │   [1,3]   │
+│   Tree    │  File     │ Priority  │  Virtual  │
+│   Items   │ Watchers  │  System   │   Tree    │
+├───────────┼───────────┼───────────┼───────────┤
+│   [2,0]   │   [2,1]   │   [2,2]   │   [2,3]   │
+│ Commands  │Decorations│  Context  │  Status   │
+│           │           │   Menu    │    Bar    │
+├───────────┼───────────┼───────────┼───────────┤
+│   [3,0]   │   [3,1]   │   [3,2]   │   [3,3]   │
+│  Types    │   Tests   │Integration│   Docs    │
+└───────────┴───────────┴───────────┴───────────┘
+\`\`\`
+
+## Simple ASCII Tree
+
+\`\`\`
+project/
+├── src/
+│   ├── components/
+│   │   ├── Button.tsx
+│   │   └── Card.tsx
+│   ├── utils/
+│   │   └── helpers.ts
+│   └── index.ts
+├── tests/
+│   └── index.test.ts
+└── package.json
+\`\`\`
+
+## Box Drawing Test Patterns
+
+\`\`\`
+Single Box:
+┌─────────┐
+│ Content │
+└─────────┘
+
+Double Line Box:
+╔═════════╗
+║ Content ║
+╚═════════╝
+
+Mixed Connectors:
+├── Item 1
+│   ├─ Sub 1.1
+│   └─ Sub 1.2
+└── Item 2
+    ├─ Sub 2.1
+    └─ Sub 2.2
+\`\`\`
+
+## Expected Behavior
+
+The box-drawing characters should:
+- Connect seamlessly without gaps
+- Align properly in monospace font
+- Not appear cramped or overlapping
+- Maintain proper vertical alignment`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
+export const WithResizeObserver: Story = {
+  args: {
+    content: `# ResizeObserver Demo
+
+This slide demonstrates automatic width detection using ResizeObserver.
+
+## Features
+
+- **No containerWidth prop**: The component automatically measures its container
+- **Responsive padding**: Dynamic padding adjusts based on measured width
+- **Real-time updates**: Padding updates when container is resized
+
+## How it works
+
+1. When \`containerWidth\` is not provided, a ResizeObserver is attached
+2. The observer measures the actual container dimensions
+3. Dynamic padding is calculated using the measured width
+4. Padding updates automatically when the container is resized
+
+## Benefits
+
+- **Automatic**: No need to manually pass container width
+- **Responsive**: Adapts to any container size
+- **Efficient**: Only observes when needed
+- **Fallback**: Uses default width (800px) if measurement fails`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+    // containerWidth intentionally omitted to demonstrate ResizeObserver
+  },
+};
