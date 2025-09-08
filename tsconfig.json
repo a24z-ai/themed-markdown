@@ -23,6 +23,7 @@
     "types": ["bun"]
   },
   "include": [
+    "index.ts",
     "industryMarkdown/**/*",
     "industryTheme/**/*",
     "tests/**/*"

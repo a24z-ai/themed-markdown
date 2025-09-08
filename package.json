@@ -1,6 +1,6 @@
 {
   "name": "themed-markdown",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Industry-themed markdown renderer with presentation capabilities",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -14,12 +14,11 @@
     "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
-    "build": "bun run clean && bun run build:esm && bun run build:cjs && bun run build:types && bun run copy:css && bun run copy:types",
-    "build:esm": "bun build ./industryMarkdown/index.ts --outfile ./dist/index.mjs --format esm --target browser --external react --external react-dom --external react-markdown --external lucide-react --external react-zoom-pan-pinch --external remark-gfm --external rehype-raw --external rehype-highlight --external rehype-sanitize --external rehype-slug --external hast-util-sanitize --external highlight.js",
-    "build:cjs": "bun build ./industryMarkdown/index.ts --outfile ./dist/index.js --format cjs --target browser --external react --external react-dom --external react-markdown --external lucide-react --external react-zoom-pan-pinch --external remark-gfm --external rehype-raw --external rehype-highlight --external rehype-sanitize --external rehype-slug --external hast-util-sanitize --external highlight.js",
+    "build": "bun run clean && bun run build:esm && bun run build:cjs && bun run build:types && bun run copy:css",
+    "build:esm": "bun build ./index.ts --outfile ./dist/index.mjs --format esm --target browser --external react --external react-dom --external react-markdown --external lucide-react --external react-zoom-pan-pinch --external remark-gfm --external rehype-raw --external rehype-highlight --external rehype-sanitize --external rehype-slug --external hast-util-sanitize --external highlight.js",
+    "build:cjs": "bun build ./index.ts --outfile ./dist/index.js --format cjs --target browser --external react --external react-dom --external react-markdown --external lucide-react --external react-zoom-pan-pinch --external remark-gfm --external rehype-raw --external rehype-highlight --external rehype-sanitize --external rehype-slug --external hast-util-sanitize --external highlight.js",
     "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "copy:css": "cp node_modules/highlight.js/styles/atom-one-dark.css ./dist/index.css",
-    "copy:types": "cp dist/industryMarkdown/index.d.ts dist/index.d.ts && cp dist/industryMarkdown/index.d.ts.map dist/index.d.ts.map",
     "dev": "bun run build --watch",
     "test": "bun test",
     "test:watch": "bun test --watch",
