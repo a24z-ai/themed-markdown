@@ -1,13 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 
 import { Theme, theme as defaultTheme } from './index';
 
 // Theme context
 interface ThemeContextValue {
   theme: Theme;
-  colorMode: 'light' | 'dark';
-  setColorMode: (mode: 'light' | 'dark') => void;
-  toggleColorMode: () => void;
 }
 
 // Create a singleton context instance that persists across module boundaries
@@ -48,66 +45,18 @@ export const useTheme = (): ThemeContextValue => {
   return context as ThemeContextValue;
 };
 
-// Helper function to get the current theme with color mode applied
-export const getThemeWithMode = (baseTheme: Theme, colorMode: 'light' | 'dark'): Theme => {
-  if (colorMode === 'light') {
-    return baseTheme;
-  }
-
-  // Apply dark mode colors
-  const darkModeColors = baseTheme.colors.modes.dark;
-  return {
-    ...baseTheme,
-    colors: {
-      ...baseTheme.colors,
-      ...darkModeColors,
-    },
-  };
-};
-
 // Theme provider component
 interface ThemeProviderProps {
   children: ReactNode;
   theme?: Theme;
-  initialColorMode?: 'light' | 'dark';
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
   theme: customTheme = defaultTheme,
-  initialColorMode = 'dark',
 }) => {
-  const [colorMode, setColorMode] = useState<'light' | 'dark'>(initialColorMode);
-
-  // Load saved color mode from localStorage on mount
-  useEffect(() => {
-    const savedMode = localStorage.getItem('principlemd-color-mode');
-    if (savedMode === 'light' || savedMode === 'dark') {
-      setColorMode(savedMode);
-    } else {
-      // Check system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setColorMode(prefersDark ? 'dark' : 'light');
-    }
-  }, []);
-
-  // Save color mode to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('principlemd-color-mode', colorMode);
-  }, [colorMode]);
-
-  const toggleColorMode = () => {
-    setColorMode(prev => (prev === 'light' ? 'dark' : 'light'));
-  };
-
-  // Get the theme with the current color mode applied
-  const themeWithMode = getThemeWithMode(customTheme, colorMode);
-
   const value: ThemeContextValue = {
-    theme: themeWithMode,
-    colorMode,
-    setColorMode,
-    toggleColorMode,
+    theme: customTheme,
   };
 
   return <ThemeContextSingleton.Provider value={value}>{children}</ThemeContextSingleton.Provider>;

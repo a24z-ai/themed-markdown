@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { ThemeProvider, theme, getThemeWithMode } from '../../industryTheme';
+import { ThemeProvider, theme } from '../../industryTheme';
 
 import { IndustryEditableMermaidDiagram } from './IndustryEditableMermaidDiagram';
 
@@ -24,8 +24,8 @@ const meta: Meta<typeof IndustryEditableMermaidDiagram> = {
     theme: {
       options: ['light', 'dark'],
       mapping: {
-        light: getThemeWithMode(theme, 'light'),
-        dark: getThemeWithMode(theme, 'dark'),
+        light: theme,
+        dark: theme,
       },
       control: { type: 'radio' },
     },
@@ -97,7 +97,7 @@ export const Default: Story = {
   args: {
     code: flowchartCode,
     id: 'default-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1000,
@@ -116,7 +116,7 @@ export const WithAutoSave: Story = {
     D --> E[Stay in edit mode]
     E --> B`,
     id: 'autosave-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
@@ -133,7 +133,7 @@ export const DarkTheme: Story = {
   args: {
     code: sequenceDiagramCode,
     id: 'dark-mermaid',
-    theme: getThemeWithMode(theme, 'dark'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1000,
@@ -147,7 +147,7 @@ export const ReadOnly: Story = {
     B --> C[View Only Mode]
     C --> D[No Edit Button]`,
     id: 'readonly-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: false,
     showEditButton: false,
   },
@@ -160,7 +160,7 @@ export const NoAutoSave: Story = {
     B --> C[Click Save Button]
     C --> D[Or Press Ctrl+S]`,
     id: 'manual-save-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0,
@@ -215,7 +215,7 @@ const InteractiveExample = () => {
     <IndustryEditableMermaidDiagram
       code={code}
       id="interactive-mermaid"
-      theme={getThemeWithMode(theme, 'light')}
+      theme={theme}
       editable={true}
       showEditButton={true}
       autoSaveDelay={3000}
@@ -233,7 +233,7 @@ export const SequenceDiagram: Story = {
   args: {
     code: sequenceDiagramCode,
     id: 'sequence-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1500,
@@ -244,7 +244,7 @@ export const ClassDiagram: Story = {
   args: {
     code: classDigramCode,
     id: 'class-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1500,
@@ -255,7 +255,7 @@ export const GanttChart: Story = {
   args: {
     code: ganttChartCode,
     id: 'gantt-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1500,
@@ -283,7 +283,7 @@ export const ComplexFlowchart: Story = {
     style Error fill:#FFB6C1
     style Database fill:#87CEEB`,
     id: 'complex-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
@@ -296,7 +296,7 @@ export const ErrorHandling: Story = {
     A[Error Demo] --> B[Valid Diagram]
     B --> C[Try adding invalid syntax]`,
     id: 'error-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0, // Manual save only for testing
@@ -318,7 +318,7 @@ export const ModalMode: Story = {
   args: {
     code: flowchartCode,
     id: 'modal-mermaid',
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1500,

@@ -104,11 +104,6 @@ export interface Theme {
     textSecondary: string;
     textTertiary: string;
     textMuted: string;
-
-    // Color modes
-    modes: {
-      dark: Partial<Colors>;
-    };
   };
 
   // Component variants (optional but useful)
@@ -130,29 +125,6 @@ export interface Theme {
   };
 }
 
-// Helper type for colors to ensure mode overrides work correctly
-interface Colors {
-  text: string;
-  background: string;
-  primary: string;
-  secondary: string;
-  accent: string;
-  highlight: string;
-  muted: string;
-  success: string;
-  warning: string;
-  error: string;
-  info: string;
-  border: string;
-  backgroundSecondary: string;
-  backgroundTertiary: string;
-  backgroundLight: string;
-  backgroundHover: string;
-  surface: string;
-  textSecondary: string;
-  textTertiary: string;
-  textMuted: string;
-}
 
 // Default theme following Theme UI conventions
 export const theme: Theme = {
@@ -226,35 +198,7 @@ export const theme: Theme = {
     surface: '#212738', // Dark navy surface
     textSecondary: '#c9b8a3', // Muted gold
     textTertiary: '#8b7968', // Faded bronze
-    textMuted: '#8b7968', // Faded bronze
-
-    // Dark mode - Same as default (already dark academia)
-    modes: {
-      dark: {
-        text: '#f1e8dc', // Warm cream
-        background: '#1a1f2e', // Deep midnight blue
-        primary: '#d4a574', // Warm amber gold
-        secondary: '#e0b584', // Lighter amber on hover
-        accent: '#c9b8a3', // Muted gold
-        highlight: 'rgba(212, 165, 116, 0.15)', // Translucent amber
-        muted: '#8b7968', // Faded bronze
-
-        success: '#5c8a72', // Forest green
-        warning: '#d4a574', // Amber
-        error: '#a85751', // Burgundy red
-        info: '#d4a574', // Using primary amber
-
-        border: 'rgba(212, 165, 116, 0.2)', // Translucent gold
-        backgroundSecondary: '#212738', // Slightly lighter navy
-        backgroundTertiary: '#2d3446', // Tertiary dark blue
-        backgroundLight: 'rgba(212, 165, 116, 0.08)', // Very light amber
-        backgroundHover: 'rgba(212, 165, 116, 0.15)', // Translucent amber hover
-        surface: '#212738', // Dark navy surface
-        textSecondary: '#c9b8a3', // Muted gold
-        textTertiary: '#8b7968', // Faded bronze
-        textMuted: '#8b7968', // Faded bronze
-      },
-    },
+    textMuted: '#8b7968', // Faded bronze,
   },
 
   // Component variants
@@ -361,7 +305,6 @@ export {
   ThemeProvider,
   useTheme,
   withTheme,
-  getThemeWithMode,
 } from './ThemeProvider';
 
 // Export theme utilities

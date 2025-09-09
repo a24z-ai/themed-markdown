@@ -112,10 +112,6 @@ export const mergeThemes = (baseTheme: Theme, ...overrides: Partial<Theme>[]): T
       colors: {
         ...theme.colors,
         ...(override.colors || {}),
-        modes: {
-          ...theme.colors.modes,
-          ...(override.colors?.modes || {}),
-        },
       },
       buttons: { ...theme.buttons, ...(override.buttons || {}) },
       text: { ...theme.text, ...(override.text || {}) },

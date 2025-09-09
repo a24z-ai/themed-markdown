@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { ThemeProvider, theme, getThemeWithMode } from '../../industryTheme';
+import { ThemeProvider, theme } from '../../industryTheme';
 
 import { IndustryEditableMarkdownSlide } from './IndustryEditableMarkdownSlide';
 import { IndustryEditableMermaidDiagram } from './IndustryEditableMermaidDiagram';
@@ -25,8 +25,8 @@ const meta: Meta<typeof IndustryEditableMarkdownSlide> = {
     theme: {
       options: ['light', 'dark'],
       mapping: {
-        light: getThemeWithMode(theme, 'light'),
-        dark: getThemeWithMode(theme, 'dark'),
+        light: theme,
+        dark: theme,
       },
       control: { type: 'radio' },
     },
@@ -74,7 +74,7 @@ export const Default: Story = {
     slideIdPrefix: 'editable',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1000,
@@ -107,7 +107,7 @@ You'll see "Saving..." appear briefly when auto-save triggers, but you'll remain
     slideIdPrefix: 'autosave',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
@@ -126,7 +126,7 @@ export const DarkTheme: Story = {
     slideIdPrefix: 'dark-editable',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'dark'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1000,
@@ -151,7 +151,7 @@ When \`editable\` is set to \`false\`, users cannot modify the content.`,
     slideIdPrefix: 'readonly',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: false,
     showEditButton: false,
   },
@@ -175,7 +175,7 @@ This slide has auto-save disabled. You must manually save your changes.
     slideIdPrefix: 'manual-save',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0,
@@ -229,7 +229,7 @@ Try editing and saving to see the counters update!`);
       slideIdPrefix="interactive"
       slideIndex={0}
       isVisible={true}
-      theme={getThemeWithMode(theme, 'light')}
+      theme={theme}
       editable={true}
       showEditButton={true}
       autoSaveDelay={3000}
@@ -318,7 +318,7 @@ If you want individual diagram edit buttons within a slide:
     slideIdPrefix: 'complex',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
@@ -339,7 +339,7 @@ Try editing and saving multiple times to see both success and failure cases.`,
     slideIdPrefix: 'error',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0, // Manual save only for testing
@@ -395,7 +395,7 @@ Below is a **separate** editable Mermaid diagram with its own **Edit Diagram** b
           slideIdPrefix="hybrid"
           slideIndex={0}
           isVisible={true}
-          theme={getThemeWithMode(theme, 'light')}
+          theme={theme}
           editable={true}
           showEditButton={true}
           autoSaveDelay={2000}
@@ -412,7 +412,7 @@ Below is a **separate** editable Mermaid diagram with its own **Edit Diagram** b
         <IndustryEditableMermaidDiagram
           code={diagramCode}
           id="hybrid-diagram"
-          theme={getThemeWithMode(theme, 'light')}
+          theme={theme}
           editable={true}
           showEditButton={true}
           autoSaveDelay={2000}
@@ -522,7 +522,7 @@ Returns the authenticated user's profile information.
     slideIdPrefix: 'api-docs',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
@@ -635,7 +635,7 @@ Here's a function with inline tags: <span style="background: #fef3c7; color: #78
     slideIdPrefix: 'badges',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
@@ -752,7 +752,7 @@ You can freely mix markdown with HTML:
     slideIdPrefix: 'html-demo',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
@@ -780,7 +780,7 @@ The editor adapts to different screen sizes and maintains usability across devic
     slideIdPrefix: 'custom',
     slideIndex: 0,
     isVisible: true,
-    theme: getThemeWithMode(theme, 'light'),
+    theme: theme,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1500,
