@@ -806,7 +806,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
         backgroundColor: theme.colors.background,
         color: theme.colors.text,
         fontFamily: theme.fonts.body,
-        padding: `${calculateSlidePadding.vertical} ${calculateSlidePadding.horizontal}`,
+        padding: `${calculateSlidePadding.horizontal}`,
         outline: 'none',
         // Add subtle focus indicator
         border: '2px solid transparent',

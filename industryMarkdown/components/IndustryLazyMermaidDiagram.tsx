@@ -12,7 +12,6 @@ interface IndustryLazyMermaidDiagramProps {
   rootMargin?: string;
   onShowInPanel?: (code: string, title?: string) => void;
   theme?: Theme;
-  fitMode?: 'height' | 'width';
 }
 
 export function IndustryLazyMermaidDiagram({
@@ -22,7 +21,6 @@ export function IndustryLazyMermaidDiagram({
   rootMargin = '200px',
   onShowInPanel,
   theme = defaultTheme,
-  fitMode = 'height',
 }: IndustryLazyMermaidDiagramProps) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
@@ -164,7 +162,7 @@ export function IndustryLazyMermaidDiagram({
           id={id}
           onCopyError={onCopyError}
           onError={setHasError}
-          fitMode={fitMode}
+          theme={theme}
         />
       ) : (
         <div style={getPlaceholderStyle()}>

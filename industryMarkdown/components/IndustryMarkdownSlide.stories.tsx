@@ -57,9 +57,9 @@ And some inline \`code\` as well.`,
 
 export const WithMermaid: Story = {
   args: {
-    content: `# Mermaid Diagram (Default Height Fit)
+    content: `# Mermaid Diagram with Fit Toggle
 
-Here's a flowchart that fits to the parent height by default:
+Here's a flowchart with a toggle button to switch between height-fit and scrollable width-fit modes:
 
 \`\`\`mermaid
 graph TB
@@ -111,7 +111,11 @@ graph TB
     UI --> Router
     Router --> HomePage
     Router --> RepoPage
-\`\`\``,
+\`\`\`
+
+Click the toggle button in the top-right corner to switch between:
+- **Height Fit**: Scales to fit container height (default)
+- **Width Fit**: Uses full width with vertical scrolling in fixed container`,
     slideIdPrefix: 'story',
     slideIndex: 0,
     isVisible: true,
@@ -348,5 +352,95 @@ This slide demonstrates automatic width detection using ResizeObserver.
     slideIndex: 0,
     isVisible: true,
     // containerWidth intentionally omitted to demonstrate ResizeObserver
+  },
+};
+
+export const MermaidFontScaling: Story = {
+  name: 'Mermaid with Font Scaling',
+  args: {
+    content: `# Font Scaling with Mermaid Diagrams
+
+This story demonstrates how Mermaid diagrams respond to different font scaling values.
+
+## Standard Size (fontSizeScale: 1.0)
+
+\`\`\`mermaid
+graph TB
+    A[Normal Size Text] --> B[Step 1]
+    B --> C[Step 2] 
+    C --> D[Result with longer text]
+    
+    subgraph "Processing Group"
+        D --> E[Data Processing]
+        E --> F[Validation]
+        F --> G[Output Generation]
+    end
+\`\`\`
+
+## Class Diagram Example
+
+\`\`\`mermaid
+classDiagram
+    class Vehicle {
+        +String make
+        +String model
+        +int year
+        +start()
+        +stop()
+        +getInfo()
+    }
+    class Car {
+        +int doors
+        +String fuel_type
+        +accelerate()
+        +brake()
+    }
+    class Motorcycle {
+        +String type
+        +boolean hasSidecar
+        +wheelie()
+    }
+    Vehicle <|-- Car
+    Vehicle <|-- Motorcycle
+\`\`\`
+
+## Sequence Diagram
+
+\`\`\`mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant API
+    participant Database
+    
+    User->>Frontend: Submit Form
+    Frontend->>API: POST /api/data
+    API->>Database: INSERT query
+    Database-->>API: Success response
+    API-->>Frontend: 201 Created
+    Frontend-->>User: Success message
+\`\`\`
+
+The diagrams above should scale with the font size controls. Try different scaling values to see the effect on text size within the Mermaid diagrams.`,
+    slideIdPrefix: 'font-scale-story',
+    slideIndex: 0,
+    isVisible: true,
+    fontSizeScale: 1.0,
+    // Ensure all required props are provided
+    containerWidth: 800,
+    // Disable the "Show in Panel" button for cleaner demo
+    onShowMermaidInPanel: undefined,
+    // showMermaidFitToggle removed - now each diagram has individual zoom controls
+  },
+  argTypes: {
+    fontSizeScale: {
+      control: {
+        type: 'range',
+        min: 0.5,
+        max: 2.0,
+        step: 0.1,
+      },
+      description: 'Scale factor for font sizes in the Mermaid diagrams',
+    },
   },
 };

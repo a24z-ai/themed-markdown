@@ -5,6 +5,7 @@
  * This is a replacement for ConfigurableMermaidDiagram that doesn't depend on the old theme system
  */
 
+import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Theme, theme as defaultTheme } from '../../industryTheme';
@@ -17,7 +18,6 @@ interface IndustryMermaidDiagramProps {
   onError?: (hasError: boolean) => void;
   rootMargin?: string;
   isModalMode?: boolean;
-  fitMode?: 'height' | 'width'; // Control whether to fit to parent height or width
 }
 
 // Define mermaid type
@@ -45,13 +45,13 @@ export function IndustryMermaidDiagram({
   onError,
   rootMargin = '200px',
   isModalMode = false,
-  fitMode = 'height', // Default to fitting parent height
 }: IndustryMermaidDiagramProps) {
   const theme = themeOverride || defaultTheme;
   const [errorDetails, setErrorDetails] = useState<{ code: string; message: string } | null>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(1.0); // Individual zoom state for this diagram
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Callback ref to set up intersection observer when element is attached
@@ -110,30 +110,33 @@ export function IndustryMermaidDiagram({
       if (!mermaid || !containerElement) return;
 
       try {
-        // Configure mermaid
+        // Configure mermaid with theme colors
+        // Create a slightly contrasted background for better visibility
+        const diagramBackground = theme.colors.backgroundSecondary || theme.colors.muted || theme.colors.background;
+        const nodeBackground = theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || theme.colors.primary + '22';
+        
         mermaid.initialize({
           startOnLoad: false,
           theme: 'base',
-          themeVariables:  {
-                primaryColor: '#1e1e1e',
-                primaryTextColor: '#e0e0e0',
-                primaryBorderColor: '#444',
-                lineColor: '#666',
-                secondaryColor: '#2a2a2a',
-                tertiaryColor: '#333',
-                background: '#1e1e1e',
-                mainBkg: '#1e1e1e',
-                secondBkg: '#2a2a2a',
-                tertiaryBkg: '#333',
-                secondaryBorderColor: '#555',
-                tertiaryBorderColor: '#666',
-                textColor: '#e0e0e0',
-                labelTextColor: '#e0e0e0',
-                altBackground: '#252525',
-                errorBkgColor: '#552222',
-                errorTextColor: '#ff6666',
-              }
-          ,
+          themeVariables: {
+            primaryColor: nodeBackground,
+            primaryTextColor: theme.colors.text,
+            primaryBorderColor: theme.colors.border,
+            lineColor: theme.colors.border,
+            secondaryColor: theme.colors.secondary + '44', // Add some transparency
+            tertiaryColor: theme.colors.accent + '44',
+            background: diagramBackground,
+            mainBkg: nodeBackground,
+            secondBkg: theme.colors.backgroundSecondary || theme.colors.muted,
+            tertiaryBkg: theme.colors.backgroundTertiary || theme.colors.accent + '22',
+            secondaryBorderColor: theme.colors.border,
+            tertiaryBorderColor: theme.colors.accent,
+            textColor: theme.colors.text,
+            labelTextColor: theme.colors.text,
+            altBackground: theme.colors.muted,
+            errorBkgColor: theme.colors.error + '33',
+            errorTextColor: theme.colors.error,
+          },
           securityLevel: 'loose',
           logLevel: 'error',
         });
@@ -157,26 +160,25 @@ export function IndustryMermaidDiagram({
         const svgElement = graphDiv.querySelector('svg');
         if (svgElement) {
           
-          // Remove mermaid's default constraints but set reasonable limits
-          svgElement.style.maxWidth = '100%';
-          svgElement.style.maxHeight = '80vh';
+          // Remove mermaid's default constraints
+          svgElement.style.maxWidth = 'none';
+          svgElement.style.maxHeight = 'none';
           svgElement.style.width = 'auto';
           svgElement.style.height = 'auto';
           svgElement.style.display = 'block';
           svgElement.style.margin = '0 auto';
           
+          // Smart sizing: ensure diagrams initially fit within height limit
+          // Note: Zoom is applied separately in its own useEffect to avoid re-rendering
           if (isModalMode) {
             // Modal mode always uses full width
             svgElement.style.width = '100%';
             svgElement.style.height = 'auto';
-          } else if (fitMode === 'width') {
-            // Fit to parent width
-            svgElement.style.width = '100%';
-            svgElement.style.maxHeight = 'none';
-          } else if (fitMode === 'height') {
-            // Fit to viewport height
-            svgElement.style.maxHeight = '60vh';
+          } else {
+            // Default sizing to fit within the 400px container height
+            svgElement.style.maxHeight = '360px'; // Leave room for padding
             svgElement.style.width = 'auto';
+            svgElement.style.maxWidth = '100%';
           }
         } else {
           console.warn('No SVG element found after mermaid render');
@@ -215,7 +217,37 @@ export function IndustryMermaidDiagram({
     };
 
     renderDiagram();
-  }, [hasRendered, code, id, theme, containerElement, onError, fitMode, isModalMode]);
+  }, [hasRendered, code, id, theme, containerElement, onError, isModalMode]); // Remove zoomLevel from dependencies
+
+  // Apply zoom transformation separately without re-rendering
+  useEffect(() => {
+    if (!containerElement || !hasRendered) return;
+    
+    const svgElement = containerElement.querySelector('svg');
+    if (svgElement) {
+      if (zoomLevel !== 1.0) {
+        // Get original dimensions before scaling
+        const originalWidth = svgElement.scrollWidth || svgElement.clientWidth;
+        const originalHeight = svgElement.scrollHeight || svgElement.clientHeight;
+        
+        // Apply transform scaling
+        svgElement.style.transform = `scale(${zoomLevel})`;
+        svgElement.style.transformOrigin = 'top left';
+        
+        // Adjust SVG dimensions to create proper scroll area
+        svgElement.style.width = `${originalWidth * zoomLevel}px`;
+        svgElement.style.height = `${originalHeight * zoomLevel}px`;
+      } else {
+        // Reset to normal
+        svgElement.style.transform = '';
+        svgElement.style.transformOrigin = '';
+        svgElement.style.width = 'auto';
+        svgElement.style.height = 'auto';
+        svgElement.style.maxHeight = '360px';
+        svgElement.style.maxWidth = '100%';
+      }
+    }
+  }, [zoomLevel, containerElement, hasRendered]);
 
   // Handle copy error action
   useEffect(() => {
@@ -240,12 +272,14 @@ export function IndustryMermaidDiagram({
     position: 'relative',
     width: '100%',
     minHeight: '200px',
+    maxHeight: '400px', // Smart height limit - diagrams initially fit within 400px
     display: 'block',
     backgroundColor: hasRendered ? 'transparent' : theme.colors.backgroundSecondary,
-    border: hasRendered ? 'none' : `1px solid ${theme.colors.border}`,
+    border: hasRendered ? `1px solid ${theme.colors.border}` : `1px solid ${theme.colors.border}`,
     borderRadius: theme.radii[2],
-    padding: hasRendered ? 0 : theme.space[4],
+    padding: hasRendered ? theme.space[3] : theme.space[4],
     margin: `${theme.space[4]}px 0`,
+    overflow: hasRendered ? 'auto' : 'visible', // Enable scrolling for scaled/zoomed content
   };
 
   const placeholderStyle: React.CSSProperties = {
@@ -256,15 +290,91 @@ export function IndustryMermaidDiagram({
   };
 
   return (
-    <div ref={containerRef} style={containerStyle} className="mermaid-container">
-      {!hasRendered && (
-        <div style={placeholderStyle}>
-          <div>📊 Mermaid Diagram</div>
-          <div style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}>
-            {isIntersecting ? 'Loading...' : 'Scroll to view'}
-          </div>
+    <div style={{ position: 'relative' }}>
+      {hasRendered && !isModalMode && (
+        <div style={{
+          position: 'absolute',
+          top: theme.space[2],
+          right: theme.space[2],
+          zIndex: 10,
+          display: 'flex',
+          gap: theme.space[1],
+        }}>
+          <button
+            onClick={() => setZoomLevel(Math.min(3.0, zoomLevel + 0.25))}
+            disabled={zoomLevel >= 3.0}
+            style={{
+              padding: theme.space[1],
+              backgroundColor: theme.colors.backgroundSecondary,
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: theme.radii[1],
+              color: theme.colors.text,
+              cursor: zoomLevel >= 3.0 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '28px',
+              height: '28px',
+              opacity: zoomLevel >= 3.0 ? 0.5 : 1,
+            }}
+            title="Zoom In"
+          >
+            <ZoomIn size={14} />
+          </button>
+          <button
+            onClick={() => setZoomLevel(Math.max(0.5, zoomLevel - 0.25))}
+            disabled={zoomLevel <= 0.5}
+            style={{
+              padding: theme.space[1],
+              backgroundColor: theme.colors.backgroundSecondary,
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: theme.radii[1],
+              color: theme.colors.text,
+              cursor: zoomLevel <= 0.5 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '28px',
+              height: '28px',
+              opacity: zoomLevel <= 0.5 ? 0.5 : 1,
+            }}
+            title="Zoom Out"
+          >
+            <ZoomOut size={14} />
+          </button>
+          <button
+            onClick={() => setZoomLevel(1.0)}
+            disabled={zoomLevel === 1.0}
+            style={{
+              padding: theme.space[1],
+              backgroundColor: theme.colors.backgroundSecondary,
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: theme.radii[1],
+              color: theme.colors.text,
+              cursor: zoomLevel === 1.0 ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '28px',
+              height: '28px',
+              opacity: zoomLevel === 1.0 ? 0.5 : 1,
+            }}
+            title="Reset Zoom"
+          >
+            <RotateCcw size={14} />
+          </button>
         </div>
       )}
+      <div ref={containerRef} style={containerStyle} className="mermaid-container">
+        {!hasRendered && (
+          <div style={placeholderStyle}>
+            <div>📊 Mermaid Diagram</div>
+            <div style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}>
+              {isIntersecting ? 'Loading...' : 'Scroll to view'}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
