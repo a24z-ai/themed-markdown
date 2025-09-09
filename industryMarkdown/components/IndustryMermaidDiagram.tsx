@@ -171,9 +171,18 @@ export function IndustryMermaidDiagram({
           // Smart sizing: ensure diagrams initially fit within height limit
           // Note: Zoom is applied separately in its own useEffect to avoid re-rendering
           if (isModalMode) {
-            // Modal mode always uses full width
-            svgElement.style.width = '100%';
+            // Modal mode: let the diagram be its natural size for the zoom container to handle
+            svgElement.style.width = 'auto';
             svgElement.style.height = 'auto';
+            // Ensure it's not larger than needed
+            const viewBox = svgElement.getAttribute('viewBox');
+            if (viewBox) {
+              const [, , width, height] = viewBox.split(' ').map(Number);
+              if (width && height) {
+                svgElement.setAttribute('width', width.toString());
+                svgElement.setAttribute('height', height.toString());
+              }
+            }
           } else {
             // Default sizing to fit within the 400px container height
             svgElement.style.maxHeight = '360px'; // Leave room for padding
@@ -224,30 +233,36 @@ export function IndustryMermaidDiagram({
     if (!containerElement || !hasRendered) return;
     
     const svgElement = containerElement.querySelector('svg');
+    
     if (svgElement) {
       if (zoomLevel !== 1.0) {
-        // Get original dimensions before scaling
-        const originalWidth = svgElement.scrollWidth || svgElement.clientWidth;
-        const originalHeight = svgElement.scrollHeight || svgElement.clientHeight;
-        
-        // Apply transform scaling
+        // Apply transform scaling from top center to keep top visible
         svgElement.style.transform = `scale(${zoomLevel})`;
-        svgElement.style.transformOrigin = 'top left';
+        svgElement.style.transformOrigin = 'top center';
         
-        // Adjust SVG dimensions to create proper scroll area
-        svgElement.style.width = `${originalWidth * zoomLevel}px`;
-        svgElement.style.height = `${originalHeight * zoomLevel}px`;
+        // Ensure the container can accommodate the scaled content
+        const containerRect = containerElement.getBoundingClientRect();
+        const svgRect = svgElement.getBoundingClientRect();
+        
+        // If the scaled SVG is smaller than container, center it
+        if (svgRect.width < containerRect.width) {
+          svgElement.style.margin = '0 auto';
+        }
       } else {
         // Reset to normal
         svgElement.style.transform = '';
         svgElement.style.transformOrigin = '';
-        svgElement.style.width = 'auto';
-        svgElement.style.height = 'auto';
-        svgElement.style.maxHeight = '360px';
-        svgElement.style.maxWidth = '100%';
+        svgElement.style.margin = '0 auto';
+        
+        // Restore original constraints
+        if (!isModalMode) {
+          svgElement.style.maxHeight = '360px';
+          svgElement.style.width = 'auto';
+          svgElement.style.maxWidth = '100%';
+        }
       }
     }
-  }, [zoomLevel, containerElement, hasRendered]);
+  }, [zoomLevel, containerElement, hasRendered, isModalMode]);
 
   // Handle copy error action
   useEffect(() => {
@@ -268,7 +283,20 @@ export function IndustryMermaidDiagram({
     return undefined;
   }, [errorDetails, onCopyError, containerElement]);
 
-  const containerStyle: React.CSSProperties = {
+  const containerStyle: React.CSSProperties = isModalMode ? {
+    // Modal mode: no constraints, let parent handle sizing
+    position: 'relative',
+    width: 'fit-content',
+    height: 'fit-content',
+    display: 'block',
+    backgroundColor: 'transparent',
+    border: 'none',
+    borderRadius: 0,
+    padding: 0,
+    margin: 0,
+    overflow: 'visible',
+  } : {
+    // Regular mode: apply constraints
     position: 'relative',
     width: '100%',
     minHeight: '200px',
@@ -289,9 +317,22 @@ export function IndustryMermaidDiagram({
     fontFamily: theme.fonts.body,
   };
 
-  return (
+  return isModalMode ? (
+    // Modal mode: simple wrapper for the zoom container
+    <div ref={containerRef} style={containerStyle} className="mermaid-container">
+      {!hasRendered && (
+        <div style={placeholderStyle}>
+          <div>📊 Mermaid Diagram</div>
+          <div style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}>
+            Loading...
+          </div>
+        </div>
+      )}
+    </div>
+  ) : (
+    // Regular mode: full UI with zoom controls
     <div style={{ position: 'relative' }}>
-      {hasRendered && !isModalMode && (
+      {hasRendered && (
         <div style={{
           position: 'absolute',
           top: theme.space[2],

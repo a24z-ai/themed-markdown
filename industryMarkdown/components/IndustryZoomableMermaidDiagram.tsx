@@ -145,8 +145,11 @@ export function IndustryZoomableMermaidDiagram({
         initialPositionX={0}
         initialPositionY={0}
         centerOnInit={true}
+        centerZoomedOut={true}
+        alignmentAnimation={{ disabled: true }}
+        zoomAnimation={{ disabled: false, size: 0.2 }}
       >
-        {({ zoomIn, zoomOut, resetTransform }) => (
+        {({ centerView, instance }) => (
           <>
             <div
               style={{
@@ -159,7 +162,17 @@ export function IndustryZoomableMermaidDiagram({
               }}
             >
               <button
-                onClick={() => zoomIn()}
+                onClick={() => {
+                  // Get current state
+                  const { scale } = instance.transformState;
+                  
+                  // New scale
+                  const newScale = Math.min(scale * 1.2, 10);
+                  
+                  // Apply the transform using centerView
+                  // The library doesn't expose setTransform directly, so we use centerView
+                  centerView(newScale, 200, 'easeOut');
+                }}
                 style={buttonStyle}
                 onMouseEnter={handleButtonHover}
                 onMouseLeave={handleButtonLeave}
@@ -168,7 +181,17 @@ export function IndustryZoomableMermaidDiagram({
                 +
               </button>
               <button
-                onClick={() => zoomOut()}
+                onClick={() => {
+                  // Get current state
+                  const { scale } = instance.transformState;
+                  
+                  // New scale
+                  const newScale = Math.max(scale * 0.833, 0.3);
+                  
+                  // Apply the transform using centerView
+                  // The library doesn't expose setTransform directly, so we use centerView
+                  centerView(newScale, 200, 'easeOut');
+                }}
                 style={buttonStyle}
                 onMouseEnter={handleButtonHover}
                 onMouseLeave={handleButtonLeave}
@@ -177,7 +200,10 @@ export function IndustryZoomableMermaidDiagram({
                 −
               </button>
               <button
-                onClick={() => resetTransform()}
+                onClick={() => {
+                  // Reset to initial calculated scale and center
+                  centerView(calculatedScale, 200, 'easeOut');
+                }}
                 style={buttonStyle}
                 onMouseEnter={handleButtonHover}
                 onMouseLeave={handleButtonLeave}
@@ -199,34 +225,34 @@ export function IndustryZoomableMermaidDiagram({
               )}
             </div>
             <TransformComponent
-              wrapperStyle={{ width: '100%', height: '100%' }}
-              contentStyle={{
-                width: '100%',
+              wrapperStyle={{ 
+                width: '100%', 
                 height: '100%',
+                overflow: 'hidden', // Contain the content
+              }}
+              contentStyle={{
+                width: 'fit-content',
+                height: 'fit-content',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                minWidth: '100%',
+                minHeight: '100%',
               }}
             >
               <div
                 ref={diagramRef}
                 style={{
-                  width: '100%',
-                  height: '100%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  width: 'fit-content',
+                  height: 'fit-content',
+                  minWidth: '100%',
+                  minHeight: '100%',
                 }}
               >
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    overflow: 'visible', // Allow SVG to be visible even when scaled
-                  }}
-                >
-                  <IndustryMermaidDiagram code={code} id={id} isModalMode={true} />
-                </div>
+                <IndustryMermaidDiagram code={code} id={id} isModalMode={true} />
               </div>
             </TransformComponent>
           </>
