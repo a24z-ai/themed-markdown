@@ -65,7 +65,6 @@ export { theme as defaultTheme } from './industryTheme';
 export { 
   ThemeProvider, 
   useTheme, 
-  useThemeSafe,
   getThemeWithMode,
   withTheme 
 } from './industryTheme/ThemeProvider';

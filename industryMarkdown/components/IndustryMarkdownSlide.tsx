@@ -68,7 +68,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-import { useTheme, useThemeSafe, Theme } from '../../industryTheme';
+import { useTheme, Theme } from '../../industryTheme';
 import { KeyboardBinding } from '../types/keyboard';
 import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
 import { parseMarkdownChunks } from '../utils/markdownUtils';
@@ -628,21 +628,14 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
     setMermaidModalCode('');
   };
 
-  // Get theme from prop or context with safe fallback
+  // Get theme from prop or context
   let industryTheme;
   try {
-    // Try to get theme from context first
     const themeContext = useTheme();
     industryTheme = themeContext.theme;
   } catch {
-    // If context not available, use safe version that provides defaults
-    try {
-      const themeContext = useThemeSafe();
-      industryTheme = themeContext.theme;
-    } catch {
-      // Even safe version failed, will rely on prop
-      industryTheme = undefined;
-    }
+    // Context not available, will use prop
+    industryTheme = undefined;
   }
   const baseTheme = themeOverride || industryTheme;
 

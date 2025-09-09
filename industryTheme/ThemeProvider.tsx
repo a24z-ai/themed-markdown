@@ -38,28 +38,15 @@ const getThemeContext = () => {
 // Get the singleton context
 const ThemeContextSingleton = getThemeContext();
 
-// Hook to use theme with optional fallback
-export const useTheme = (options?: { allowFallback?: boolean }): ThemeContextValue => {
+// Hook to use theme
+export const useTheme = (): ThemeContextValue => {
   const context = useContext(ThemeContextSingleton);
 
   if (!context) {
-    if (options?.allowFallback) {
-      // Return a default theme context when not in provider
-      // This allows components to work standalone
-      return {
-        theme: getThemeWithMode(defaultTheme, 'dark'),
-        colorMode: 'dark',
-        setColorMode: () => console.warn('ThemeProvider not found, cannot set color mode'),
-        toggleColorMode: () => console.warn('ThemeProvider not found, cannot toggle color mode'),
-      };
-    }
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context as ThemeContextValue;
 };
-
-// Export a safe version that always works
-export const useThemeSafe = () => useTheme({ allowFallback: true });
 
 // Helper function to get the current theme with color mode applied
 export const getThemeWithMode = (baseTheme: Theme, colorMode: 'light' | 'dark'): Theme => {

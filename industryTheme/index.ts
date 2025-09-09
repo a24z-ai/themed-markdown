@@ -360,7 +360,6 @@ export function resetFontScale(theme: Theme): Theme {
 export {
   ThemeProvider,
   useTheme,
-  useThemeSafe,
   withTheme,
   getThemeWithMode,
 } from './ThemeProvider';
