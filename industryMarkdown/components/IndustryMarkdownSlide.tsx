@@ -712,9 +712,9 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
       attributes: {
         ...defaultSchema.attributes,
         // Allow className for syntax highlighting
-        code: [...(defaultSchema.attributes?.code || []), 'className'],
-        span: [...(defaultSchema.attributes?.span || []), 'className'],
-        pre: [...(defaultSchema.attributes?.pre || []), 'className'],
+        code: [...(defaultSchema.attributes?.code || []), 'className', 'style'],
+        span: [...(defaultSchema.attributes?.span || []), 'className', 'style'],
+        pre: [...(defaultSchema.attributes?.pre || []), 'className', 'style'],
         // Allow style attributes on common HTML elements
         div: [...(defaultSchema.attributes?.div || []), 'style', 'className', 'id'],
         p: [...(defaultSchema.attributes?.p || []), 'style', 'className', 'id'],
@@ -749,6 +749,15 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
         td: [...(defaultSchema.attributes?.td || []), 'style', 'className'],
         blockquote: [...(defaultSchema.attributes?.blockquote || []), 'style', 'className'],
         hr: [...(defaultSchema.attributes?.hr || []), 'style', 'className'],
+        // Additional elements for inline styling (badges, labels, etc.)
+        label: [...(defaultSchema.attributes?.label || []), 'style', 'className', 'for'],
+        input: [...(defaultSchema.attributes?.input || []), 'style', 'className', 'type', 'placeholder', 'value', 'checked', 'disabled'],
+        button: [...(defaultSchema.attributes?.button || []), 'style', 'className', 'type', 'disabled'],
+        details: [...(defaultSchema.attributes?.details || []), 'style', 'className', 'open'],
+        summary: [...(defaultSchema.attributes?.summary || []), 'style', 'className'],
+        footer: [...(defaultSchema.attributes?.footer || []), 'style', 'className'],
+        header: [...(defaultSchema.attributes?.header || []), 'style', 'className'],
+        section: [...(defaultSchema.attributes?.section || []), 'style', 'className'],
       },
     }),
     [],

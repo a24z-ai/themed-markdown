@@ -1,55 +1,49 @@
 import { Pencil, Save, X } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import { Theme, useTheme } from '../../industryTheme';
+import { Theme } from '../../industryTheme';
 
-import { IndustryMarkdownSlide, IndustryMarkdownSlideProps } from './IndustryMarkdownSlide';
+import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
-export interface IndustryEditableMarkdownSlideProps extends IndustryMarkdownSlideProps {
-  onContentChange?: (newContent: string) => void;
-  onSave?: (content: string) => Promise<void>;
+export interface IndustryEditableMermaidDiagramProps {
+  code: string;
+  id: string;
+  theme: Theme;
+  onCodeChange?: (newCode: string) => void;
+  onSave?: (code: string) => Promise<void>;
   autoSaveDelay?: number;
   editable?: boolean;
   showEditButton?: boolean;
-  theme?: Theme; // Add theme as optional prop
+  onCopyError?: (mermaidCode: string, errorMessage: string) => void;
+  onError?: (hasError: boolean) => void;
+  rootMargin?: string;
+  isModalMode?: boolean;
 }
 
-export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSlideProps> = ({
-  content,
-  onContentChange,
+export const IndustryEditableMermaidDiagram: React.FC<IndustryEditableMermaidDiagramProps> = ({
+  code,
+  id,
+  theme,
+  onCodeChange,
   onSave,
   autoSaveDelay = 1000,
   editable = true,
   showEditButton = true,
-  theme: themeProp,
-  ...slideProps
+  onCopyError,
+  onError,
+  rootMargin,
+  isModalMode = false,
 }) => {
-  // Try to get theme from context, but don't fail if not available
-  let contextTheme;
-  try {
-    const themeContext = useTheme();
-    contextTheme = themeContext.theme;
-  } catch {
-    // Context not available, will use prop
-  }
-
-  const theme = themeProp || contextTheme;
-
-  if (!theme) {
-    throw new Error(
-      'IndustryEditableMarkdownSlide: theme must be provided either as a prop or through ThemeProvider',
-    );
-  }
   const [isEditing, setIsEditing] = useState(false);
-  const [editContent, setEditContent] = useState(content);
+  const [editCode, setEditCode] = useState(code);
   const [isSaving, setIsSaving] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  // Update edit content when prop changes
+  // Update edit code when prop changes
   useEffect(() => {
-    setEditContent(content);
-  }, [content]);
+    setEditCode(code);
+  }, [code]);
 
   // Auto-save functionality
   useEffect(() => {
@@ -68,7 +62,7 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [editContent, isEditing, autoSaveDelay]);
+  }, [editCode, isEditing, autoSaveDelay]);
 
   const handleEdit = useCallback(() => {
     setIsEditing(true);
@@ -79,19 +73,19 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
   }, []);
 
   const handleCancel = useCallback(() => {
-    setEditContent(content);
+    setEditCode(code);
     setIsEditing(false);
-  }, [content]);
+  }, [code]);
 
   const handleSave = useCallback(async (exitEditMode = true) => {
-    if (onContentChange) {
-      onContentChange(editContent);
+    if (onCodeChange) {
+      onCodeChange(editCode);
     }
 
     if (onSave) {
       setIsSaving(true);
       try {
-        await onSave(editContent);
+        await onSave(editCode);
       } catch (error) {
         console.error('Failed to save:', error);
       } finally {
@@ -102,7 +96,7 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
     if (exitEditMode) {
       setIsEditing(false);
     }
-  }, [editContent, onContentChange, onSave]);
+  }, [editCode, onCodeChange, onSave]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -119,7 +113,7 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
   // Auto-resize textarea
   const handleTextareaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = e.target;
-    setEditContent(textarea.value);
+    setEditCode(textarea.value);
 
     // Auto-resize
     textarea.style.height = 'auto';
@@ -158,7 +152,7 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
             }}
           >
             <Pencil size={16} />
-            <span>Editing Mode</span>
+            <span>Editing Mermaid Diagram</span>
             {autoSaveDelay && <span>(Auto-save enabled)</span>}
           </div>
           <div
@@ -214,29 +208,91 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
             flex: 1,
             padding: theme.space[4],
             overflow: 'auto',
+            display: 'flex',
+            gap: theme.space[4],
           }}
         >
-          <textarea
-            ref={textareaRef}
-            value={editContent}
-            onChange={handleTextareaChange}
-            onKeyDown={handleKeyDown}
+          {/* Code Editor */}
+          <div
             style={{
-              width: '100%',
-              minHeight: '100%',
-              padding: theme.space[3],
-              backgroundColor: theme.colors.background,
-              color: theme.colors.text,
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[2],
-              fontFamily: theme.fonts.monospace,
-              fontSize: theme.fontSizes[1],
-              lineHeight: theme.lineHeights.relaxed,
-              resize: 'none',
-              outline: 'none',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
             }}
-            placeholder="Enter your markdown content here..."
-          />
+          >
+            <h3
+              style={{
+                margin: 0,
+                marginBottom: theme.space[2],
+                fontSize: theme.fontSizes[2],
+                fontWeight: theme.fontWeights.semibold,
+                color: theme.colors.text,
+              }}
+            >
+              Mermaid Code
+            </h3>
+            <textarea
+              ref={textareaRef}
+              value={editCode}
+              onChange={handleTextareaChange}
+              onKeyDown={handleKeyDown}
+              style={{
+                flex: 1,
+                minHeight: '300px',
+                padding: theme.space[3],
+                backgroundColor: theme.colors.background,
+                color: theme.colors.text,
+                border: `1px solid ${theme.colors.border}`,
+                borderRadius: theme.radii[2],
+                fontFamily: theme.fonts.monospace,
+                fontSize: theme.fontSizes[1],
+                lineHeight: theme.lineHeights.relaxed,
+                resize: 'none',
+                outline: 'none',
+              }}
+              placeholder="Enter your Mermaid diagram code here..."
+            />
+          </div>
+
+          {/* Live Preview */}
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+                marginBottom: theme.space[2],
+                fontSize: theme.fontSizes[2],
+                fontWeight: theme.fontWeights.semibold,
+                color: theme.colors.text,
+              }}
+            >
+              Live Preview
+            </h3>
+            <div
+              style={{
+                flex: 1,
+                border: `1px solid ${theme.colors.border}`,
+                borderRadius: theme.radii[2],
+                overflow: 'auto',
+                backgroundColor: theme.colors.backgroundSecondary,
+              }}
+            >
+              <IndustryMermaidDiagram
+                code={editCode}
+                id={`${id}-preview`}
+                theme={theme}
+                onCopyError={onCopyError}
+                onError={onError}
+                rootMargin={rootMargin}
+                isModalMode={isModalMode}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -251,32 +307,47 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
           onClick={handleEdit}
           style={{
             position: 'absolute',
-            top: theme.space[3],
-            right: theme.space[3],
+            top: theme.space[2],
+            left: theme.space[2],
             display: 'flex',
             alignItems: 'center',
             gap: theme.space[1],
-            padding: `${theme.space[1]}px ${theme.space[3]}px`,
-            backgroundColor: theme.colors.secondary,
+            padding: `${theme.space[2]}px ${theme.space[3]}px`,
+            backgroundColor: theme.colors.primary,
             color: theme.colors.background,
             border: 'none',
-            borderRadius: theme.radii[1],
+            borderRadius: theme.radii[2],
             fontSize: theme.fontSizes[1],
+            fontWeight: theme.fontWeights.medium,
             cursor: 'pointer',
-            zIndex: 10,
-            transition: 'opacity 0.2s',
-            opacity: 0.8,
+            zIndex: 20,
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+            transition: 'all 0.2s ease',
           }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '0.8')}
+          onMouseEnter={e => {
+            e.currentTarget.style.transform = 'translateY(-1px)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
+          }}
         >
-          <Pencil size={14} />
-          Edit
+          <Pencil size={16} />
+          Edit Diagram
         </button>
       )}
 
-      {/* Markdown Content */}
-      <IndustryMarkdownSlide {...slideProps} content={content} theme={theme} />
+      {/* Mermaid Diagram */}
+      <IndustryMermaidDiagram
+        code={code}
+        id={id}
+        theme={theme}
+        onCopyError={onCopyError}
+        onError={onError}
+        rootMargin={rootMargin}
+        isModalMode={isModalMode}
+      />
     </div>
   );
 };
