@@ -176,7 +176,7 @@ const highlightOverrides = `
   }
 `;
 
-// CSS for smooth font size transitions
+// CSS for smooth font size transitions and first-child heading adjustments
 const fontTransitionCSS = `
   .markdown-slide * {
     transition: font-size 0.2s ease-in-out;
@@ -195,6 +195,32 @@ const fontTransitionCSS = `
   /* Ensure checkbox labels maintain fixed sizing */
   .markdown-slide label[for*="checkbox"] {
     font-size: 1rem !important; /* Fixed size for checkbox labels */
+  }
+  
+  /* Remove top margin from headings when they're the first element */
+  .markdown-slide > :first-child h1:first-child,
+  .markdown-slide > :first-child h2:first-child,
+  .markdown-slide > :first-child h3:first-child,
+  .markdown-slide > :first-child h4:first-child,
+  .markdown-slide > :first-child h5:first-child,
+  .markdown-slide > :first-child h6:first-child {
+    margin-top: 0 !important;
+  }
+  
+  /* Also handle when heading is inside the first paragraph/div from ReactMarkdown */
+  .markdown-slide > div:first-child > h1:first-child,
+  .markdown-slide > div:first-child > h2:first-child,
+  .markdown-slide > div:first-child > h3:first-child,
+  .markdown-slide > div:first-child > h4:first-child,
+  .markdown-slide > div:first-child > h5:first-child,
+  .markdown-slide > div:first-child > h6:first-child,
+  .markdown-slide > p:first-child > h1:first-child,
+  .markdown-slide > p:first-child > h2:first-child,
+  .markdown-slide > p:first-child > h3:first-child,
+  .markdown-slide > p:first-child > h4:first-child,
+  .markdown-slide > p:first-child > h5:first-child,
+  .markdown-slide > p:first-child > h6:first-child {
+    margin-top: 0 !important;
   }
 `;
 
