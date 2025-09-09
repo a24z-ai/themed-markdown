@@ -1,10 +1,13 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 
 import { Theme, theme as defaultTheme } from './index';
+import { getMode } from './themeHelpers';
 
 // Theme context
 interface ThemeContextValue {
   theme: Theme;
+  mode?: string;
+  setMode: (mode: string) => void;
 }
 
 // Create a singleton context instance that persists across module boundaries
@@ -49,14 +52,52 @@ export const useTheme = (): ThemeContextValue => {
 interface ThemeProviderProps {
   children: ReactNode;
   theme?: Theme;
+  initialMode?: string;
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
   theme: customTheme = defaultTheme,
+  initialMode,
 }) => {
+  const [mode, setMode] = useState<string | undefined>(initialMode);
+  
+  // Get the theme with the current mode applied
+  const activeTheme = React.useMemo(() => {
+    if (!mode || !customTheme.modes || !customTheme.modes[mode]) {
+      return customTheme;
+    }
+    
+    // Apply the mode colors to the theme
+    return {
+      ...customTheme,
+      colors: getMode(customTheme, mode),
+    };
+  }, [customTheme, mode]);
+  
+  // Load saved mode from localStorage on mount
+  useEffect(() => {
+    if (!initialMode) {
+      const savedMode = localStorage.getItem('principlemd-theme-mode');
+      if (savedMode) {
+        setMode(savedMode);
+      }
+    }
+  }, [initialMode]);
+  
+  // Save mode to localStorage when it changes
+  useEffect(() => {
+    if (mode) {
+      localStorage.setItem('principlemd-theme-mode', mode);
+    } else {
+      localStorage.removeItem('principlemd-theme-mode');
+    }
+  }, [mode]);
+  
   const value: ThemeContextValue = {
-    theme: customTheme,
+    theme: activeTheme,
+    mode,
+    setMode,
   };
 
   return <ThemeContextSingleton.Provider value={value}>{children}</ThemeContextSingleton.Provider>;

@@ -39,6 +39,11 @@ type CardVariant = {
 };
 
 export interface Theme {
+  // Color modes (optional)
+  modes?: {
+    [modeName: string]: Partial<Theme['colors']>;
+  };
+  
   // Scale values for consistent spacing
   space: number[];
 
@@ -320,5 +325,13 @@ export {
   createStyle,
   mergeThemes,
 } from './utils';
+
+// Export theme helper functions
+export { 
+  overrideColors, 
+  makeTheme, 
+  addMode, 
+  getMode 
+} from './themeHelpers';
 
 export default theme;

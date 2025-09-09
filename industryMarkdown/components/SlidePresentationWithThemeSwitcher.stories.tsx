@@ -1,155 +1,125 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React, { useState } from 'react';
+import React from 'react';
 
-import { ThemeProvider, Theme, theme as defaultTheme } from '../../industryTheme';
+import { ThemeProvider, useTheme, theme as defaultTheme, addMode } from '../../industryTheme';
 
 import { SlidePresentation } from './SlidePresentation';
 
-// Alexandria themes from /Users/griever/Developer/alexandria/src/lib/alexandria-theme.ts
-const previewTheme: Theme = {
-  ...defaultTheme,
-  colors: {
-    ...defaultTheme.colors,
-    
-    // Base colors
-    text: '#361B1B',           // Dark Brown/Near Black
-    background: '#F6F2EA',     // Parchment/Off-White
-    primary: '#0D3B4A',        // Deep Teal/Blue
-    secondary: '#EFCF83',      // Gold/Ochre
-    accent: '#AA5725',         // Terracotta/Red Ocher
-    highlight: '#F6DEB9',      // Lighter Gold/Brightened Ochre
-    muted: '#8A837A',          // Muted Gray-Brown
-    
-    // Status colors
-    success: '#4CAF50',        // Standard green
-    warning: '#FFC107',        // Standard amber
-    error: '#F44336',          // Standard red
-    info: '#2196F3',           // Standard blue
-    
-    // Additional semantic colors
-    border: '#C7B9A3',         // Lighter muted tone for borders
-    surface: '#FFFFFF',        // Pure white for cards
-    backgroundSecondary: '#EDE9E0',  // Slightly darker parchment
-    backgroundTertiary: '#DBCEB8',   // Even darker for section headers
-    backgroundLight: '#FFFFFF',      // Pure white for clean contrast
-    backgroundHover: '#E9E4DB',      // Subtle hover state
-    textSecondary: '#5C4B4B',        // Slightly lighter text
-    textTertiary: '#8A837A',         // Muted text (matches muted base)
-    textMuted: '#B0A79A',            // Very light, subtle text
-  },
-};
+// Create a theme with multiple modes using the new theme helpers
+const themeWithAllModes = addMode(
+  addMode(
+    addMode(
+      addMode(
+        addMode(
+          defaultTheme,
+          'preview',
+          {
+            // Preview mode - Warm, rich colors with parchment background
+            text: '#361B1B',
+            background: '#F6F2EA',
+            primary: '#0D3B4A',
+            secondary: '#EFCF83',
+            accent: '#AA5725',
+            highlight: '#F6DEB9',
+            muted: '#8A837A',
+            border: '#C7B9A3',
+            surface: '#FFFFFF',
+            backgroundSecondary: '#EDE9E0',
+            backgroundTertiary: '#DBCEB8',
+            backgroundLight: '#FFFFFF',
+            backgroundHover: '#E9E4DB',
+            textSecondary: '#5C4B4B',
+            textTertiary: '#8A837A',
+            textMuted: '#B0A79A',
+          }
+        ),
+        'alexandria',
+        {
+          // Alexandria mode - Minimalist with OKLCH colors
+          text: '#252525',
+          background: '#faf9f7',
+          primary: '#343434',
+          secondary: '#f7f7f7',
+          accent: '#f7f7f7',
+          muted: '#f7f7f7',
+          border: '#ebebeb',
+          surface: '#faf9f7',
+          backgroundSecondary: '#faf9f7',
+          backgroundTertiary: '#f7f7f7',
+          backgroundLight: '#f7f7f7',
+          backgroundHover: '#f7f7f7',
+          textSecondary: '#8e8e8e',
+          textTertiary: '#8e8e8e',
+          textMuted: '#8e8e8e',
+        }
+      ),
+      'dark',
+      {
+        // Dark mode with amber accents
+        text: '#e4e4e7',
+        background: '#18181b',
+        primary: '#f59e0b',
+        secondary: '#1f2937',
+        accent: '#d97706',
+        highlight: 'rgba(245, 158, 11, 0.2)',
+        muted: '#71717a',
+        border: '#27272a',
+        surface: '#1f1f23',
+        backgroundSecondary: '#1f1f23',
+        backgroundTertiary: '#27272a',
+        backgroundLight: '#27272a',
+        backgroundHover: '#2a2a2e',
+        textSecondary: '#a1a1aa',
+        textTertiary: '#71717a',
+        textMuted: '#52525b',
+      }
+    ),
+    'cyberpunk',
+    {
+      // Cyberpunk neon colors
+      text: '#f0abfc',
+      background: '#0a0a0a',
+      primary: '#00ffff',
+      secondary: '#ff00ff',
+      accent: '#ffff00',
+      highlight: 'rgba(0, 255, 255, 0.3)',
+      muted: '#4a5568',
+      border: '#ff00ff40',
+      surface: '#1a1a1a',
+      backgroundSecondary: '#141414',
+      backgroundTertiary: '#1f1f1f',
+      backgroundLight: '#2a2a2a',
+      backgroundHover: '#333333',
+      textSecondary: '#d8b4fe',
+      textTertiary: '#a78bfa',
+      textMuted: '#8b5cf6',
+    }
+  ),
+  'high-contrast',
+  {
+    // High contrast mode
+    text: '#000000',
+    background: '#FFFFFF',
+    primary: '#0000FF',
+    secondary: '#FF0000',
+    accent: '#00FF00',
+    border: '#000000',
+    muted: '#666666',
+    textSecondary: '#333333',
+    textTertiary: '#666666',
+    textMuted: '#999999',
+  }
+);
 
-const alexandriaTheme: Theme = {
-  ...defaultTheme,
-  colors: {
-    ...defaultTheme.colors,
-    
-    // Light mode colors - converted from OKLCH to hex
-    text: '#252525',           // oklch(0.145 0 0)
-    background: '#faf9f7',     // oklch(0.98 0.005 45) - warm off-white
-    primary: '#343434',        // oklch(0.205 0 0)
-    secondary: '#f7f7f7',      // oklch(0.97 0 0)
-    accent: '#f7f7f7',         // oklch(0.97 0 0)
-    muted: '#f7f7f7',          // oklch(0.97 0 0)
-    border: '#ebebeb',         // oklch(0.922 0 0)
-    
-    // Surface and background variations
-    surface: '#faf9f7',        // Same as background
-    backgroundSecondary: '#faf9f7',
-    backgroundTertiary: '#f7f7f7',
-    backgroundLight: '#f7f7f7',
-    backgroundHover: '#f7f7f7',
-    
-    // Text variations
-    textSecondary: '#8e8e8e',  // oklch(0.556 0 0)
-    textTertiary: '#8e8e8e',
-    textMuted: '#8e8e8e',
-    
-    // Semantic colors
-    error: '#ef4444',          // oklch(0.577 0.245 27.325) - red
-    warning: '#f59e0b',        // amber
-    success: '#10b981',        // emerald
-    info: '#3b82f6',           // blue
-    
-    // Dark mode colors
-  },
-};
-
-// Dark theme with inverted colors
-const darkTheme: Theme = {
-  ...defaultTheme,
-  colors: {
-    ...defaultTheme.colors,
-    
-    // Dark mode colors
-    text: '#e4e4e7',           // Light gray text
-    background: '#18181b',     // Very dark gray/black background
-    primary: '#f59e0b',        // Amber for primary actions
-    secondary: '#1f2937',      // Dark gray for secondary elements
-    accent: '#d97706',         // Darker amber for accents
-    highlight: 'rgba(245, 158, 11, 0.2)', // Translucent amber
-    muted: '#71717a',          // Muted gray
-    
-    // Status colors (slightly adjusted for dark mode)
-    success: '#10b981',        // Emerald green
-    warning: '#f59e0b',        // Amber
-    error: '#ef4444',          // Red
-    info: '#3b82f6',           // Blue
-    
-    // Additional semantic colors
-    border: '#27272a',         // Dark border
-    surface: '#1f1f23',        // Slightly lighter than background
-    backgroundSecondary: '#1f1f23',  // Secondary background
-    backgroundTertiary: '#27272a',   // Tertiary background
-    backgroundLight: '#27272a',      // Light background (still dark in dark mode)
-    backgroundHover: '#2a2a2e',      // Hover state
-    textSecondary: '#a1a1aa',        // Secondary text
-    textTertiary: '#71717a',         // Tertiary text
-    textMuted: '#52525b',            // Very muted text
-  },
-};
-
-// Cyberpunk theme with neon colors
-const cyberpunkTheme: Theme = {
-  ...defaultTheme,
-  colors: {
-    ...defaultTheme.colors,
-    
-    // Cyberpunk neon colors
-    text: '#f0abfc',           // Bright purple-pink text
-    background: '#0a0a0a',     // Pure black background
-    primary: '#00ffff',        // Cyan neon
-    secondary: '#ff00ff',      // Magenta neon
-    accent: '#ffff00',         // Yellow neon
-    highlight: 'rgba(0, 255, 255, 0.3)', // Translucent cyan
-    muted: '#4a5568',          // Dark gray
-    
-    // Status colors with neon feel
-    success: '#00ff00',        // Neon green
-    warning: '#ffff00',        // Neon yellow
-    error: '#ff0066',          // Hot pink
-    info: '#00ccff',           // Light cyan
-    
-    // Additional semantic colors
-    border: '#ff00ff40',       // Translucent magenta border
-    surface: '#1a1a1a',        // Slightly lighter than background
-    backgroundSecondary: '#141414',  // Secondary background
-    backgroundTertiary: '#1f1f1f',   // Tertiary background
-    backgroundLight: '#2a2a2a',      // Light background
-    backgroundHover: '#333333',      // Hover state
-    textSecondary: '#d8b4fe',        // Light purple
-    textTertiary: '#a78bfa',         // Medium purple
-    textMuted: '#8b5cf6',            // Dark purple
-  },
-};
-
-const themes = {
-  default: defaultTheme,
-  preview: previewTheme,
-  alexandria: alexandriaTheme,
-  dark: darkTheme,
-  cyberpunk: cyberpunkTheme,
-};
+// List of available modes
+const availableModes = [
+  { value: '', label: 'Default' },
+  { value: 'preview', label: 'Preview' },
+  { value: 'alexandria', label: 'Alexandria' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'cyberpunk', label: 'Cyberpunk' },
+  { value: 'high-contrast', label: 'High Contrast' },
+];
 
 // Interactive wrapper component with theme switcher
 interface SlidePresentationWithThemeSwitcherProps {
@@ -166,91 +136,94 @@ interface SlidePresentationWithThemeSwitcherProps {
 }
 
 const SlidePresentationWithThemeSwitcher = ({ slides, ...props }: SlidePresentationWithThemeSwitcherProps) => {
-  const [currentTheme, setCurrentTheme] = useState<keyof typeof themes>('default');
-
-  // Apply dark mode if available
-  const activeTheme = themes[currentTheme];
+  const { theme, mode, setMode } = useTheme();
 
   return (
-    <ThemeProvider theme={activeTheme}>
-      <div style={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column' }}>
-        {/* Theme Switcher Controls */}
-        <div style={{ 
-          padding: '16px', 
-          backgroundColor: activeTheme.colors.backgroundSecondary,
-          borderBottom: `1px solid ${activeTheme.colors.border}`,
-          display: 'flex',
-          gap: '12px',
-          alignItems: 'center',
-          flexWrap: 'wrap'
+    <div style={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Theme Switcher Controls */}
+      <div style={{ 
+        padding: '16px', 
+        backgroundColor: theme.colors.backgroundSecondary,
+        borderBottom: `1px solid ${theme.colors.border}`,
+        display: 'flex',
+        gap: '12px',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+      }}>
+        <span style={{ 
+          color: theme.colors.text, 
+          fontWeight: 600,
+          marginRight: '8px'
         }}>
-          <span style={{ 
-            color: activeTheme.colors.text, 
-            fontWeight: 600,
-            marginRight: '8px'
-          }}>
-            Theme:
-          </span>
-          
-          {/* Theme buttons */}
-          {Object.keys(themes).map((themeName) => (
-            <button
-              key={themeName}
-              onClick={() => setCurrentTheme(themeName as keyof typeof themes)}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: currentTheme === themeName 
-                  ? activeTheme.colors.primary 
-                  : activeTheme.colors.background,
-                color: currentTheme === themeName 
-                  ? activeTheme.colors.background 
-                  : activeTheme.colors.text,
-                border: `2px solid ${currentTheme === themeName 
-                  ? activeTheme.colors.primary 
-                  : activeTheme.colors.border}`,
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: currentTheme === themeName ? 600 : 400,
-                textTransform: 'capitalize',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (currentTheme !== themeName) {
-                  e.currentTarget.style.backgroundColor = activeTheme.colors.backgroundHover;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (currentTheme !== themeName) {
-                  e.currentTarget.style.backgroundColor = activeTheme.colors.background;
-                }
-              }}
-            >
-              {themeName}
-            </button>
-          ))}
-          
-          {/* Current theme info */}
-          <div style={{ 
-            marginLeft: 'auto',
-            fontSize: '14px',
-            color: activeTheme.colors.textSecondary
-          }}>
-            Current: <strong style={{ textTransform: 'capitalize' }}>{currentTheme}</strong>
-          </div>
-        </div>
+          Theme Mode:
+        </span>
         
-        {/* Slide Presentation */}
-        <div style={{ flex: 1, overflow: 'hidden' }}>
-          <SlidePresentation slides={slides} {...props} />
+        {/* Mode buttons */}
+        {availableModes.map((modeOption) => (
+          <button
+            key={modeOption.value}
+            onClick={() => setMode(modeOption.value)}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: (mode || '') === modeOption.value 
+                ? theme.colors.primary 
+                : theme.colors.background,
+              color: (mode || '') === modeOption.value 
+                ? theme.colors.background 
+                : theme.colors.text,
+              border: `2px solid ${(mode || '') === modeOption.value 
+                ? theme.colors.primary 
+                : theme.colors.border}`,
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: (mode || '') === modeOption.value ? 600 : 400,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if ((mode || '') !== modeOption.value) {
+                e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
+              }
+            }}
+            onMouseLeave={(e) => {
+              if ((mode || '') !== modeOption.value) {
+                e.currentTarget.style.backgroundColor = theme.colors.background;
+              }
+            }}
+          >
+            {modeOption.label}
+          </button>
+        ))}
+        
+        {/* Current mode info */}
+        <div style={{ 
+          marginLeft: 'auto',
+          fontSize: '14px',
+          color: theme.colors.textSecondary
+        }}>
+          Current: <strong>{mode || 'default'}</strong>
         </div>
       </div>
+      
+      {/* Slide Presentation */}
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        <SlidePresentation slides={slides} {...props} />
+      </div>
+    </div>
+  );
+};
+
+// Wrapper component with ThemeProvider
+const SlidePresentationWithThemeWrapper = (props: SlidePresentationWithThemeSwitcherProps) => {
+  return (
+    <ThemeProvider theme={themeWithAllModes}>
+      <SlidePresentationWithThemeSwitcher {...props} />
     </ThemeProvider>
   );
 };
 
 const meta: Meta<typeof SlidePresentation> = {
   title: 'IndustryMarkdown/SlidePresentationWithThemeSwitcher',
-  component: SlidePresentationWithThemeSwitcher,
+  component: SlidePresentationWithThemeWrapper,
   parameters: {
     layout: 'fullscreen',
   },
@@ -271,12 +244,13 @@ const demoSlides = [
 
 This presentation demonstrates the ability to switch between different themes dynamically.
 
-### Available Themes:
-- **Default Theme** - Dark Academia with warm amber gold
-- **Preview Theme** - Warm, rich colors with parchment background
-- **Alexandria Theme** - Minimalist with OKLCH colors
-- **Dark Theme** - Classic dark mode with amber accents
-- **Cyberpunk Theme** - Neon colors on black background
+### Available Theme Modes:
+- **Default** - Dark Academia with warm amber gold
+- **Preview** - Warm, rich colors with parchment background
+- **Alexandria** - Minimalist with OKLCH colors
+- **Dark** - Classic dark mode with amber accents
+- **Cyberpunk** - Neon colors on black background
+- **High Contrast** - Maximum contrast for accessibility
 
 ### Features:
 - Live theme switching
@@ -314,12 +288,12 @@ function greetUser(name) {
 
 ## Data Presentation
 
-| Feature | Default | Preview | Alexandria | Dark | Cyberpunk |
-|---------|---------|---------|------------|------|-----------|
-| Background | Dark Navy | Parchment | Off-white | Black | Pure Black |
-| Primary | Amber Gold | Deep Teal | Minimal Gray | Amber | Cyan Neon |
-| Accent | Muted Gold | Terracotta | Light Gray | Dark Amber | Yellow Neon |
-| Text | Warm Cream | Dark Brown | Dark Gray | Light Gray | Purple-Pink |
+| Feature | Default | Preview | Alexandria | Dark | Cyberpunk | High Contrast |
+|---------|---------|---------|------------|------|-----------|---------------|
+| Background | Dark Navy | Parchment | Off-white | Black | Pure Black | White |
+| Primary | Amber Gold | Deep Teal | Minimal Gray | Amber | Cyan Neon | Blue |
+| Accent | Muted Gold | Terracotta | Light Gray | Dark Amber | Yellow Neon | Green |
+| Text | Warm Cream | Dark Brown | Dark Gray | Light Gray | Purple-Pink | Black |
 
 ### Theme Characteristics
 
@@ -348,7 +322,13 @@ function greetUser(name) {
    - Neon color scheme
    - High contrast neon on black
    - Futuristic aesthetic
-   - Bold and vibrant`,
+   - Bold and vibrant
+
+6. **High Contrast**
+   - Maximum contrast ratios
+   - WCAG AAA compliant
+   - Accessibility focused
+   - Clear visual separation`,
 
   `# Mermaid Diagrams
 
@@ -362,11 +342,13 @@ graph TD
     B -->|Alexandria| E[Minimalist]
     B -->|Dark| H[Classic Dark Mode]
     B -->|Cyberpunk| I[Neon Aesthetic]
+    B -->|High Contrast| J[Maximum Contrast]
     C --> F[Apply Theme]
     D --> F
     E --> F
     H --> F
     I --> F
+    J --> F
     F --> G[Update UI]
 \`\`\`
 
@@ -390,11 +372,12 @@ sequenceDiagram
 
 Try interacting with these elements in different themes:
 
-- [ ] Test default theme
-- [ ] Test preview theme
-- [ ] Test alexandria theme
-- [ ] Test dark theme
-- [ ] Test cyberpunk theme
+- [ ] Test default mode
+- [ ] Test preview mode
+- [ ] Test alexandria mode
+- [ ] Test dark mode
+- [ ] Test cyberpunk mode
+- [ ] Test high contrast mode
 - [ ] Check navigation controls
 - [ ] Verify color contrast
 - [ ] Test theme persistence
