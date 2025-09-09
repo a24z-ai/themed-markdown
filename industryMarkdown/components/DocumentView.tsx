@@ -33,6 +33,7 @@ export interface DocumentViewProps {
   handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
   repositoryInfo?: RepositoryInfo;
+  fontSizeScale?: number;
 }
 
 export const DocumentView: React.FC<DocumentViewProps> = ({
@@ -52,6 +53,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
   handleRunBashCommand,
   handlePromptCopy,
   repositoryInfo,
+  fontSizeScale,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -104,6 +106,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
             enableKeyboardScrolling={enableKeyboardScrolling}
             onLinkClick={onLinkClick}
             handleRunBashCommand={handleRunBashCommand}
+            fontSizeScale={fontSizeScale}
             handlePromptCopy={handlePromptCopy}
             repositoryInfo={repositoryInfo}
           />
@@ -142,6 +145,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
             enableKeyboardScrolling={enableKeyboardScrolling}
             onLinkClick={onLinkClick}
             handleRunBashCommand={handleRunBashCommand}
+            fontSizeScale={fontSizeScale}
             handlePromptCopy={handlePromptCopy}
             repositoryInfo={repositoryInfo}
           />
@@ -228,6 +232,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
               enableKeyboardScrolling={enableKeyboardScrolling}
               onLinkClick={onLinkClick}
               handleRunBashCommand={handleRunBashCommand}
+              fontSizeScale={fontSizeScale}
               handlePromptCopy={handlePromptCopy}
               repositoryInfo={repositoryInfo}
             />

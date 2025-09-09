@@ -52,6 +52,13 @@ export type {
   MarkdownSlideLocation,
 } from './industryMarkdown/types/presentation';
 
+export type {
+  ContentChunk,
+  MarkdownChunk,
+  MermaidChunk,
+  CodeChunk,
+} from './industryMarkdown/types/customMarkdownChunks';
+
 // Theme system
 export type { Theme } from './industryTheme';
 export { theme as defaultTheme } from './industryTheme';

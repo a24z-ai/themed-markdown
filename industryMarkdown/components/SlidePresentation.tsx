@@ -31,6 +31,7 @@ export interface SlidePresentationProps {
   onLinkClick?: (href: string, event?: MouseEvent) => void;
   handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
+  fontSizeScale?: number;
 }
 
 export const SlidePresentation: React.FC<SlidePresentationProps> = ({
@@ -49,6 +50,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   onLinkClick,
   handleRunBashCommand,
   handlePromptCopy,
+  fontSizeScale,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(initialSlide);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -352,6 +354,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
             onLinkClick={onLinkClick}
             handleRunBashCommand={handleRunBashCommand}
             handlePromptCopy={handlePromptCopy}
+            fontSizeScale={fontSizeScale}
           />
         ) : (
           <div
