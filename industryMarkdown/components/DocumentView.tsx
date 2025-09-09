@@ -1,6 +1,6 @@
 import React, { useRef, useCallback } from 'react';
 
-import { Theme } from '../../industryTheme';
+import { useTheme } from '../../industryTheme';
 import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
@@ -11,9 +11,6 @@ export interface DocumentViewProps {
 
   // Display mode
   showSegmented?: boolean; // If true and content is array, show with section headers
-
-  // Theme
-  theme: Theme;
 
   // Event handlers
   onCheckboxChange?: (slideIndex: number, lineNumber: number, checked: boolean) => void;
@@ -39,7 +36,6 @@ export interface DocumentViewProps {
 export const DocumentView: React.FC<DocumentViewProps> = ({
   content,
   showSegmented = true,
-  theme,
   onCheckboxChange,
   onSectionClick,
   maxWidth = '900px',
@@ -57,6 +53,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const { theme } = useTheme();
 
   // Handle scroll to section
   const scrollToSection = useCallback((sectionIndex: number) => {

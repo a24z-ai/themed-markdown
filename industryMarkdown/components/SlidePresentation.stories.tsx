@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import { ThemeProvider, theme, getThemeWithMode } from '../../industryTheme';
+import { ThemeProvider } from '../../industryTheme';
 
 import { SlidePresentation } from './SlidePresentation';
 
@@ -21,14 +21,6 @@ const meta: Meta<typeof SlidePresentation> = {
     layout: 'fullscreen',
   },
   argTypes: {
-    theme: {
-      options: ['light', 'dark'],
-      mapping: {
-        light: getThemeWithMode(theme, 'light'),
-        dark: getThemeWithMode(theme, 'dark'),
-      },
-      control: { type: 'radio' },
-    },
     initialSlide: {
       control: { type: 'number', min: 0, max: 10 },
     },
@@ -166,7 +158,6 @@ function MyPresentation() {
 \`\`\`typescript
 interface PresentationProps {
   slides: string[];
-  theme: Theme;
   onComplete?: () => void;
 }
 \`\`\``,
@@ -349,7 +340,6 @@ export const BasicPresentation: Story = {
   args: {
     slides: presentationSlides,
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: true,
     showFullscreenButton: true,
@@ -413,7 +403,6 @@ Quick recap:
 Press **Home** to return to the beginning.`,
     ],
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: true,
     showFullscreenButton: true,
@@ -425,7 +414,6 @@ export const DarkThemePresentation: Story = {
   args: {
     slides: presentationSlides,
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'dark'),
     showNavigation: true,
     showSlideCounter: true,
     showFullscreenButton: true,
@@ -437,7 +425,6 @@ export const TechnicalPresentation: Story = {
   args: {
     slides: technicalSlides,
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: true,
     showFullscreenButton: false,
@@ -449,7 +436,6 @@ export const MinimalNavigation: Story = {
   args: {
     slides: presentationSlides,
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: false,
     showFullscreenButton: false,
@@ -461,7 +447,6 @@ export const NoNavigation: Story = {
   args: {
     slides: presentationSlides,
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: false,
     slideIdPrefix: 'no-nav',
   },
@@ -513,7 +498,6 @@ npm run build
 *In a real implementation, these could be executable.*`,
     ],
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: true,
     slideIdPrefix: 'interactive',
@@ -552,7 +536,6 @@ Even with a single slide, you still get:
 - Responsive layout
 
 No navigation controls are shown when there's only one slide.`],
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: true,
     slideIdPrefix: 'single',
@@ -563,7 +546,6 @@ export const CustomHeight: Story = {
   args: {
     slides: presentationSlides,
     initialSlide: 0,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: true,
     containerHeight: '600px',
@@ -575,7 +557,6 @@ export const StartFromMiddle: Story = {
   args: {
     slides: presentationSlides,
     initialSlide: 2,
-    theme: getThemeWithMode(theme, 'light'),
     showNavigation: true,
     showSlideCounter: true,
     showFullscreenButton: true,

@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import { Theme } from '../../industryTheme';
+import { useTheme } from '../../industryTheme';
 import { BashCommandOptions, BashCommandResult } from '../types/presentation';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
@@ -10,9 +10,6 @@ export interface SlidePresentationProps {
   // Core content
   slides: string[];
   initialSlide?: number;
-
-  // Theme
-  theme: Theme;
 
   // Event handlers
   onSlideChange?: (slideIndex: number) => void;
@@ -37,7 +34,6 @@ export interface SlidePresentationProps {
 export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   slides,
   initialSlide = 0,
-  theme,
   onSlideChange,
   onCheckboxChange,
   showNavigation = true,
@@ -55,6 +51,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   const [currentSlide, setCurrentSlide] = useState(initialSlide);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   // Handle slide navigation
   const navigateToSlide = useCallback(

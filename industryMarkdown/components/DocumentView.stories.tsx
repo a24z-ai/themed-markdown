@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import { ThemeProvider, theme, getThemeWithMode } from '../../industryTheme';
+import { ThemeProvider } from '../../industryTheme';
 
 import { DocumentView } from './DocumentView';
 
@@ -20,16 +20,7 @@ const meta: Meta<typeof DocumentView> = {
   parameters: {
     layout: 'fullscreen',
   },
-  argTypes: {
-    theme: {
-      options: ['light', 'dark'],
-      mapping: {
-        light: getThemeWithMode(theme, 'light'),
-        dark: getThemeWithMode(theme, 'dark'),
-      },
-      control: { type: 'radio' },
-    },
-  },
+  argTypes: {},
 };
 
 export default meta;
@@ -177,7 +168,6 @@ The component supports various event handlers for interactivity:
 export const SingleDocument: Story = {
   args: {
     content: singleDocumentContent,
-    theme: getThemeWithMode(theme, 'light'),
     showSegmented: false,
     maxWidth: '900px',
     padding: '24px',
@@ -188,7 +178,6 @@ export const SingleDocument: Story = {
 export const SegmentedDocument: Story = {
   args: {
     content: segmentedContent,
-    theme: getThemeWithMode(theme, 'light'),
     showSegmented: true,
     showSectionHeaders: true,
     showSeparators: true,
@@ -201,7 +190,6 @@ export const SegmentedDocument: Story = {
 export const DarkThemeDocument: Story = {
   args: {
     content: singleDocumentContent,
-    theme: getThemeWithMode(theme, 'dark'),
     showSegmented: false,
     maxWidth: '900px',
     padding: '24px',
@@ -212,7 +200,6 @@ export const DarkThemeDocument: Story = {
 export const WideDocument: Story = {
   args: {
     content: singleDocumentContent,
-    theme: getThemeWithMode(theme, 'light'),
     showSegmented: false,
     maxWidth: '1400px',
     padding: '32px',
@@ -223,7 +210,6 @@ export const WideDocument: Story = {
 export const CompactSegments: Story = {
   args: {
     content: segmentedContent,
-    theme: getThemeWithMode(theme, 'light'),
     showSegmented: true,
     showSectionHeaders: false,
     showSeparators: false,
@@ -285,7 +271,6 @@ function TodoList({ items }) {
 - [GitHub Repository](https://github.com/example/repo)
 - [Documentation](https://docs.example.com)
 - [API Reference](https://api.example.com)`,
-    theme: getThemeWithMode(theme, 'light'),
     showSegmented: false,
     maxWidth: '900px',
     padding: '24px',
@@ -456,7 +441,6 @@ classDiagram
     Component <|-- DocumentView
     Component <|-- SlidePresentation
 \`\`\``,
-    theme: getThemeWithMode(theme, 'light'),
     showSegmented: false,
     maxWidth: '1000px',
     padding: '24px',
