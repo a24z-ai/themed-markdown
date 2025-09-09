@@ -73,34 +73,6 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
     navigateToSlide(currentSlide + 1);
   }, [currentSlide, navigateToSlide]);
 
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Don't interfere with typing in inputs
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
-        return;
-      }
-
-      switch (event.key) {
-        case 'ArrowLeft':
-          if (event.ctrlKey || event.metaKey) {
-            event.preventDefault();
-            goToPreviousSlide();
-          }
-          break;
-        case 'ArrowRight':
-          if (event.ctrlKey || event.metaKey) {
-            event.preventDefault();
-            goToNextSlide();
-          }
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToPreviousSlide, goToNextSlide]);
-
   // Handle fullscreen
   const toggleFullscreen = useCallback(() => {
     if (!containerRef.current) return;
@@ -113,6 +85,74 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
       setIsFullscreen(false);
     }
   }, [isFullscreen]);
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Don't interfere with typing in inputs
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          // Support both with and without modifier keys
+          event.preventDefault();
+          goToPreviousSlide();
+          break;
+        case 'ArrowRight':
+          // Support both with and without modifier keys
+          event.preventDefault();
+          goToNextSlide();
+          break;
+        case ' ': // Spacebar
+          // Spacebar goes to next slide (common in presentations)
+          event.preventDefault();
+          goToNextSlide();
+          break;
+        case 'Enter':
+          // Enter also goes to next slide
+          event.preventDefault();
+          goToNextSlide();
+          break;
+        case 'Backspace':
+          // Backspace goes to previous slide
+          event.preventDefault();
+          goToPreviousSlide();
+          break;
+        case 'Home':
+          // Home goes to first slide
+          event.preventDefault();
+          navigateToSlide(0);
+          break;
+        case 'End':
+          // End goes to last slide
+          event.preventDefault();
+          navigateToSlide(slides.length - 1);
+          break;
+        case 'f':
+        case 'F':
+          // F key toggles fullscreen
+          if (!event.ctrlKey && !event.metaKey && !event.altKey) {
+            event.preventDefault();
+            toggleFullscreen();
+          }
+          break;
+      }
+      
+      // Number keys 1-9 jump to specific slides
+      if (!event.ctrlKey && !event.metaKey && !event.altKey) {
+        const num = parseInt(event.key);
+        if (num >= 1 && num <= 9 && num <= slides.length) {
+          event.preventDefault();
+          navigateToSlide(num - 1);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [goToPreviousSlide, goToNextSlide, navigateToSlide, slides.length, toggleFullscreen]);
 
   // Update state when slides change externally
   useEffect(() => {

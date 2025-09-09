@@ -187,7 +187,9 @@ export function IndustryMermaidDiagram({
             // Default sizing to fit within the 400px container height
             svgElement.style.maxHeight = '360px'; // Leave room for padding
             svgElement.style.width = 'auto';
-            svgElement.style.maxWidth = '100%';
+            // Remove maxWidth constraint to prevent cutoff
+            svgElement.style.maxWidth = 'none';
+            // Let container handle overflow with scrolling
           }
         } else {
           console.warn('No SVG element found after mermaid render');
@@ -258,7 +260,7 @@ export function IndustryMermaidDiagram({
         if (!isModalMode) {
           svgElement.style.maxHeight = '360px';
           svgElement.style.width = 'auto';
-          svgElement.style.maxWidth = '100%';
+          svgElement.style.maxWidth = 'none'; // No width constraint to prevent cutoff
         }
       }
     }
@@ -307,7 +309,9 @@ export function IndustryMermaidDiagram({
     borderRadius: theme.radii[2],
     padding: hasRendered ? theme.space[3] : theme.space[4],
     margin: `${theme.space[4]}px 0`,
-    overflow: hasRendered ? 'auto' : 'visible', // Enable scrolling for scaled/zoomed content
+    // Enable horizontal scrolling for wide diagrams, vertical for tall ones
+    overflowX: hasRendered ? 'auto' : 'visible',
+    overflowY: hasRendered ? 'auto' : 'visible',
   };
 
   const placeholderStyle: React.CSSProperties = {
