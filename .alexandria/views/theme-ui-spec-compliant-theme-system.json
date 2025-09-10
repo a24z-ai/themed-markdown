@@ -1,23 +1,31 @@
 {
-  "id": "industry-themed-markdown-components",
+  "id": "theme-ui-spec-compliant-theme-system",
   "version": "1.0.0",
-  "name": "Industry-themed Markdown Components",
+  "name": "Theme UI Spec-Compliant Theme System",
   "description": "Codebase view extracted from documentation",
   "rows": 1,
-  "cols": 1,
+  "cols": 2,
   "cells": {
-    "Key Differences from ConfigurableMarkdownSlide": {
+    "Files": {
       "coordinates": [
         0,
         0
       ],
       "files": [
-        "md"
+      ],
+      "priority": 0
+    },
+    "Example Component": {
+      "coordinates": [
+        0,
+        1
+      ],
+      "files": [
       ],
       "priority": 0
     }
   },
-  "overviewPath": "industryMarkdown/README.md",
+  "overviewPath": "industryTheme/README.md",
   "category": "docs",
   "displayOrder": 0,
   "timestamp": "2025-09-10T02:07:38.915Z",
@@ -26,7 +34,7 @@
     "ui": {
       "enabled": true,
       "rows": 1,
-      "cols": 1,
+      "cols": 2,
       "showCellLabels": true,
       "cellLabelPosition": "top"
     }

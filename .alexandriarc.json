@@ -5,7 +5,6 @@
     "useGitignore": true,
     "patterns": {
       "exclude": [
-        ".a24z/**",
         ".alexandria/**"
       ]
     }

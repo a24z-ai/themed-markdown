@@ -55,6 +55,36 @@ And some inline \`code\` as well.`,
   },
 };
 
+export const WithVideo: Story = {
+  args: {
+    content: `# Video Content Demo
+
+## Working GitHub Attachment Video (.mov file)
+This is a real GitHub attachment that redirects to a .mov video file:
+
+![Demo Video](https://github.com/user-attachments/assets/8bf7b277-c6e9-4fbf-8fc8-10857d5bdac7)
+
+## Same URL as Image (without "video" keyword in alt text)
+![Demo Image](https://github.com/user-attachments/assets/8bf7b277-c6e9-4fbf-8fc8-10857d5bdac7)
+
+## Working MP4 Sample
+![Sample Video](https://www.w3schools.com/html/mov_bbb.mp4)
+
+## HTML Video Element with GitHub Attachment
+<video width="560" height="315" controls>
+  <source src="https://github.com/user-attachments/assets/8bf7b277-c6e9-4fbf-8fc8-10857d5bdac7" type="video/quicktime">
+  <source src="https://github.com/user-attachments/assets/8bf7b277-c6e9-4fbf-8fc8-10857d5bdac7" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+Note: The GitHub attachment URL above redirects to a .mov file hosted on AWS S3.
+`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
 export const WithMermaid: Story = {
   args: {
     content: `# Mermaid Diagram with Fit Toggle

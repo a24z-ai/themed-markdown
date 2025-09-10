@@ -41,8 +41,31 @@ interface IndustryMarkdownComponentsProps {
 // Global cache to track failed images and prevent repeated requests
 const failedImageCache = new Set<string>();
 
-// Optimized image component using industryTheme
-const OptimizedMarkdownImage = React.memo(
+// Helper to detect video URLs
+const isVideoUrl = (url: string, alt?: string): boolean => {
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv', '.m4v'];
+  const lowercaseUrl = url.toLowerCase();
+  
+  // Check for file extensions in URL
+  if (videoExtensions.some(ext => lowercaseUrl.includes(ext))) {
+    return true;
+  }
+  
+  // Check alt text for hints that this is a video
+  if (alt) {
+    const altLower = alt.toLowerCase();
+    if (altLower.includes('video') || altLower.includes('demo') || altLower.includes('recording')) {
+      return true;
+    }
+  }
+  
+  // For GitHub attachments without extensions, we can't reliably detect video vs image
+  // So we'll treat them as images by default unless alt text suggests otherwise
+  return false;
+};
+
+// Optimized media component (handles both images and videos)
+const OptimizedMarkdownMedia = React.memo(
   ({
     src,
     alt,
@@ -62,7 +85,7 @@ const OptimizedMarkdownImage = React.memo(
     const [hasErrored, setHasErrored] = useState(() => failedImageCache.has(transformedSrc));
     const retryCount = useRef(0);
 
-    const imageStyle = useMemo(
+    const mediaStyle = useMemo(
       () => ({
         maxWidth: '100%',
         height: 'auto',
@@ -80,7 +103,55 @@ const OptimizedMarkdownImage = React.memo(
       retryCount.current = 0;
     };
 
-    const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const handleError = (e: React.SyntheticEvent<HTMLElement, Event>) => {
+      retryCount.current += 1;
+      failedImageCache.add(transformedSrc);
+      setHasErrored(true);
+      e.stopPropagation();
+    };
+
+    // Check if this is a video URL (using both URL and alt text for detection)
+    if (isVideoUrl(transformedSrc, alt)) {
+      if (hasErrored) {
+        return (
+          <span
+            style={{
+              ...mediaStyle,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: theme.colors.backgroundSecondary,
+              color: theme.colors.textSecondary,
+              border: `1px solid ${theme.colors.border}`,
+              padding: theme.space[4],
+              minHeight: '200px',
+            }}
+          >
+            ⚠️ Video failed to load: {alt || transformedSrc}
+          </span>
+        );
+      }
+
+      return (
+        <video
+          controls
+          style={mediaStyle}
+          onLoadedData={handleLoad}
+          onError={handleError}
+          title={alt}
+          {...props}
+        >
+          <source src={transformedSrc} />
+          {/* Add fallback source types for better compatibility */}
+          <source src={transformedSrc} type="video/mp4" />
+          <source src={transformedSrc} type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
+      );
+    }
+
+    // Original image handling code
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
       retryCount.current += 1;
       failedImageCache.add(transformedSrc);
       setHasErrored(true);
@@ -91,7 +162,7 @@ const OptimizedMarkdownImage = React.memo(
       return (
         <span
           style={{
-            ...imageStyle,
+            ...mediaStyle,
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -116,9 +187,9 @@ const OptimizedMarkdownImage = React.memo(
       <img
         src={transformedSrc}
         alt={alt}
-        style={imageStyle}
+        style={mediaStyle}
         onLoad={handleLoad}
-        onError={handleError}
+        onError={handleImageError}
         {...props}
       />
     );
@@ -438,9 +509,9 @@ export const createIndustryMarkdownComponents = ({
       </LinkWithLoadingIndicator>
     ),
 
-    // Images
+    // Images and Videos (detected by file extension)
     img: ({ src, alt, ...props }: ImageProps) => (
-      <OptimizedMarkdownImage
+      <OptimizedMarkdownMedia
         src={src || ''}
         alt={alt || ''}
         repositoryInfo={repositoryInfo}
@@ -451,6 +522,24 @@ export const createIndustryMarkdownComponents = ({
 
     // Picture elements
     picture: ({ children, ...props }: MarkdownComponentProps) => <picture {...props}>{children}</picture>,
+
+    // Video elements
+    video: ({ children, ...props }: MarkdownComponentProps) => (
+      <video
+        controls
+        style={{
+          maxWidth: '100%',
+          height: 'auto',
+          display: 'block',
+          margin: `${theme.space[3]}px auto`,
+          borderRadius: theme.radii[1],
+          boxShadow: theme.shadows[2],
+        }}
+        {...props}
+      >
+        {children}
+      </video>
+    ),
 
     // Source elements
     source: ({ srcset, srcSet, ...props }: SourceProps) => {
