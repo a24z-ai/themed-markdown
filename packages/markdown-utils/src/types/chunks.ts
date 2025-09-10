@@ -16,11 +16,11 @@ export interface BaseChunk<T extends string = string> {
 }
 
 // Core chunk types
-export interface MarkdownChunk extends BaseChunk<typeof CHUNK_TYPES.MARKDOWN> {}
+export type MarkdownChunk = BaseChunk<typeof CHUNK_TYPES.MARKDOWN>;
 
-export interface MermaidChunk extends BaseChunk<typeof CHUNK_TYPES.MERMAID> {}
+export type MermaidChunk = BaseChunk<typeof CHUNK_TYPES.MERMAID>;
 
-export interface SlideChunk extends BaseChunk<typeof CHUNK_TYPES.SLIDE> {}
+export type SlideChunk = BaseChunk<typeof CHUNK_TYPES.SLIDE>;
 
 export interface CodeChunk extends BaseChunk<typeof CHUNK_TYPES.CODE> {
   language?: string;

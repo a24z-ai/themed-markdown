@@ -1,7 +1,6 @@
 import {
   MarkdownPresentation,
   MarkdownSlide,
-  MarkdownPresentationFormat,
   MarkdownSource,
   MarkdownSourceType,
   RepositoryInfo,
@@ -24,7 +23,7 @@ export function parseMarkdownIntoPresentationFromSource(
     case MarkdownSourceType.WORKSPACE_FILE:
     case MarkdownSourceType.GITHUB_FILE:
     case MarkdownSourceType.DRAFT:
-      presentation = parseMarkdownIntoPresentation(source.content, undefined, source.repositoryInfo);
+      presentation = parseMarkdownIntoPresentation(source.content, source.repositoryInfo);
       break;
     default:
       throw new Error(`Unsupported source type: ${source.type}`);
@@ -53,11 +52,10 @@ export function createGithubFileSource(
  */
 export function parseMarkdownIntoPresentation(
   markdownContent: string,
-  format?: MarkdownPresentationFormat,
   repositoryInfo?: RepositoryInfo
 ): MarkdownPresentation {
-  // Use core library implementation
-  return parseMarkdownIntoPresentationCore(markdownContent, format, repositoryInfo);
+  // Use core library implementation - always using header format
+  return parseMarkdownIntoPresentationCore(markdownContent, repositoryInfo);
 }
 
 /**
@@ -76,13 +74,11 @@ export function createPresentationWithErrorMessage(errorMessage: string): Markdo
           startLine: 0,
           endLine: 0,
           content: errorMessageMarkdown,
-          type: MarkdownPresentationFormat.FULL_CONTENT,
         },
         chunks: parseMarkdownChunks(errorMessageMarkdown, 'slide-error'),
       },
     ],
     originalContent: errorMessageMarkdown,
-    format: MarkdownPresentationFormat.FULL_CONTENT,
   };
 }
 
@@ -90,29 +86,19 @@ export function createPresentationWithErrorMessage(errorMessage: string): Markdo
  * Helper function to reconstruct the original markdown content from a Presentation object
  */
 export function reconstructMarkdownContent(presentation: MarkdownPresentation): string {
-  switch (presentation.format) {
-    case MarkdownPresentationFormat.HORIZONTAL_RULE:
-      return presentation.slides.map(slide => slide.location.content).join('\n\n---\n\n');
-
-    case MarkdownPresentationFormat.HEADER:
-      return presentation.slides
-        .map((slide, index) => {
-          // First slide might not have ## if it was content before first header
-          if (index === 0 && !slide.location.content.startsWith('##')) {
-            return slide.location.content;
-          }
-          // Ensure header slides start with ##
-          return slide.location.content.startsWith('##')
-            ? slide.location.content
-            : `## ${slide.location.content}`;
-        })
-        .join('\n\n');
-
-    case MarkdownPresentationFormat.FULL_CONTENT:
-    default:
-      // For full content, just return the first slide's content or empty string
-      return presentation.slides[0]?.location.content || '';
-  }
+  // Always use header format
+  return presentation.slides
+    .map((slide, index) => {
+      // First slide might not have ## if it was content before first header
+      if (index === 0 && !slide.location.content.startsWith('##')) {
+        return slide.location.content;
+      }
+      // Ensure header slides start with ##
+      return slide.location.content.startsWith('##')
+        ? slide.location.content
+        : `## ${slide.location.content}`;
+    })
+    .join('\n\n');
 }
 
 /**

@@ -91,14 +91,14 @@ Line 10`;
 
     const result = parseMarkdownIntoPresentation(markdown);
 
-    expect(result.slides[0].location.startLine).toBe(1);
+    expect(result.slides[0].location.startLine).toBe(0);
     expect(result.slides[0].location.endLine).toBe(3);
 
-    expect(result.slides[1].location.startLine).toBe(5);
+    expect(result.slides[1].location.startLine).toBe(4);
     expect(result.slides[1].location.endLine).toBe(7);
 
-    expect(result.slides[2].location.startLine).toBe(9);
-    expect(result.slides[2].location.endLine).toBe(10);
+    expect(result.slides[2].location.startLine).toBe(8);
+    expect(result.slides[2].location.endLine).toBe(9);
   });
 
   it('should handle complex real-world markdown', () => {

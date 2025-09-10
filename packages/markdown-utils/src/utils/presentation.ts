@@ -1,12 +1,11 @@
+import { BaseChunk } from '../types/chunks';
 import {
   MarkdownPresentation,
   MarkdownSlide,
-  MarkdownPresentationFormat,
   MarkdownSource,
-  MarkdownSourceType,
   RepositoryInfo,
 } from '../types/presentation';
-import { BaseChunk } from '../types/chunks';
+
 import { parseMarkdownChunks } from './markdown-parser';
 
 // Simple hash function for markdown strings
@@ -50,28 +49,12 @@ export function parseMarkdownIntoPresentationFromSource<T extends BaseChunk = Ba
   source: MarkdownSource,
   customParsers?: Array<(content: string, idPrefix: string) => T[]>
 ): MarkdownPresentation<T> {
-  let presentation: MarkdownPresentation<T>;
-  switch (source.type) {
-    case MarkdownSourceType.GITHUB_FILE:
-    case MarkdownSourceType.GITHUB_ISSUE:
-    case MarkdownSourceType.GITHUB_PULL_REQUEST:
-    case MarkdownSourceType.GITHUB_GIST:
-      presentation = parseMarkdownIntoPresentation(
-        source.content,
-        MarkdownPresentationFormat.HEADER,
-        source.repositoryInfo,
-        customParsers
-      );
-      break;
-    default:
-      presentation = parseMarkdownIntoPresentation(
-        source.content,
-        MarkdownPresentationFormat.HORIZONTAL_RULE,
-        source.repositoryInfo,
-        customParsers
-      );
-      break;
-  }
+  // Always use header format
+  const presentation = parseMarkdownIntoPresentation(
+    source.content,
+    source.repositoryInfo,
+    customParsers
+  );
   presentation.source = source;
   return presentation;
 }
@@ -81,14 +64,15 @@ export function parseMarkdownIntoPresentationFromSource<T extends BaseChunk = Ba
  */
 export function parseMarkdownIntoPresentation<T extends BaseChunk = BaseChunk>(
   markdownContent: string,
-  format?: MarkdownPresentationFormat,
   repositoryInfo?: RepositoryInfo,
   customParsers?: Array<(content: string, idPrefix: string) => T[]>
 ): MarkdownPresentation<T> {
-  const detectedFormat = format || detectPresentationFormat(markdownContent);
 
-  // If format is FULL_CONTENT, return the entire content as a single slide
-  if (detectedFormat === MarkdownPresentationFormat.FULL_CONTENT) {
+  // Check if content has multiple headers
+  const hasMultipleHeaders = detectMultipleHeaders(markdownContent);
+  
+  // If no multiple headers, return entire content as single slide
+  if (!hasMultipleHeaders) {
     const id = `slide-0-${hashMarkdownString(markdownContent)}`;
     const chunks = parseMarkdownChunks<T>(markdownContent, id, customParsers);
     return {
@@ -100,13 +84,11 @@ export function parseMarkdownIntoPresentation<T extends BaseChunk = BaseChunk>(
             startLine: 0,
             endLine: markdownContent.split('\n').length - 1,
             content: markdownContent,
-            type: detectedFormat,
           },
           chunks,
         },
       ],
       originalContent: markdownContent,
-      format: detectedFormat,
       repositoryInfo,
     };
   }
@@ -132,14 +114,9 @@ export function parseMarkdownIntoPresentation<T extends BaseChunk = BaseChunk>(
       }
     }
     
-    // Only check for delimiters if we're not inside a code block
-    const isDelimiter = !inCodeBlock && (
-      detectedFormat === MarkdownPresentationFormat.HORIZONTAL_RULE
-        ? line.trim() === '---'
-        : detectedFormat === MarkdownPresentationFormat.HEADER
-        ? line.trim().startsWith('#') && !line.trim().startsWith('###')  // # or ## but not ###
-        : false
-    );
+    // Only check for headers if we're not inside a code block
+    // Headers are # or ## but not ###
+    const isDelimiter = !inCodeBlock && line.trim().startsWith('#') && !line.trim().startsWith('###');
 
     if (isDelimiter && currentSlideLines.length > 0) {
       // Save current slide
@@ -153,13 +130,12 @@ export function parseMarkdownIntoPresentation<T extends BaseChunk = BaseChunk>(
           startLine: currentSlideStartLine,
           endLine: i - 1,
           content: slideContent,
-          type: detectedFormat,
         },
         chunks,
       });
 
-      // Start new slide
-      currentSlideLines = detectedFormat === MarkdownPresentationFormat.HEADER ? [line] : [];
+      // Start new slide with the header line
+      currentSlideLines = [line];
       currentSlideStartLine = i;
     } else {
       currentSlideLines.push(line);
@@ -178,7 +154,6 @@ export function parseMarkdownIntoPresentation<T extends BaseChunk = BaseChunk>(
         startLine: currentSlideStartLine,
         endLine: lines.length - 1,
         content: slideContent,
-        type: detectedFormat,
       },
       chunks,
     });
@@ -187,15 +162,14 @@ export function parseMarkdownIntoPresentation<T extends BaseChunk = BaseChunk>(
   return {
     slides,
     originalContent: markdownContent,
-    format: detectedFormat,
     repositoryInfo,
   };
 }
 
 /**
- * Detect the presentation format from markdown content
+ * Detect if content has multiple headers
  */
-function detectPresentationFormat(markdownContent: string): MarkdownPresentationFormat {
+function detectMultipleHeaders(markdownContent: string): boolean {
   const lines = markdownContent.split('\n');
   let h1Count = 0;
   let h2Count = 0;
@@ -226,13 +200,9 @@ function detectPresentationFormat(markdownContent: string): MarkdownPresentation
     }
   }
 
-  // If there are multiple H1 or H2 headers, use header format
-  if (h1Count > 1 || h2Count > 1) {
-    return MarkdownPresentationFormat.HEADER;
-  }
-
-  // Default to full content as single slide
-  return MarkdownPresentationFormat.FULL_CONTENT;
+  // If there are multiple headers (H1 or H2), return true
+  const totalHeaders = h1Count + h2Count;
+  return totalHeaders > 1;
 }
 
 /**
@@ -242,13 +212,7 @@ export function serializePresentationToMarkdown<T extends BaseChunk = BaseChunk>
   presentation: MarkdownPresentation<T>
 ): string {
   return presentation.slides
-    .map((slide, index) => {
-      const delimiter =
-        presentation.format === MarkdownPresentationFormat.HORIZONTAL_RULE && index > 0
-          ? '---\n'
-          : '';
-      return delimiter + slide.location.content;
-    })
+    .map(slide => slide.location.content)
     .join('\n');
 }
 

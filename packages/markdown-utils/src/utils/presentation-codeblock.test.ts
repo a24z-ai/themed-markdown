@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { parseMarkdownIntoPresentation, MarkdownPresentationFormat } from '../index';
+import { parseMarkdownIntoPresentation } from '../index';
 
 describe('parseMarkdownIntoPresentation with code blocks', () => {
   it('should not split slides on headers inside code blocks', () => {
@@ -19,10 +19,7 @@ Still in first slide
 
 This should be a new slide`;
 
-    const presentation = parseMarkdownIntoPresentation(
-      content,
-      MarkdownPresentationFormat.HEADER
-    );
+    const presentation = parseMarkdownIntoPresentation(content);
     
     expect(presentation.slides).toHaveLength(2);
     expect(presentation.slides[0].title).toBe('First Slide');
@@ -31,7 +28,7 @@ This should be a new slide`;
     expect(presentation.slides[1].title).toBe('Second Slide');
   });
 
-  it('should not split on --- inside code blocks', () => {
+  it('should not split on --- inside code blocks but split on headers', () => {
     const content = `# Slide One
 
 Content here
@@ -48,10 +45,7 @@ Still in slide one
 
 # Slide Two`;
 
-    const presentation = parseMarkdownIntoPresentation(
-      content,
-      MarkdownPresentationFormat.HORIZONTAL_RULE
-    );
+    const presentation = parseMarkdownIntoPresentation(content);
     
     expect(presentation.slides).toHaveLength(2);
     expect(presentation.slides[0].location.content).toContain('---');
@@ -68,16 +62,13 @@ Still in slide one
 
 # Second Slide`;
 
-    const presentation = parseMarkdownIntoPresentation(
-      content,
-      MarkdownPresentationFormat.HEADER
-    );
+    const presentation = parseMarkdownIntoPresentation(content);
     
     expect(presentation.slides).toHaveLength(2);
     expect(presentation.slides[0].location.content).toContain('Header in tilde block');
   });
 
-  it('should detect format correctly ignoring code blocks', () => {
+  it('should correctly handle single header with code blocks', () => {
     const content = `# Only One Real Header
 
 \`\`\`markdown
@@ -89,8 +80,7 @@ No slide splitting should occur`;
 
     const presentation = parseMarkdownIntoPresentation(content);
     
-    // Should detect as FULL_CONTENT since only 1 real header
-    expect(presentation.format).toBe(MarkdownPresentationFormat.FULL_CONTENT);
+    // Should return single slide since only 1 real header
     expect(presentation.slides).toHaveLength(1);
   });
 });

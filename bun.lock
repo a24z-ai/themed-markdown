@@ -4,7 +4,7 @@
     "": {
       "name": "themed-markdown",
       "dependencies": {
-        "@a24z/markdown-utils": "^0.1.0",
+        "@a24z/markdown-utils": "^0.1.1",
         "@modelcontextprotocol/sdk": "^1.0.4",
         "@types/d3-hierarchy": "^3.1.7",
         "@types/flexsearch": "^0.7.6",
@@ -106,7 +106,7 @@
     },
   },
   "packages": {
-    "@a24z/markdown-utils": ["@a24z/markdown-utils@0.1.0", "", {}, "sha512-BZv4YeFWbVqXQ7Uj1X9aHV6PeFu0WZLz/cT6KzI3qJoLgQQmGon4RX3L7kmj5Oga3Tv7zUrGoiB+rRLXY1ntyQ=="],
+    "@a24z/markdown-utils": ["@a24z/markdown-utils@0.1.1", "", {}, "sha512-gEtyT0nayqBYioWbK0kxBCJK0CmbT4WkCqa+Bmd4piPbou8S6gYQ+Y+tOUmd8bti1+4AjGNijmrAbIu/avAe1Q=="],
 
     "@adobe/css-tools": ["@adobe/css-tools@4.4.4", "", {}, "sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg=="],
 

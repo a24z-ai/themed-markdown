@@ -1,11 +1,5 @@
 import { BaseChunk } from './chunks';
 
-export enum MarkdownPresentationFormat {
-  HORIZONTAL_RULE = 'horizontal_rule',
-  HEADER = 'header',
-  FULL_CONTENT = 'full_content',
-}
-
 export enum MarkdownSourceType {
   WORKSPACE_FILE = 'workspace_file',
   REMOTE_FILE = 'remote_file',
@@ -30,7 +24,6 @@ export interface MarkdownSlideLocation {
   startLine: number;
   endLine: number;
   content: string;
-  type: MarkdownPresentationFormat;
 }
 
 export interface MarkdownSlide<T extends BaseChunk = BaseChunk> {
@@ -56,7 +49,6 @@ export interface MarkdownPresentation<T extends BaseChunk = BaseChunk> {
   source?: MarkdownSource;
   slides: MarkdownSlide<T>[];
   originalContent: string;
-  format: MarkdownPresentationFormat;
   /** Optional repository information for resolving relative URLs to GitHub raw URLs */
   repositoryInfo?: RepositoryInfo;
 }

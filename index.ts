@@ -45,7 +45,6 @@ export { parseMarkdownChunks } from './industryMarkdown/utils/markdownUtils';
 export type {
   MarkdownPresentation,
   MarkdownSlide,
-  MarkdownPresentationFormat,
   MarkdownSource,
   MarkdownSourceType,
   RepositoryInfo,

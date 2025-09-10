@@ -1,11 +1,5 @@
 import { ContentChunk } from './customMarkdownChunks';
 
-export enum MarkdownPresentationFormat {
-  HORIZONTAL_RULE = 'horizontal_rule',
-  HEADER = 'header',
-  FULL_CONTENT = 'full_content',
-}
-
 export enum MarkdownSourceType {
   WORKSPACE_FILE = 'workspace_file',
   REMOTE_FILE = 'remote_file',
@@ -30,7 +24,6 @@ export interface MarkdownSlideLocation {
   startLine: number;
   endLine: number;
   content: string;
-  type: MarkdownPresentationFormat;
 }
 
 export interface MarkdownSlide {
@@ -73,7 +66,6 @@ export interface MarkdownPresentation {
   source?: MarkdownSource;
   slides: MarkdownSlide[];
   originalContent: string;
-  format: MarkdownPresentationFormat;
   /** Optional repository information for resolving relative URLs to GitHub raw URLs */
   repositoryInfo?: RepositoryInfo;
 }

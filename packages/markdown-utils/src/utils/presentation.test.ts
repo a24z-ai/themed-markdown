@@ -2,8 +2,7 @@ import { describe, it, expect } from 'bun:test';
 import { 
   parseMarkdownIntoPresentation, 
   extractSlideTitle,
-  serializePresentationToMarkdown,
-  MarkdownPresentationFormat 
+  serializePresentationToMarkdown
 } from '../index';
 
 describe('extractSlideTitle', () => {
@@ -33,17 +32,16 @@ describe('extractSlideTitle', () => {
 });
 
 describe('parseMarkdownIntoPresentation', () => {
-  it('should parse single slide with FULL_CONTENT format', () => {
+  it('should parse single slide when only one header', () => {
     const content = '# Single Slide\n\nJust one slide here';
     const presentation = parseMarkdownIntoPresentation(content);
     
-    expect(presentation.format).toBe(MarkdownPresentationFormat.FULL_CONTENT);
     expect(presentation.slides).toHaveLength(1);
     expect(presentation.slides[0].title).toBe('Single Slide');
     expect(presentation.slides[0].location.content).toBe(content);
   });
 
-  it('should split slides by horizontal rules', () => {
+  it('should split slides by headers even with horizontal rules', () => {
     const content = `# Slide 1
 
 Content 1
@@ -60,10 +58,7 @@ Content 2
 
 Content 3`;
 
-    const presentation = parseMarkdownIntoPresentation(
-      content, 
-      MarkdownPresentationFormat.HORIZONTAL_RULE
-    );
+    const presentation = parseMarkdownIntoPresentation(content);
     
     expect(presentation.slides).toHaveLength(3);
     expect(presentation.slides[0].title).toBe('Slide 1');
@@ -84,10 +79,7 @@ Content of second
 
 Final content`;
 
-    const presentation = parseMarkdownIntoPresentation(
-      content,
-      MarkdownPresentationFormat.HEADER
-    );
+    const presentation = parseMarkdownIntoPresentation(content);
     
     expect(presentation.slides).toHaveLength(3);
     expect(presentation.slides[0].title).toBe('First Slide');
@@ -95,11 +87,10 @@ Final content`;
     expect(presentation.slides[2].title).toBe('Third Slide');
   });
 
-  it('should auto-detect header format with multiple headers', () => {
+  it('should parse multiple headers correctly', () => {
     const content = '# Slide 1\nContent\n# Slide 2\nMore\n## Slide 3\nFinal';
     const presentation = parseMarkdownIntoPresentation(content);
     
-    expect(presentation.format).toBe(MarkdownPresentationFormat.HEADER);
     expect(presentation.slides).toHaveLength(3);
   });
 });
@@ -110,22 +101,16 @@ describe('serializePresentationToMarkdown', () => {
 
 Content
 
----
-
 # Slide 2
 
 More content`;
 
-    const presentation = parseMarkdownIntoPresentation(
-      originalContent,
-      MarkdownPresentationFormat.HORIZONTAL_RULE
-    );
+    const presentation = parseMarkdownIntoPresentation(originalContent);
     
     const serialized = serializePresentationToMarkdown(presentation);
     
     // Should contain both slides
     expect(serialized).toContain('# Slide 1');
     expect(serialized).toContain('# Slide 2');
-    expect(serialized).toContain('---');
   });
 });

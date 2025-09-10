@@ -15,7 +15,6 @@ export {
 
 // Type exports - presentation
 export {
-  MarkdownPresentationFormat,
   MarkdownSourceType,
   type MarkdownSource,
   type MarkdownSlideLocation,
