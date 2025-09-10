@@ -1,0 +1,23 @@
+{
+  "id": "themed-markdown",
+  "version": "1.0.0",
+  "name": "themed-markdown",
+  "description": "Codebase view extracted from documentation",
+  "rows": 1,
+  "cols": 1,
+  "cells": {},
+  "overviewPath": "README.md",
+  "category": "docs",
+  "displayOrder": 0,
+  "timestamp": "2025-09-10T02:07:38.914Z",
+  "metadata": {
+    "generationType": "user",
+    "ui": {
+      "enabled": true,
+      "rows": 1,
+      "cols": 1,
+      "showCellLabels": true,
+      "cellLabelPosition": "top"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "a24z-markdown-utils",
+  "version": "1.0.0",
+  "name": "@a24z/markdown-utils",
+  "description": "Codebase view extracted from documentation",
+  "rows": 1,
+  "cols": 1,
+  "cells": {},
+  "overviewPath": "packages/markdown-utils/README.md",
+  "category": "docs",
+  "displayOrder": 0,
+  "timestamp": "2025-09-10T02:07:38.915Z",
+  "metadata": {
+    "generationType": "user",
+    "ui": {
+      "enabled": true,
+      "rows": 1,
+      "cols": 1,
+      "showCellLabels": true,
+      "cellLabelPosition": "top"
+    }
+  }
+}

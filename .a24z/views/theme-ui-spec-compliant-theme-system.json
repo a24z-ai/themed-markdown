@@ -1,0 +1,46 @@
+{
+  "id": "theme-ui-spec-compliant-theme-system",
+  "version": "1.0.0",
+  "name": "Theme UI Spec-Compliant Theme System",
+  "description": "Codebase view extracted from documentation",
+  "rows": 1,
+  "cols": 2,
+  "cells": {
+    "Files": {
+      "coordinates": [
+        0,
+        0
+      ],
+      "files": [
+        "ts",
+        "tsx",
+        "md"
+      ],
+      "priority": 0
+    },
+    "Example Component": {
+      "coordinates": [
+        0,
+        1
+      ],
+      "files": [
+        "tsx"
+      ],
+      "priority": 0
+    }
+  },
+  "overviewPath": "industryTheme/README.md",
+  "category": "docs",
+  "displayOrder": 0,
+  "timestamp": "2025-09-10T02:07:38.915Z",
+  "metadata": {
+    "generationType": "user",
+    "ui": {
+      "enabled": true,
+      "rows": 1,
+      "cols": 2,
+      "showCellLabels": true,
+      "cellLabelPosition": "top"
+    }
+  }
+}

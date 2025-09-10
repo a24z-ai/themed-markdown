@@ -1,0 +1,34 @@
+{
+  "id": "industry-themed-markdown-components",
+  "version": "1.0.0",
+  "name": "Industry-themed Markdown Components",
+  "description": "Codebase view extracted from documentation",
+  "rows": 1,
+  "cols": 1,
+  "cells": {
+    "Key Differences from ConfigurableMarkdownSlide": {
+      "coordinates": [
+        0,
+        0
+      ],
+      "files": [
+        "md"
+      ],
+      "priority": 0
+    }
+  },
+  "overviewPath": "industryMarkdown/README.md",
+  "category": "docs",
+  "displayOrder": 0,
+  "timestamp": "2025-09-10T02:07:38.915Z",
+  "metadata": {
+    "generationType": "user",
+    "ui": {
+      "enabled": true,
+      "rows": 1,
+      "cols": 1,
+      "showCellLabels": true,
+      "cellLabelPosition": "top"
+    }
+  }
+}
