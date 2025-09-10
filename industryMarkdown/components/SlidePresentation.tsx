@@ -256,7 +256,8 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
               display: 'flex',
               alignItems: 'center',
               gap: theme.space[1],
-              padding: `${theme.space[1]}px ${theme.space[2]}px`,
+              padding: `0 ${theme.space[2]}px`,
+              height: '36px',
               backgroundColor: 'transparent',
               border: `1px solid ${theme.colors.border}`,
               borderRadius: theme.radii[1],
@@ -276,7 +277,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={18} />
             Previous
           </button>
           </div>
@@ -313,7 +314,8 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 gap: theme.space[1],
-                padding: `${theme.space[1]}px ${theme.space[2]}px`,
+                padding: `0 ${theme.space[2]}px`,
+                height: '36px',
                 backgroundColor: 'transparent',
                 border: `1px solid ${theme.colors.border}`,
                 borderRadius: theme.radii[1],
@@ -334,7 +336,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
               }}
             >
               Next
-              <ChevronRight size={16} />
+              <ChevronRight size={18} />
             </button>
 
             {showFullscreenButton && (
