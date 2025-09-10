@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X } from 'lucide
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 import { useTheme } from '../../industryTheme';
-import { BashCommandOptions, BashCommandResult } from '../types/presentation';
+import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
 import { extractAllSlideTitles } from '../utils/extractSlideTitles';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';

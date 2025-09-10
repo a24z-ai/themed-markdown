@@ -1,6 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
 import { parseMarkdownIntoPresentation } from '../../industryMarkdown/utils/presentationUtils';
-import type { MarkdownSlide } from '../../industryMarkdown/types/presentation';
 
 describe('parseMarkdownIntoPresentation', () => {
   it('should split document by ## headers', () => {
@@ -151,11 +150,11 @@ Common issues and solutions.`;
 
     // Check that slides are in order and have unique IDs
     expect(result.slides).toHaveLength(4); // 1 title + 3 sections
-    result.slides.forEach((slide: MarkdownSlide, index: number) => {
+    result.slides.forEach((slide, index) => {
       expect(slide.id).toContain('slide-');
       // Each slide should have a unique ID
-      const otherSlides = result.slides.filter((_: MarkdownSlide, i: number) => i !== index);
-      expect(otherSlides.every((other: MarkdownSlide) => other.id !== slide.id)).toBe(true);
+      const otherSlides = result.slides.filter((_, i) => i !== index);
+      expect(otherSlides.every((other) => other.id !== slide.id)).toBe(true);
     });
   });
 

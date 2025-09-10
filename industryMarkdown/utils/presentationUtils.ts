@@ -5,43 +5,16 @@ import {
   MarkdownSource,
   MarkdownSourceType,
   RepositoryInfo,
-} from '../types/presentation';
-
-import { parseMarkdownChunks } from './markdownUtils';
-
-// Simple hash function for markdown strings
-function hashMarkdownString(str: string): string {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  return Math.abs(hash).toString(36);
-}
+  parseMarkdownChunks,
+  extractSlideTitle as extractSlideTitleCore,
+  parseMarkdownIntoPresentation as parseMarkdownIntoPresentationCore,
+} from '@a24z/markdown-utils';
 
 /**
  * Extract the title from slide content (first heading or first line)
+ * Re-export from core library
  */
-export function extractSlideTitle(content: string): string {
-  const lines = content.split('\n').filter(line => line.trim());
-
-  // Look for the first heading
-  for (const line of lines) {
-    const headingMatch = line.match(/^#+\s+(.+)$/);
-    if (headingMatch) {
-      return headingMatch[1].trim();
-    }
-  }
-
-  // If no heading, use first non-empty line (truncated)
-  if (lines.length > 0) {
-    const firstLine = lines[0];
-    return firstLine.length > 50 ? firstLine.substring(0, 47) + '...' : firstLine;
-  }
-
-  return 'Untitled Slide';
-}
+export const extractSlideTitle = extractSlideTitleCore;
 
 export function parseMarkdownIntoPresentationFromSource(
   source: MarkdownSource,
@@ -51,14 +24,12 @@ export function parseMarkdownIntoPresentationFromSource(
     case MarkdownSourceType.WORKSPACE_FILE:
     case MarkdownSourceType.GITHUB_FILE:
     case MarkdownSourceType.DRAFT:
-      presentation = parseMarkdownIntoPresentation(source.content);
+      presentation = parseMarkdownIntoPresentation(source.content, undefined, source.repositoryInfo);
       break;
     default:
       throw new Error(`Unsupported source type: ${source.type}`);
   }
   presentation.source = source;
-  // Experimental: Add repository info to the presentation
-  presentation.repositoryInfo = source.repositoryInfo;
   return presentation;
 }
 
@@ -78,127 +49,15 @@ export function createGithubFileSource(
 /**
  * Enhanced version of markdown slide parsing that preserves location information
  * and returns a structured Presentation object
+ * Now uses the core library implementation
  */
-export function parseMarkdownIntoPresentation(markdownContent: string): MarkdownPresentation {
-  try {
-    if (typeof markdownContent !== 'string') {
-      console.error('Invalid markdown content provided - not a string');
-      return {
-        slides: [],
-        originalContent: '',
-        format: MarkdownPresentationFormat.FULL_CONTENT,
-      };
-    }
-
-    // Handle empty content gracefully without logging
-    if (!markdownContent || markdownContent.trim() === '') {
-      return {
-        slides: [],
-        originalContent: '',
-        format: MarkdownPresentationFormat.FULL_CONTENT,
-      };
-    }
-
-    const slides: MarkdownSlide[] = [];
-    let format: MarkdownPresentationFormat = MarkdownPresentationFormat.FULL_CONTENT;
-
-    // Try splitting by ## headers
-    let slideCounter = 0;
-    const headerMatches = Array.from(markdownContent.matchAll(/^(##\s+.*$)/gm));
-
-    if (headerMatches.length > 0) {
-      format = MarkdownPresentationFormat.HEADER;
-
-      // Handle content before first ## if it exists
-      const firstHeaderStart = headerMatches[0].index!;
-      const firstContent = markdownContent.substring(0, firstHeaderStart).trim();
-      if (firstContent) {
-        slideCounter++;
-        slides.push({
-          id: `slide-${slideCounter}-${hashMarkdownString(firstContent)}`,
-          title: extractSlideTitle(firstContent),
-          location: {
-            startLine: 1,
-            endLine: firstContent.split('\n').length,
-            content: firstContent,
-            type: MarkdownPresentationFormat.HEADER,
-          },
-          chunks: parseMarkdownChunks(firstContent, `slide-${slideCounter}`),
-        });
-      }
-
-      // Process each header section
-      for (let i = 0; i < headerMatches.length; i++) {
-        const headerMatch = headerMatches[i];
-        const startIndex = headerMatch.index!;
-        const endIndex =
-          i < headerMatches.length - 1 ? headerMatches[i + 1].index! : markdownContent.length;
-        const content = markdownContent.substring(startIndex, endIndex).trim();
-
-        if (content) {
-          slideCounter++;
-          const startLine = markdownContent.substring(0, startIndex).split('\n').length;
-          const endLine = startLine + content.split('\n').length - 1;
-
-          slides.push({
-            id: `slide-${slideCounter}-${hashMarkdownString(content)}`,
-            title: extractSlideTitle(content),
-            location: {
-              startLine,
-              endLine,
-              content,
-              type: MarkdownPresentationFormat.HEADER,
-            },
-            chunks: parseMarkdownChunks(content, `slide-${slideCounter}`),
-          });
-        }
-      }
-    } else if (markdownContent.trim()) {
-      // If no headers found, treat entire content as one slide
-      slideCounter++;
-      const trimmedContent = markdownContent.trim();
-      slides.push({
-        id: `slide-${slideCounter}-${hashMarkdownString(trimmedContent)}`,
-        title: extractSlideTitle(trimmedContent),
-        location: {
-          startLine: 1,
-          endLine: markdownContent.split('\n').length,
-          content: trimmedContent,
-          type: MarkdownPresentationFormat.FULL_CONTENT,
-        },
-        chunks: parseMarkdownChunks(trimmedContent, `slide-${slideCounter}`),
-      });
-    }
-
-    return {
-      slides,
-      originalContent: markdownContent,
-      format,
-    };
-  } catch (error) {
-    console.error('Error parsing markdown presentation:', error);
-    // Return single slide with full content in case of error
-    const content = markdownContent.trim();
-    return {
-      slides: content
-        ? [
-            {
-              id: `slide-error-${hashMarkdownString(content)}`,
-              title: extractSlideTitle(content),
-              location: {
-                startLine: 1,
-                endLine: content.split('\n').length,
-                content,
-                type: MarkdownPresentationFormat.FULL_CONTENT,
-              },
-              chunks: parseMarkdownChunks(content, 'slide-error'),
-            },
-          ]
-        : [],
-      originalContent: markdownContent,
-      format: MarkdownPresentationFormat.FULL_CONTENT,
-    };
-  }
+export function parseMarkdownIntoPresentation(
+  markdownContent: string,
+  format?: MarkdownPresentationFormat,
+  repositoryInfo?: RepositoryInfo
+): MarkdownPresentation {
+  // Use core library implementation
+  return parseMarkdownIntoPresentationCore(markdownContent, format, repositoryInfo);
 }
 
 /**

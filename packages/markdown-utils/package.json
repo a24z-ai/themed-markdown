@@ -1,0 +1,48 @@
+{
+  "name": "@a24z/markdown-utils",
+  "version": "0.1.0",
+  "description": "Core markdown parsing and presentation utilities without React dependencies",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun run clean && bun run build:esm && bun run build:cjs && bun run build:types",
+    "build:esm": "bun build ./src/index.ts --outfile ./dist/index.mjs --format esm",
+    "build:cjs": "bun build ./src/index.ts --outfile ./dist/index.js --format cjs",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap",
+    "dev": "bun run build --watch",
+    "test": "bun test",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "markdown",
+    "parser",
+    "presentation",
+    "slides",
+    "utilities"
+  ],
+  "author": "a24z Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.0.4"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a24z-ai/themed-markdown.git",
+    "directory": "packages/markdown-utils"
+  }
+}

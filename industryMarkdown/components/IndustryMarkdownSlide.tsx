@@ -70,7 +70,7 @@ import remarkGfm from 'remark-gfm';
 
 import { useTheme, Theme } from '../../industryTheme';
 import { KeyboardBinding } from '../types/keyboard';
-import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
+import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '@a24z/markdown-utils';
 import { parseMarkdownChunks } from '../utils/markdownUtils';
 
 import { IndustryHtmlModal, useIndustryHtmlModal } from './IndustryHtmlModal';
@@ -881,7 +881,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
           if (chunk.type === 'mermaid_chunk') {
             const mermaidProps: React.ComponentProps<typeof IndustryLazyMermaidDiagram> = {
               id: chunk.id,
-              code: chunk.code,
+              code: chunk.content,
               onCopyError: onCopyMermaidError,
               rootMargin: rootMargin,
               theme: theme,

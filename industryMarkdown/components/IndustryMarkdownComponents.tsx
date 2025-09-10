@@ -12,8 +12,7 @@ import {
   SourceProps,
   CheckboxElementProps,
 } from '../types/markdownComponents';
-import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '../types/presentation';
-import { parseBashCommands } from '../utils/bashCommandParser';
+import { BashCommandOptions, BashCommandResult, RepositoryInfo, parseBashCommands } from '@a24z/markdown-utils';
 import { extractTextFromChildren, LinkWithLoadingIndicator } from '../utils/componentUtils';
 import { transformImageUrl } from '../utils/imageUrlUtils';
 

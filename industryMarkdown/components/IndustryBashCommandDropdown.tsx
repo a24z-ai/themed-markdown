@@ -2,7 +2,7 @@ import { Play, ChevronDown } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
 
 import { Theme, useTheme } from '../../industryTheme';
-import { BashCommand, getCommandDisplayName } from '../utils/bashCommandParser';
+import { BashCommand, getCommandDisplayName } from '@a24z/markdown-utils';
 
 interface IndustryBashCommandDropdownProps {
   commands: BashCommand[];
