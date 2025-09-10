@@ -295,29 +295,6 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
             >
               <span style={{ fontWeight: 600 }}>Slide {currentSlide + 1}</span>
               <span style={{ opacity: 0.7 }}>of {slides.length}</span>
-
-              {/* Quick navigation dropdown */}
-              <select
-                value={currentSlide}
-                onChange={e => navigateToSlide(Number(e.target.value))}
-                style={{
-                  marginLeft: theme.space[2],
-                  padding: `${theme.space[0]}px ${theme.space[1]}px`,
-                  backgroundColor: theme.colors.backgroundSecondary,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: theme.radii[0],
-                  color: theme.colors.text,
-                  fontSize: theme.fontSizes[0],
-                  fontFamily: theme.fonts.monospace,
-                  cursor: 'pointer',
-                }}
-              >
-                {slides.map((_, index) => (
-                  <option key={index} value={index}>
-                    {index + 1}
-                  </option>
-                ))}
-              </select>
             </div>
           )}
 
@@ -329,34 +306,6 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
               gap: theme.space[2],
             }}
           >
-            {showFullscreenButton && (
-              <button
-                onClick={toggleFullscreen}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '32px',
-                  height: '32px',
-                  backgroundColor: 'transparent',
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: theme.radii[1],
-                  color: theme.colors.textSecondary,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseOver={e => {
-                  e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-                title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-              >
-                {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-              </button>
-            )}
-
             <button
               onClick={goToNextSlide}
               disabled={currentSlide === slides.length - 1}
@@ -387,6 +336,34 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
               Next
               <ChevronRight size={16} />
             </button>
+
+            {showFullscreenButton && (
+              <button
+                onClick={toggleFullscreen}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '36px',
+                  height: '36px',
+                  backgroundColor: 'transparent',
+                  border: `1px solid ${theme.colors.border}`,
+                  borderRadius: theme.radii[1],
+                  color: theme.colors.textSecondary,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseOver={e => {
+                  e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
+                }}
+                onMouseOut={e => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
+                title={isFullscreen ? 'Exit fullscreen (F)' : 'Enter fullscreen (F)'}
+              >
+                {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+              </button>
+            )}
           </div>
         </div>
       )}
