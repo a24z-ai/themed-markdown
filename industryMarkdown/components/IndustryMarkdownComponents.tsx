@@ -1,3 +1,4 @@
+import { BashCommandOptions, BashCommandResult, RepositoryInfo, parseBashCommands } from '@a24z/markdown-utils';
 import { Copy, Monitor, FileText, Check } from 'lucide-react';
 import React, { useMemo, useState, useRef } from 'react';
 
@@ -12,7 +13,6 @@ import {
   SourceProps,
   CheckboxElementProps,
 } from '../types/markdownComponents';
-import { BashCommandOptions, BashCommandResult, RepositoryInfo, parseBashCommands } from '@a24z/markdown-utils';
 import { extractTextFromChildren, LinkWithLoadingIndicator } from '../utils/componentUtils';
 import { transformImageUrl } from '../utils/imageUrlUtils';
 

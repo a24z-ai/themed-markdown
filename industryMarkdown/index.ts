@@ -6,6 +6,12 @@ export type { IndustryMarkdownSlideProps } from './components/IndustryMarkdownSl
 export { SlidePresentation } from './components/SlidePresentation';
 export type { SlidePresentationProps } from './components/SlidePresentation';
 
+// Slide navigation components
+export { SlideNavigationHeader } from './components/SlideNavigationHeader';
+export type { SlideNavigationHeaderProps } from './components/SlideNavigationHeader';
+export { SlideSearchBar } from './components/SlideSearchBar';
+export type { SlideSearchBarProps, SearchResult } from './components/SlideSearchBar';
+
 // Document view component for continuous or segmented display
 export { DocumentView } from './components/DocumentView';
 export type { DocumentViewProps } from './components/DocumentView';

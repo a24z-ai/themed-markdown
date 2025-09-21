@@ -109,6 +109,10 @@ export interface Theme {
     textSecondary: string;
     textTertiary: string;
     textMuted: string;
+
+    // Search highlight colors
+    highlightBg?: string;
+    highlightBorder?: string;
   };
 
   // Component variants (optional but useful)
@@ -203,7 +207,11 @@ export const theme: Theme = {
     surface: '#212738', // Dark navy surface
     textSecondary: '#c9b8a3', // Muted gold
     textTertiary: '#8b7968', // Faded bronze
-    textMuted: '#8b7968', // Faded bronze,
+    textMuted: '#8b7968', // Faded bronze
+
+    // Search highlight colors
+    highlightBg: 'rgba(255, 193, 7, 0.25)', // Semi-transparent amber/yellow
+    highlightBorder: 'rgba(255, 193, 7, 0.5)', // Stronger amber for border
   },
 
   // Component variants

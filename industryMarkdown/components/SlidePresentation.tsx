@@ -1,11 +1,12 @@
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X } from 'lucide-react';
+import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 import { useTheme } from '../../industryTheme';
-import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
 import { extractAllSlideTitles } from '../utils/extractSlideTitles';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
+import { SlideNavigationHeader } from './SlideNavigationHeader';
+import { SlideSearchBar, SearchResult } from './SlideSearchBar';
 
 export interface SlidePresentationProps {
   // Core content
@@ -52,6 +53,11 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   const [currentSlide, setCurrentSlide] = useState(initialSlide);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showTOC, setShowTOC] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [currentSearchResult, setCurrentSearchResult] = useState(-1); // -1 means no selection
+  const [searchStartSlide, setSearchStartSlide] = useState(0); // Track where search was initiated
   const containerRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   
@@ -70,6 +76,67 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
     },
     [slides.length, onSlideChange],
   );
+
+  // Search functionality - only rebuild when query or slides change, not currentSlide
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      setCurrentSearchResult(-1);
+      return;
+    }
+
+    const query = searchQuery.toLowerCase();
+    const results: SearchResult[] = [];
+
+    slides.forEach((slide, index) => {
+      const slideText = slide.toLowerCase();
+      const matches = slideText.split(query).length - 1;
+      if (matches > 0) {
+        results.push({ slideIndex: index, count: matches });
+      }
+    });
+
+    setSearchResults(results);
+
+    // Don't auto-highlight any result
+    setCurrentSearchResult(-1);
+  }, [searchQuery, slides]);
+
+  const navigateToSearchResult = useCallback(
+    (resultIndex: number) => {
+      if (searchResults.length === 0) return;
+
+      // If we're at -1 (no selection) and going forward, start at 0
+      // If going backward from -1, wrap to last result
+      let newIndex = resultIndex;
+      if (currentSearchResult === -1) {
+        newIndex = resultIndex < 0 ? searchResults.length - 1 : 0;
+      } else {
+        newIndex = ((resultIndex % searchResults.length) + searchResults.length) % searchResults.length;
+      }
+
+      setCurrentSearchResult(newIndex);
+
+      // Only navigate if it's a different slide
+      const targetSlide = searchResults[newIndex].slideIndex;
+      if (targetSlide !== currentSlide) {
+        navigateToSlide(targetSlide);
+      }
+    },
+    [searchResults, navigateToSlide, currentSlide, currentSearchResult]
+  );
+
+  const closeSearch = useCallback(() => {
+    setShowSearch(false);
+    // Keep search state - don't clear query or results
+  }, []);
+
+  const clearSearch = useCallback(() => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setCurrentSearchResult(-1);
+    setSearchStartSlide(0);
+  }, []);
 
   const goToPreviousSlide = useCallback(() => {
     navigateToSlide(currentSlide - 1);
@@ -97,7 +164,59 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       // Don't interfere with typing in inputs
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        // Allow Tab navigation in search
+        if (showSearch && (event.key === 'Tab' || event.key === 'Enter' || event.key === 'Escape')) {
+          // Continue to handle these keys
+        } else {
+          return;
+        }
+      }
+
+      // Handle Cmd/Ctrl+F for search
+      if ((event.metaKey || event.ctrlKey) && (event.key === 'f' || event.key === 'F')) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // If reopening search, update the start slide but keep the query/results
+        if (!showSearch) {
+          setSearchStartSlide(currentSlide); // Remember where we started searching
+          setShowSearch(true);
+        } else {
+          // If search is already open, close it
+          closeSearch();
+        }
         return;
+      }
+
+      // Handle search-specific keys
+      if (showSearch) {
+        switch (event.key) {
+          case 'Escape':
+            event.preventDefault();
+            closeSearch();
+            return;
+          case 'Tab':
+            event.preventDefault();
+            if (event.shiftKey) {
+              navigateToSearchResult(currentSearchResult - 1);
+            } else {
+              navigateToSearchResult(currentSearchResult + 1);
+            }
+            return;
+          case 'Enter':
+            event.preventDefault();
+            // If we have a selected result, navigate to it
+            if (currentSearchResult >= 0 && currentSearchResult < searchResults.length) {
+              const targetSlide = searchResults[currentSearchResult].slideIndex;
+              if (targetSlide !== currentSlide) {
+                navigateToSlide(targetSlide);
+              }
+            }
+            // Always close the search bar on Enter
+            closeSearch();
+            return;
+        }
+        return; // Don't process other keys when search is open
       }
 
       switch (event.key) {
@@ -173,7 +292,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToPreviousSlide, goToNextSlide, navigateToSlide, slides.length, toggleFullscreen, showTOC]);
+  }, [goToPreviousSlide, goToNextSlide, navigateToSlide, slides.length, toggleFullscreen, showTOC, showSearch, closeSearch, navigateToSearchResult, currentSearchResult]);
 
   // Update state when slides change externally
   useEffect(() => {
@@ -182,7 +301,6 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
     }
   }, [slides.length, currentSlide]);
 
-  const navigationHeight = showNavigation ? '48px' : '0px';
 
   return (
     <div
@@ -197,177 +315,19 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
     >
       {/* Navigation Bar */}
       {showNavigation && (
-        <div
-          style={{
-            height: navigationHeight,
-            minHeight: navigationHeight,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: `0 ${theme.space[3]}px`,
-            borderBottom: `1px solid ${theme.colors.border}`,
-            backgroundColor: theme.colors.background,
-            flexShrink: 0,
-          }}
-        >
-          {/* Left: TOC button and Previous button */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: theme.space[2],
-            }}
-          >
-            {/* Table of Contents button */}
-            <button
-              onClick={() => setShowTOC(prev => !prev)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '36px',
-                height: '36px',
-                backgroundColor: showTOC ? theme.colors.primary : 'transparent',
-                border: `1px solid ${showTOC ? theme.colors.primary : theme.colors.border}`,
-                borderRadius: theme.radii[1],
-                color: showTOC ? theme.colors.background : theme.colors.text,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseOver={e => {
-                if (!showTOC) {
-                  e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-                }
-              }}
-              onMouseOut={e => {
-                if (!showTOC) {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }
-              }}
-              title={showTOC ? 'Close table of contents (Esc)' : 'Open table of contents (T)'}
-            >
-              {showTOC ? <X size={18} /> : <Menu size={18} />}
-            </button>
-            
-            <button
-              onClick={goToPreviousSlide}
-              disabled={currentSlide === 0}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: theme.space[1],
-              padding: `0 ${theme.space[2]}px`,
-              height: '36px',
-              backgroundColor: 'transparent',
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[1],
-              color: currentSlide === 0 ? theme.colors.muted : theme.colors.text,
-              cursor: currentSlide === 0 ? 'not-allowed' : 'pointer',
-              fontSize: theme.fontSizes[1],
-              fontFamily: theme.fonts.body,
-              opacity: currentSlide === 0 ? 0.5 : 1,
-              transition: 'all 0.2s ease',
-            }}
-            onMouseOver={e => {
-              if (currentSlide !== 0) {
-                e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-              }
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
-          >
-            <ChevronLeft size={18} />
-            Previous
-          </button>
-          </div>
-
-          {/* Center: Slide counter */}
-          {showSlideCounter && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: theme.space[2],
-                color: theme.colors.textSecondary,
-                fontSize: theme.fontSizes[1],
-                fontFamily: theme.fonts.monospace,
-              }}
-            >
-              <span style={{ fontWeight: 600 }}>Slide {currentSlide + 1}</span>
-              <span style={{ opacity: 0.7 }}>of {slides.length}</span>
-            </div>
-          )}
-
-          {/* Right: Next button and fullscreen */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: theme.space[2],
-            }}
-          >
-            <button
-              onClick={goToNextSlide}
-              disabled={currentSlide === slides.length - 1}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: theme.space[1],
-                padding: `0 ${theme.space[2]}px`,
-                height: '36px',
-                backgroundColor: 'transparent',
-                border: `1px solid ${theme.colors.border}`,
-                borderRadius: theme.radii[1],
-                color: currentSlide === slides.length - 1 ? theme.colors.muted : theme.colors.text,
-                cursor: currentSlide === slides.length - 1 ? 'not-allowed' : 'pointer',
-                fontSize: theme.fontSizes[1],
-                fontFamily: theme.fonts.body,
-                opacity: currentSlide === slides.length - 1 ? 0.5 : 1,
-                transition: 'all 0.2s ease',
-              }}
-              onMouseOver={e => {
-                if (currentSlide !== slides.length - 1) {
-                  e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-                }
-              }}
-              onMouseOut={e => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
-            >
-              Next
-              <ChevronRight size={18} />
-            </button>
-
-            {showFullscreenButton && (
-              <button
-                onClick={toggleFullscreen}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '36px',
-                  height: '36px',
-                  backgroundColor: 'transparent',
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: theme.radii[1],
-                  color: theme.colors.textSecondary,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseOver={e => {
-                  e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-                }}
-                onMouseOut={e => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-                title={isFullscreen ? 'Exit fullscreen (F)' : 'Enter fullscreen (F)'}
-              >
-                {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
-              </button>
-            )}
-          </div>
-        </div>
+        <SlideNavigationHeader
+          currentSlide={currentSlide}
+          totalSlides={slides.length}
+          showTOC={showTOC}
+          isFullscreen={isFullscreen}
+          showSlideCounter={showSlideCounter}
+          showFullscreenButton={showFullscreenButton}
+          theme={theme}
+          onPrevious={goToPreviousSlide}
+          onNext={goToNextSlide}
+          onToggleTOC={() => setShowTOC(prev => !prev)}
+          onToggleFullscreen={toggleFullscreen}
+        />
       )}
 
       {/* Main Content Area with TOC Sidebar */}
@@ -543,6 +503,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
             handleRunBashCommand={handleRunBashCommand}
             handlePromptCopy={handlePromptCopy}
             fontSizeScale={fontSizeScale}
+            searchQuery={showSearch ? searchQuery : undefined}
           />
         ) : (
           <div
@@ -585,6 +546,24 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
           />
         </div>
       )}
+
+      {/* Search Bar */}
+      <SlideSearchBar
+        showSearch={showSearch}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchResults={searchResults}
+        currentSearchResult={currentSearchResult}
+        searchStartSlide={searchStartSlide}
+        slideTitles={slideTitles}
+        theme={theme}
+        onResultClick={(index, slideIndex) => {
+          setCurrentSearchResult(index);
+          navigateToSlide(slideIndex);
+        }}
+        onClose={closeSearch}
+        onClear={clearSearch}
+      />
     </div>
   );
 };

@@ -59,6 +59,7 @@
  * ```
  */
 
+import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '@a24z/markdown-utils';
 import { defaultSchema } from 'hast-util-sanitize';
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -70,7 +71,7 @@ import remarkGfm from 'remark-gfm';
 
 import { useTheme, Theme } from '../../industryTheme';
 import { KeyboardBinding } from '../types/keyboard';
-import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '@a24z/markdown-utils';
+import { highlightSearchMatches } from '../utils/highlightSearchMatches';
 import { parseMarkdownChunks } from '../utils/markdownUtils';
 
 import { IndustryHtmlModal, useIndustryHtmlModal } from './IndustryHtmlModal';
@@ -99,6 +100,9 @@ export interface IndustryMarkdownSlideProps {
 
   // === Feature Toggles ===
   enableHtmlPopout?: boolean;
+
+  // === Search ===
+  searchQuery?: string; // Search query for highlighting matches
 
   // === Layout & Styling ===
   slideHeaderMarginTopOverride?: number;
@@ -343,6 +347,9 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
 
   // === Feature Toggles ===
   enableHtmlPopout = true,
+
+  // === Search ===
+  searchQuery,
 
   // === Layout & Styling ===
   slideHeaderMarginTopOverride,
@@ -727,9 +734,11 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
   const sanitizeSchema = useMemo(
     () => ({
       ...defaultSchema,
-      tagNames: [...(defaultSchema.tagNames || []), 'picture', 'source'],
+      tagNames: [...(defaultSchema.tagNames || []), 'picture', 'source', 'mark'],
       attributes: {
         ...defaultSchema.attributes,
+        // Allow mark element for search highlighting
+        mark: ['style', 'className'],
         // Allow className for syntax highlighting
         code: [...(defaultSchema.attributes?.code || []), 'className', 'style'],
         span: [...(defaultSchema.attributes?.span || []), 'className', 'style'],
@@ -788,7 +797,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
   // Create a function to get markdown components for each chunk index
   const getMarkdownComponents = useCallback(
     (chunkIndex: number) => {
-      return createIndustryMarkdownComponents({
+      const baseComponents = createIndustryMarkdownComponents({
         theme,
         slideIdPrefix,
         slideIndex,
@@ -804,6 +813,30 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
         index: chunkIndex,
         repositoryInfo,
       });
+
+      // Add mark component for search highlighting with inline styles
+      if (searchQuery) {
+        return {
+          ...baseComponents,
+          mark: ({ children }: { children?: React.ReactNode }) => (
+            <mark
+              style={{
+                backgroundColor: theme.colors.highlightBg || 'rgba(255, 193, 7, 0.25)',
+                color: theme.colors.text,
+                padding: '0.05em 0.15em',
+                borderRadius: `${theme.radii[0]}px`,
+                border: `1px solid ${theme.colors.highlightBorder || 'rgba(255, 193, 7, 0.4)'}`,
+                fontWeight: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              {children}
+            </mark>
+          ),
+        };
+      }
+
+      return baseComponents;
     },
     [
       theme,
@@ -819,6 +852,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
       enableHtmlPopout,
       slideHeaderMarginTopOverride,
       repositoryInfo,
+      searchQuery,
     ],
   );
 
@@ -862,6 +896,11 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
       ) : (
         chunks.map((chunk, index) => {
           if (chunk.type === 'markdown_chunk') {
+            // Apply search highlighting if a search query is present
+            const processedContent = searchQuery
+              ? highlightSearchMatches(chunk.content, searchQuery)
+              : chunk.content;
+
             return (
               <ReactMarkdown
                 key={chunk.id}
@@ -874,7 +913,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
                 ]}
                 components={getMarkdownComponents(index)}
               >
-                {chunk.content}
+                {processedContent}
               </ReactMarkdown>
             );
           }

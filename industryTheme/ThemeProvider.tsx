@@ -1,7 +1,8 @@
 import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 
-import { Theme, theme as defaultTheme } from './index';
 import { getMode } from './themeHelpers';
+
+import { Theme, theme as defaultTheme } from './index';
 
 // Theme context
 interface ThemeContextValue {
