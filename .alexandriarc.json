@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/a24z-ai/alexandria/main/schema/alexandriarc.json",
+  "$schema": "https://raw.githubusercontent.com/a24z-ai/alexandria-cli/main/schema/alexandriarc.json",
   "version": "1.0.0",
   "context": {
     "useGitignore": true,
@@ -7,6 +7,31 @@
       "exclude": [
         ".alexandria/**"
       ]
-    }
+    },
+    "rules": [
+      {
+        "id": "document-organization",
+        "severity": "warning",
+        "enabled": true,
+        "options": {
+          "rootExceptions": [
+            "README.md",
+            "AGENTS.md"
+          ]
+        }
+      },
+      {
+        "id": "filename-convention",
+        "severity": "warning",
+        "enabled": true,
+        "options": {
+          "style": "kebab-case",
+          "exceptions": [
+            "README.md",
+            "AGENTS.md"
+          ]
+        }
+      }
+    ]
   }
 }

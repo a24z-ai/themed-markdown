@@ -61,10 +61,10 @@ export type {
 // Theme system
 export type { Theme } from './industryTheme';
 export { theme as defaultTheme } from './industryTheme';
-export { 
-  ThemeProvider, 
-  useTheme, 
-  withTheme 
+export {
+  ThemeProvider,
+  useTheme,
+  withTheme
 } from './industryTheme/ThemeProvider';
 export {
   scaleThemeFonts,
@@ -72,3 +72,10 @@ export {
   decreaseFontScale,
   resetFontScale
 } from './industryTheme';
+
+// Export all available themes
+export {
+  terminalTheme,
+  regalTheme,
+  glassmorphismTheme
+} from './industryTheme/themes';
