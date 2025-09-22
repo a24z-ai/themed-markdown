@@ -3,6 +3,8 @@
  * Based on https://theme-ui.com/theme-spec
  */
 
+import { terminalTheme } from './themes';
+
 // Component style variant types
 type ButtonVariant = {
   color?: string;
@@ -135,142 +137,11 @@ export interface Theme {
 }
 
 
-// Default theme following Theme UI conventions
-export const theme: Theme = {
-  // Spacing scale (used for margin, padding, etc.)
-  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+// Default theme - Terminal theme for developers
+export const theme: Theme = terminalTheme;
 
-  // Typography
-  fonts: {
-    body: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    heading: '"Crimson Text", "Georgia", "Times New Roman", serif',
-    monospace: '"Fira Code", "SF Mono", Monaco, Inconsolata, monospace',
-  },
-
-  fontSizes: [12, 14, 16, 18, 20, 24, 32, 48, 64, 96],
-
-  fontScale: 1.0,
-
-  fontWeights: {
-    body: 400,
-    heading: 600,
-    bold: 700,
-    light: 300,
-    medium: 500,
-    semibold: 600,
-  },
-
-  lineHeights: {
-    body: 1.5,
-    heading: 1.2,
-    tight: 1.25,
-    relaxed: 1.75,
-  },
-
-  // Layout
-  breakpoints: ['640px', '768px', '1024px', '1280px'],
-  sizes: [16, 32, 64, 128, 256, 512, 768, 1024, 1536],
-  radii: [0, 2, 4, 6, 8, 12, 16, 24],
-  shadows: [
-    'none',
-    '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-    '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-    '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-    '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-  ],
-  zIndices: [0, 1, 10, 20, 30, 40, 50],
-
-  // Colors (light mode default) - Dark Academia theme with muted gold
-  colors: {
-    // Base colors
-    text: '#f1e8dc', // Warm cream
-    background: '#1a1f2e', // Deep midnight blue
-    primary: '#d4a574', // Warm amber gold
-    secondary: '#e0b584', // Lighter amber on hover
-    accent: '#c9b8a3', // Muted gold
-    highlight: 'rgba(212, 165, 116, 0.15)', // Translucent amber
-    muted: '#8b7968', // Faded bronze
-
-    // Status colors - Jewel tones
-    success: '#5c8a72', // Forest green
-    warning: '#d4a574', // Amber (same as primary for consistency)
-    error: '#a85751', // Burgundy red
-    info: '#d4a574', // Using primary amber
-
-    // Additional semantic colors
-    border: 'rgba(212, 165, 116, 0.2)', // Translucent gold
-    backgroundSecondary: '#212738', // Slightly lighter navy
-    backgroundTertiary: '#2d3446', // Tertiary dark blue
-    backgroundLight: 'rgba(212, 165, 116, 0.08)', // Very light amber
-    backgroundHover: 'rgba(212, 165, 116, 0.15)', // Translucent amber hover
-    surface: '#212738', // Dark navy surface
-    textSecondary: '#c9b8a3', // Muted gold
-    textTertiary: '#8b7968', // Faded bronze
-    textMuted: '#8b7968', // Faded bronze
-
-    // Search highlight colors
-    highlightBg: 'rgba(255, 193, 7, 0.25)', // Semi-transparent amber/yellow
-    highlightBorder: 'rgba(255, 193, 7, 0.5)', // Stronger amber for border
-  },
-
-  // Component variants
-  buttons: {
-    primary: {
-      color: 'background',
-      bg: 'primary',
-      '&:hover': {
-        bg: 'secondary',
-      },
-    },
-    secondary: {
-      color: 'text',
-      bg: 'muted',
-      '&:hover': {
-        bg: 'backgroundSecondary',
-      },
-    },
-    ghost: {
-      color: 'primary',
-      bg: 'transparent',
-      '&:hover': {
-        bg: 'muted',
-      },
-    },
-  },
-
-  text: {
-    heading: {
-      fontFamily: 'heading',
-      fontWeight: 'heading',
-      lineHeight: 'heading',
-    },
-    body: {
-      fontFamily: 'body',
-      fontWeight: 'body',
-      lineHeight: 'body',
-    },
-    caption: {
-      fontSize: 1,
-      color: 'textSecondary',
-    },
-  },
-
-  cards: {
-    primary: {
-      bg: 'background',
-      border: '1px solid',
-      borderColor: 'border',
-      borderRadius: 2,
-    },
-    secondary: {
-      bg: 'backgroundSecondary',
-      border: '1px solid',
-      borderColor: 'border',
-      borderRadius: 2,
-    },
-  },
-};
+// Export all themes for direct access
+export { terminalTheme, regalTheme, glassmorphismTheme } from './themes';
 
 /**
  * Scale font sizes in a theme by a given factor
@@ -335,11 +206,15 @@ export {
 } from './utils';
 
 // Export theme helper functions
-export { 
-  overrideColors, 
-  makeTheme, 
-  addMode, 
-  getMode 
+export {
+  overrideColors,
+  makeTheme,
+  addMode,
+  getMode
 } from './themeHelpers';
+
+// Export ThemeShowcase component
+export { ThemeShowcase } from './ThemeShowcase';
+export type { ThemeShowcaseProps } from './ThemeShowcase';
 
 export default theme;
