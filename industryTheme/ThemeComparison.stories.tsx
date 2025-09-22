@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
 import { ThemeProvider, useTheme, terminalTheme, regalTheme } from './index';
+import { matrixTheme, matrixMinimalTheme } from './themes';
 
 // Component to show theme details
 const ThemeShowcase = () => {
@@ -307,9 +308,11 @@ const ThemeShowcase = () => {
 
 // Theme switcher component
 const ThemeSwitcher = () => {
-  const [currentTheme, setCurrentTheme] = useState<'terminal' | 'regal'>('terminal');
+  const [currentTheme, setCurrentTheme] = useState<'terminal' | 'regal' | 'matrix' | 'matrixMinimal'>('terminal');
 
-  const activeTheme = currentTheme === 'terminal' ? terminalTheme : regalTheme;
+  const activeTheme = currentTheme === 'terminal' ? terminalTheme :
+                      currentTheme === 'regal' ? regalTheme :
+                      currentTheme === 'matrix' ? matrixTheme : matrixMinimalTheme;
 
   return (
     <>
@@ -351,6 +354,32 @@ const ThemeSwitcher = () => {
         >
           Regal Theme
         </button>
+        <button
+          onClick={() => setCurrentTheme('matrix')}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: currentTheme === 'matrix' ? '#00ff41' : '#333',
+            color: currentTheme === 'matrix' ? '#000000' : '#ffffff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Matrix Theme
+        </button>
+        <button
+          onClick={() => setCurrentTheme('matrixMinimal')}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: currentTheme === 'matrixMinimal' ? '#ffffff' : '#333',
+            color: currentTheme === 'matrixMinimal' ? '#000000' : '#ffffff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Matrix Minimal
+        </button>
       </div>
 
       <div style={{ paddingTop: '60px' }}>
@@ -388,6 +417,22 @@ export const TerminalTheme: Story = {
 export const RegalTheme: Story = {
   render: () => (
     <ThemeProvider theme={regalTheme}>
+      <ThemeShowcase />
+    </ThemeProvider>
+  ),
+};
+
+export const MatrixTheme: Story = {
+  render: () => (
+    <ThemeProvider theme={matrixTheme}>
+      <ThemeShowcase />
+    </ThemeProvider>
+  ),
+};
+
+export const MatrixMinimalTheme: Story = {
+  render: () => (
+    <ThemeProvider theme={matrixMinimalTheme}>
       <ThemeShowcase />
     </ThemeProvider>
   ),

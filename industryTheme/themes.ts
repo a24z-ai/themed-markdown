@@ -317,3 +317,285 @@ export const terminalTheme: Theme = {
     },
   },
 };
+
+// Matrix theme - Classic Matrix green-on-black terminal look
+export const matrixTheme: Theme = {
+  // Spacing scale (used for margin, padding, etc.)
+  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+
+  // Typography - Classic terminal/Matrix fonts
+  fonts: {
+    body: '"Courier New", "Courier", "Lucida Console", "Monaco", monospace',
+    heading: '"Courier New", "Courier", "Lucida Console", "Monaco", monospace',
+    monospace: '"Courier New", "Courier", "Lucida Console", "Monaco", monospace',
+  },
+
+  fontSizes: [12, 14, 16, 18, 20, 24, 32, 48, 64, 96],
+
+  fontScale: 1.0,
+
+  fontWeights: {
+    body: 400,
+    heading: 500,
+    bold: 600,
+    light: 300,
+    medium: 500,
+    semibold: 600,
+  },
+
+  lineHeights: {
+    body: 1.5,
+    heading: 1.2,
+    tight: 1.3,
+    relaxed: 1.7,
+  },
+
+  // Layout
+  breakpoints: ['640px', '768px', '1024px', '1280px'],
+  sizes: [16, 32, 64, 128, 256, 512, 768, 1024, 1536],
+  radii: [0, 2, 4, 6, 8, 12, 16, 24],
+  shadows: [
+    'none',
+    '0 0 5px rgba(0, 255, 65, 0.15)',
+    '0 0 10px rgba(0, 255, 65, 0.2)',
+    '0 0 15px rgba(0, 255, 65, 0.25)',
+    '0 0 20px rgba(0, 255, 65, 0.3)',
+    '0 0 30px rgba(0, 255, 65, 0.4)',
+  ],
+  zIndices: [0, 1, 10, 20, 30, 40, 50],
+
+  // Colors - Matrix inspired theme with softer whites and green accents
+  colors: {
+    // Base colors - Softer whites with Matrix green accents
+    text: '#e0e0e0', // Soft white for main text
+    background: '#000000', // Pure black background
+    primary: '#00ff41', // Matrix green for primary actions
+    secondary: '#00cc33', // Darker green for secondary
+    accent: '#00ff41', // Matrix green accent
+    highlight: 'rgba(0, 255, 65, 0.15)', // Translucent green highlight
+    muted: '#0a0a0a', // Very dark gray
+
+    // Status colors - More variety while keeping Matrix feel
+    success: '#00ff41', // Matrix green
+    warning: '#ffcc00', // Amber warning
+    error: '#ff3333', // Red for errors (more practical)
+    info: '#00ccff', // Cyan for info
+
+    // Additional semantic colors
+    border: 'rgba(0, 255, 65, 0.2)', // Subtle green border
+    backgroundSecondary: '#0a0a0a', // Very dark gray
+    backgroundTertiary: '#111111', // Slightly lighter dark gray
+    backgroundLight: 'rgba(0, 255, 65, 0.03)', // Very faint green glow
+    backgroundHover: 'rgba(0, 255, 65, 0.08)', // Subtle green hover
+    surface: '#050505', // Almost black
+    textSecondary: '#b0b0b0', // Light gray for secondary text
+    textTertiary: '#808080', // Medium gray
+    textMuted: '#606060', // Darker gray
+
+    // Search highlight colors
+    highlightBg: 'rgba(0, 255, 65, 0.25)', // Green highlight
+    highlightBorder: 'rgba(0, 255, 65, 0.5)', // Stronger green for border
+  },
+
+  // Component variants
+  buttons: {
+    primary: {
+      color: 'black',
+      bg: 'primary',
+      borderWidth: 0,
+      '&:hover': {
+        bg: 'secondary',
+      },
+    },
+    secondary: {
+      color: 'primary',
+      bg: 'transparent',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: 'primary',
+      '&:hover': {
+        bg: 'highlight',
+      },
+    },
+    ghost: {
+      color: 'text',
+      bg: 'transparent',
+      '&:hover': {
+        bg: 'backgroundHover',
+      },
+    },
+  },
+
+  text: {
+    heading: {
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'heading',
+    },
+    body: {
+      fontFamily: 'body',
+      fontWeight: 'body',
+      lineHeight: 'body',
+    },
+    caption: {
+      fontSize: 1,
+      color: 'textSecondary',
+    },
+  },
+
+  cards: {
+    primary: {
+      bg: 'surface',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: 0, // No rounded corners for authentic terminal look
+    },
+    secondary: {
+      bg: 'backgroundSecondary',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: 0,
+    },
+  },
+};
+
+// Matrix Minimal theme - Matrix aesthetic with white primary/secondary
+export const matrixMinimalTheme: Theme = {
+  // Spacing scale (used for margin, padding, etc.)
+  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+
+  // Typography - Classic terminal/Matrix fonts
+  fonts: {
+    body: '"Courier New", "Courier", "Lucida Console", "Monaco", monospace',
+    heading: '"Courier New", "Courier", "Lucida Console", "Monaco", monospace',
+    monospace: '"Courier New", "Courier", "Lucida Console", "Monaco", monospace',
+  },
+
+  fontSizes: [12, 14, 16, 18, 20, 24, 32, 48, 64, 96],
+
+  fontScale: 1.0,
+
+  fontWeights: {
+    body: 400,
+    heading: 500,
+    bold: 600,
+    light: 300,
+    medium: 500,
+    semibold: 600,
+  },
+
+  lineHeights: {
+    body: 1.5,
+    heading: 1.2,
+    tight: 1.3,
+    relaxed: 1.7,
+  },
+
+  // Layout
+  breakpoints: ['640px', '768px', '1024px', '1280px'],
+  sizes: [16, 32, 64, 128, 256, 512, 768, 1024, 1536],
+  radii: [0, 2, 4, 6, 8, 12, 16, 24],
+  shadows: [
+    'none',
+    '0 1px 2px rgba(0, 0, 0, 0.05)',
+    '0 2px 4px rgba(0, 0, 0, 0.1)',
+    '0 4px 8px rgba(0, 0, 0, 0.15)',
+    '0 8px 16px rgba(0, 0, 0, 0.2)',
+    '0 0 20px rgba(0, 255, 65, 0.1)', // Subtle green glow for special elements
+  ],
+  zIndices: [0, 1, 10, 20, 30, 40, 50],
+
+  // Colors - Minimal Matrix theme with white primary/secondary and green accents
+  colors: {
+    // Base colors - Whites with Matrix green as accent only
+    text: '#e0e0e0', // Soft white for main text
+    background: '#000000', // Pure black background
+    primary: '#ffffff', // Pure white for primary
+    secondary: '#d0d0d0', // Light gray for secondary
+    accent: '#00ff41', // Matrix green for accents only
+    highlight: 'rgba(0, 255, 65, 0.1)', // Very subtle green highlight
+    muted: '#0a0a0a', // Very dark gray
+
+    // Status colors - Practical colors
+    success: '#00ff41', // Matrix green for success
+    warning: '#ffcc00', // Amber warning
+    error: '#ff3333', // Red for errors
+    info: '#00ccff', // Cyan for info
+
+    // Additional semantic colors
+    border: 'rgba(255, 255, 255, 0.1)', // Subtle white border
+    backgroundSecondary: '#0a0a0a', // Very dark gray
+    backgroundTertiary: '#111111', // Slightly lighter dark gray
+    backgroundLight: 'rgba(255, 255, 255, 0.02)', // Very faint white glow
+    backgroundHover: 'rgba(0, 255, 65, 0.05)', // Very subtle green hover
+    surface: '#050505', // Almost black
+    textSecondary: '#b0b0b0', // Light gray for secondary text
+    textTertiary: '#808080', // Medium gray
+    textMuted: '#606060', // Darker gray
+
+    // Search highlight colors
+    highlightBg: 'rgba(0, 255, 65, 0.2)', // Green highlight for search
+    highlightBorder: 'rgba(0, 255, 65, 0.4)', // Stronger green for border
+  },
+
+  // Component variants
+  buttons: {
+    primary: {
+      color: 'black',
+      bg: 'primary',
+      borderWidth: 0,
+      '&:hover': {
+        bg: 'secondary',
+      },
+    },
+    secondary: {
+      color: 'primary',
+      bg: 'transparent',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: 'primary',
+      '&:hover': {
+        bg: 'backgroundHover',
+      },
+    },
+    ghost: {
+      color: 'text',
+      bg: 'transparent',
+      '&:hover': {
+        bg: 'backgroundHover',
+      },
+    },
+  },
+
+  text: {
+    heading: {
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'heading',
+    },
+    body: {
+      fontFamily: 'body',
+      fontWeight: 'body',
+      lineHeight: 'body',
+    },
+    caption: {
+      fontSize: 1,
+      color: 'textSecondary',
+    },
+  },
+
+  cards: {
+    primary: {
+      bg: 'surface',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: 0, // No rounded corners for terminal look
+    },
+    secondary: {
+      bg: 'backgroundSecondary',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: 0,
+    },
+  },
+};

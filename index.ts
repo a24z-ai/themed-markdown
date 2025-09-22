@@ -77,5 +77,7 @@ export {
 export {
   terminalTheme,
   regalTheme,
-  glassmorphismTheme
+  glassmorphismTheme,
+  matrixTheme,
+  matrixMinimalTheme
 } from './industryTheme/themes';
