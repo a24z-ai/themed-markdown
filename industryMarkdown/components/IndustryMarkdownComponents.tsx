@@ -844,15 +844,11 @@ export const createIndustryMarkdownComponents = ({
         <code
           style={
             {
-              backgroundColor: theme.colors.backgroundSecondary,
-              color: theme.colors.text,
-              padding: `${theme.space[1]}px ${theme.space[2]}px`,
-              borderRadius: theme.radii[1],
+              color: theme.colors.accent,
               fontSize: '0.875em',
               fontFamily: theme.fonts.monospace,
-              border: `1px solid ${theme.colors.border}`,
               // Ensure text color overrides any highlight.js styles
-              '--text-color': theme.colors.text,
+              '--text-color': theme.colors.accent,
             } as React.CSSProperties
           }
           className={`inline-code ${className || ''}`}

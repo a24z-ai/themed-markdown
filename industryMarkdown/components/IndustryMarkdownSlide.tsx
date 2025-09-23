@@ -162,9 +162,9 @@ const highlightOverrides = `
     background-color: transparent !important;
   }
   
-  /* Ensure inline code has proper contrast */
+  /* Ensure inline code uses its own color */
   .inline-code {
-    color: inherit !important;
+    color: var(--text-color) !important;
   }
   
   /* Prevent highlight.js from overriding inline code colors */
@@ -250,6 +250,7 @@ const injectStyles = () => {
     stylesInjected = true;
   }
 };
+
 
 // Keyboard scroll configuration type
 export interface KeyboardScrollConfig {
@@ -903,7 +904,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
 
             return (
               <ReactMarkdown
-                key={chunk.id}
+                key={`${chunk.id}-${JSON.stringify(theme.colors.accent)}`}
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[
                   rehypeRaw,
