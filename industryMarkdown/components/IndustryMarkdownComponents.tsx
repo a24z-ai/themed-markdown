@@ -839,7 +839,12 @@ export const createIndustryMarkdownComponents = ({
         );
       }
 
-      // Inline code
+      // Inline code - strip any highlight.js classes to prevent background styling
+      const cleanClassName = className
+        ?.replace(/hljs(-\w+)?/g, '') // Remove all hljs classes
+        ?.replace(/language-\w+/g, '') // Remove language classes for inline code
+        ?.trim();
+
       return (
         <code
           style={
@@ -847,11 +852,13 @@ export const createIndustryMarkdownComponents = ({
               color: theme.colors.accent,
               fontSize: '0.875em',
               fontFamily: theme.fonts.monospace,
-              // Ensure text color overrides any highlight.js styles
+              backgroundColor: 'transparent',
+              padding: 0,
+              // Ensure text color and background overrides any highlight.js styles
               '--text-color': theme.colors.accent,
             } as React.CSSProperties
           }
-          className={`inline-code ${className || ''}`}
+          className={cleanClassName ? `inline-code ${cleanClassName}` : 'inline-code'}
           {...props}
         >
           {children}

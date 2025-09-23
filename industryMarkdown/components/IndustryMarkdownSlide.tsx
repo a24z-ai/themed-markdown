@@ -124,59 +124,98 @@ export interface IndustryMarkdownSlideProps {
 
 // Override highlight.js token background colors and ensure proper text colors
 const highlightOverrides = `
-  .hljs,
-  .hljs-keyword,
-  .hljs-selector-tag,
-  .hljs-literal,
-  .hljs-strong,
-  .hljs-name,
-  .hljs-variable,
-  .hljs-number,
-  .hljs-string,
-  .hljs-comment,
-  .hljs-type,
-  .hljs-built_in,
-  .hljs-builtin-name,
-  .hljs-meta,
-  .hljs-tag,
-  .hljs-title,
-  .hljs-attr,
-  .hljs-attribute,
-  .hljs-addition,
-  .hljs-deletion,
-  .hljs-link,
-  .hljs-doctag,
-  .hljs-formula,
-  .hljs-section,
-  .hljs-selector-class,
-  .hljs-selector-attr,
-  .hljs-selector-pseudo,
-  .hljs-symbol,
-  .hljs-bullet,
-  .hljs-selector-id,
-  .hljs-emphasis,
-  .hljs-quote,
-  .hljs-template-variable,
-  .hljs-regexp,
-  .hljs-subst {
+  /* Remove backgrounds from all highlight.js classes in code blocks */
+  pre code .hljs,
+  pre code .hljs-keyword,
+  pre code .hljs-selector-tag,
+  pre code .hljs-literal,
+  pre code .hljs-strong,
+  pre code .hljs-name,
+  pre code .hljs-variable,
+  pre code .hljs-number,
+  pre code .hljs-string,
+  pre code .hljs-comment,
+  pre code .hljs-type,
+  pre code .hljs-built_in,
+  pre code .hljs-builtin-name,
+  pre code .hljs-meta,
+  pre code .hljs-tag,
+  pre code .hljs-title,
+  pre code .hljs-attr,
+  pre code .hljs-attribute,
+  pre code .hljs-addition,
+  pre code .hljs-deletion,
+  pre code .hljs-link,
+  pre code .hljs-doctag,
+  pre code .hljs-formula,
+  pre code .hljs-section,
+  pre code .hljs-selector-class,
+  pre code .hljs-selector-attr,
+  pre code .hljs-selector-pseudo,
+  pre code .hljs-symbol,
+  pre code .hljs-bullet,
+  pre code .hljs-selector-id,
+  pre code .hljs-emphasis,
+  pre code .hljs-quote,
+  pre code .hljs-template-variable,
+  pre code .hljs-regexp,
+  pre code .hljs-subst {
     background-color: transparent !important;
   }
-  
-  /* Ensure inline code uses its own color */
-  .inline-code {
+
+  /* Aggressive removal of backgrounds and padding for inline code */
+  p code,
+  li code,
+  td code,
+  th code,
+  h1 code,
+  h2 code,
+  h3 code,
+  h4 code,
+  h5 code,
+  h6 code,
+  blockquote code,
+  .inline-code,
+  code:not(pre code) {
+    background: transparent !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text-color, currentColor) !important;
+  }
+
+  /* Ensure inline code uses its own color even with hljs classes */
+  .inline-code,
+  .inline-code[class*="hljs"],
+  .inline-code[class*="language"] {
     color: var(--text-color) !important;
-  }
-  
-  /* Prevent highlight.js from overriding inline code colors */
-  .inline-code.hljs,
-  .inline-code .hljs-keyword,
-  .inline-code .hljs-string,
-  .inline-code .hljs-number,
-  .inline-code .hljs-comment,
-  .inline-code .hljs-built_in,
-  .inline-code .hljs-literal {
-    color: inherit !important;
+    background: transparent !important;
     background-color: transparent !important;
+    padding: 0 !important;
+  }
+
+  /* Override any highlight.js styles on inline code */
+  p code[class*="hljs"],
+  li code[class*="hljs"],
+  td code[class*="hljs"],
+  th code[class*="hljs"],
+  p code[class*="language"],
+  li code[class*="language"],
+  td code[class*="language"],
+  th code[class*="language"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  /* Remove all hljs styling from any inline code */
+  :not(pre) > code.hljs {
+    background: transparent !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    color: inherit !important;
   }
 `;
 
