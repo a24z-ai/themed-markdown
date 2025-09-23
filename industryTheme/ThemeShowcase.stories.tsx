@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
+import { slateTheme, matrixTheme, matrixMinimalTheme } from './themes';
+
 import { ThemeProvider, terminalTheme, regalTheme, glassmorphismTheme, ThemeShowcase, Theme } from './index';
 
 // Interactive theme editor demo
 const InteractiveThemeEditor = () => {
-  const [selectedTheme, setSelectedTheme] = useState<'terminal' | 'regal' | 'glassmorphism'>('terminal');
+  const [selectedTheme, setSelectedTheme] = useState<'terminal' | 'regal' | 'glassmorphism' | 'slate' | 'matrix' | 'matrixMinimal'>('slate');
   const [showValues, setShowValues] = useState(true);
   const [sections, setSections] = useState<('colors' | 'typography' | 'spacing' | 'shadows' | 'radii')[]>([
     'colors', 'typography', 'spacing', 'shadows', 'radii'
@@ -15,6 +17,9 @@ const InteractiveThemeEditor = () => {
     terminal: terminalTheme,
     regal: regalTheme,
     glassmorphism: glassmorphismTheme,
+    slate: slateTheme,
+    matrix: matrixTheme,
+    matrixMinimal: matrixMinimalTheme,
   };
 
   const currentTheme = themes[selectedTheme];
@@ -44,7 +49,7 @@ const InteractiveThemeEditor = () => {
             <label style={{ color: '#fff', marginRight: '10px', fontSize: '14px' }}>Theme:</label>
             <select
               value={selectedTheme}
-              onChange={(e) => setSelectedTheme(e.target.value as 'terminal' | 'regal' | 'glassmorphism')}
+              onChange={(e) => setSelectedTheme(e.target.value as 'terminal' | 'regal' | 'glassmorphism' | 'slate' | 'matrix' | 'matrixMinimal')}
               style={{
                 padding: '8px 12px',
                 borderRadius: '4px',
@@ -54,9 +59,12 @@ const InteractiveThemeEditor = () => {
                 fontSize: '14px',
               }}
             >
+              <option value="slate">Slate (New)</option>
               <option value="terminal">Terminal</option>
               <option value="regal">Regal</option>
               <option value="glassmorphism">Glassmorphism</option>
+              <option value="matrix">Matrix</option>
+              <option value="matrixMinimal">Matrix Minimal</option>
             </select>
           </div>
 
@@ -147,6 +155,18 @@ export const Regal: Story = {
 
 export const Glassmorphism: Story = {
   render: () => <ThemedShowcase theme={glassmorphismTheme} title="Glassmorphism Theme Showcase" />,
+};
+
+export const Slate: Story = {
+  render: () => <ThemedShowcase theme={slateTheme} title="Slate Theme Showcase" />,
+};
+
+export const Matrix: Story = {
+  render: () => <ThemedShowcase theme={matrixTheme} title="Matrix Theme Showcase" />,
+};
+
+export const MatrixMinimal: Story = {
+  render: () => <ThemedShowcase theme={matrixMinimalTheme} title="Matrix Minimal Theme Showcase" />,
 };
 
 export const CompactView: Story = {

@@ -79,5 +79,6 @@ export {
   regalTheme,
   glassmorphismTheme,
   matrixTheme,
-  matrixMinimalTheme
+  matrixMinimalTheme,
+  slateTheme
 } from './industryTheme/themes';

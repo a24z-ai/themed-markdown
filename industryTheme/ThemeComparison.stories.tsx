@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
+import { matrixTheme, matrixMinimalTheme, slateTheme } from './themes';
+
 import { ThemeProvider, useTheme, terminalTheme, regalTheme } from './index';
-import { matrixTheme, matrixMinimalTheme } from './themes';
 
 // Component to show theme details
 const ThemeShowcase = () => {
@@ -308,11 +309,12 @@ const ThemeShowcase = () => {
 
 // Theme switcher component
 const ThemeSwitcher = () => {
-  const [currentTheme, setCurrentTheme] = useState<'terminal' | 'regal' | 'matrix' | 'matrixMinimal'>('terminal');
+  const [currentTheme, setCurrentTheme] = useState<'terminal' | 'regal' | 'matrix' | 'matrixMinimal' | 'slate'>('slate');
 
   const activeTheme = currentTheme === 'terminal' ? terminalTheme :
                       currentTheme === 'regal' ? regalTheme :
-                      currentTheme === 'matrix' ? matrixTheme : matrixMinimalTheme;
+                      currentTheme === 'matrix' ? matrixTheme :
+                      currentTheme === 'matrixMinimal' ? matrixMinimalTheme : slateTheme;
 
   return (
     <>
@@ -380,6 +382,19 @@ const ThemeSwitcher = () => {
         >
           Matrix Minimal
         </button>
+        <button
+          onClick={() => setCurrentTheme('slate')}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: currentTheme === 'slate' ? '#00bcd4' : '#333',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Slate Theme (New)
+        </button>
       </div>
 
       <div style={{ paddingTop: '60px' }}>
@@ -433,6 +448,14 @@ export const MatrixTheme: Story = {
 export const MatrixMinimalTheme: Story = {
   render: () => (
     <ThemeProvider theme={matrixMinimalTheme}>
+      <ThemeShowcase />
+    </ThemeProvider>
+  ),
+};
+
+export const SlateTheme: Story = {
+  render: () => (
+    <ThemeProvider theme={slateTheme}>
       <ThemeShowcase />
     </ThemeProvider>
   ),

@@ -599,3 +599,143 @@ export const matrixMinimalTheme: Theme = {
     },
   },
 };
+
+// Slate theme - Sophisticated grey-based theme with vibrant accents
+export const slateTheme: Theme = {
+  // Spacing scale (used for margin, padding, etc.)
+  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+
+  // Typography
+  fonts: {
+    body: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    heading: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    monospace: '"Fira Code", "SF Mono", Monaco, Inconsolata, monospace',
+  },
+
+  fontSizes: [12, 14, 16, 18, 20, 24, 32, 48, 64, 96],
+
+  fontScale: 1.0,
+
+  fontWeights: {
+    body: 400,
+    heading: 600,
+    bold: 700,
+    light: 300,
+    medium: 500,
+    semibold: 600,
+  },
+
+  lineHeights: {
+    body: 1.6,
+    heading: 1.3,
+    tight: 1.25,
+    relaxed: 1.75,
+  },
+
+  // Layout
+  breakpoints: ['640px', '768px', '1024px', '1280px'],
+  sizes: [16, 32, 64, 128, 256, 512, 768, 1024, 1536],
+  radii: [0, 2, 4, 6, 8, 12, 16, 24],
+  shadows: [
+    'none',
+    '0 1px 3px 0 rgba(0, 0, 0, 0.2)',
+    '0 4px 6px -1px rgba(0, 0, 0, 0.2)',
+    '0 10px 15px -3px rgba(0, 0, 0, 0.2)',
+    '0 20px 25px -5px rgba(0, 0, 0, 0.25)',
+    '0 25px 50px -12px rgba(0, 0, 0, 0.3)',
+  ],
+  zIndices: [0, 1, 10, 20, 30, 40, 50],
+
+  // Colors - Grey-based with vibrant accents
+  colors: {
+    // Base colors - Various shades of grey with white accents
+    text: '#9ca3af', // Medium grey for most text
+    background: '#1a1c1e', // Very dark charcoal
+    primary: '#d1d5db', // Light grey for primary
+    secondary: '#6b7280', // Medium grey for secondary
+    accent: '#f59e0b', // Vibrant amber
+    highlight: 'rgba(209, 213, 219, 0.15)', // Translucent light grey
+    muted: '#2d3134', // Dark grey
+
+    // Status colors - Vibrant and practical
+    success: '#10b981', // Emerald green
+    warning: '#f59e0b', // Amber
+    error: '#ef4444', // Red
+    info: '#3b82f6', // Blue
+
+    // Additional semantic colors - Grey palette
+    border: 'rgba(156, 163, 175, 0.15)', // Subtle grey border
+    backgroundSecondary: '#22252a', // Slightly lighter dark grey
+    backgroundTertiary: '#2d3134', // Even lighter dark grey
+    backgroundLight: 'rgba(156, 163, 175, 0.05)', // Very faint grey
+    backgroundHover: 'rgba(156, 163, 175, 0.1)', // Subtle grey hover
+    surface: '#1f2124', // Near-black surface
+    textSecondary: '#e5e7eb', // Light grey for important text (closer to white)
+    textTertiary: '#6b7280', // Darker grey
+    textMuted: '#4b5563', // Even darker grey
+
+    // Search highlight colors
+    highlightBg: 'rgba(245, 158, 11, 0.25)', // Amber highlight
+    highlightBorder: 'rgba(245, 158, 11, 0.5)', // Stronger amber for border
+  },
+
+  // Component variants
+  buttons: {
+    primary: {
+      color: '#1a1c1e', // Dark text on light grey
+      bg: 'primary',
+      borderWidth: 0,
+      '&:hover': {
+        bg: '#9ca3af', // Darker grey on hover
+      },
+    },
+    secondary: {
+      color: '#e5e7eb', // Light text on medium grey
+      bg: 'secondary',
+      borderWidth: 0,
+      '&:hover': {
+        bg: '#4b5563', // Darker grey on hover
+      },
+    },
+    ghost: {
+      color: 'textSecondary',
+      bg: 'transparent',
+      '&:hover': {
+        bg: 'backgroundHover',
+      },
+    },
+  },
+
+  text: {
+    heading: {
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'heading',
+      color: 'textSecondary', // Headers in lighter grey/white
+    },
+    body: {
+      fontFamily: 'body',
+      fontWeight: 'body',
+      lineHeight: 'body',
+    },
+    caption: {
+      fontSize: 1,
+      color: 'textTertiary',
+    },
+  },
+
+  cards: {
+    primary: {
+      bg: 'surface',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: 3,
+    },
+    secondary: {
+      bg: 'backgroundSecondary',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: 3,
+    },
+  },
+};
