@@ -356,45 +356,45 @@ export const matrixTheme: Theme = {
   radii: [0, 2, 4, 6, 8, 12, 16, 24],
   shadows: [
     'none',
-    '0 0 5px rgba(0, 255, 65, 0.15)',
-    '0 0 10px rgba(0, 255, 65, 0.2)',
-    '0 0 15px rgba(0, 255, 65, 0.25)',
-    '0 0 20px rgba(0, 255, 65, 0.3)',
-    '0 0 30px rgba(0, 255, 65, 0.4)',
+    '0 0 5px rgba(0, 216, 53, 0.15)',
+    '0 0 10px rgba(0, 216, 53, 0.2)',
+    '0 0 15px rgba(0, 216, 53, 0.25)',
+    '0 0 20px rgba(0, 216, 53, 0.3)',
+    '0 0 30px rgba(0, 216, 53, 0.4)',
   ],
   zIndices: [0, 1, 10, 20, 30, 40, 50],
 
   // Colors - Matrix inspired theme with softer whites and green accents
   colors: {
     // Base colors - Softer whites with Matrix green accents
-    text: '#e0e0e0', // Soft white for main text
+    text: '#a8a8a8', // Much softer white for main text
     background: '#000000', // Pure black background
-    primary: '#00ff41', // Matrix green for primary actions
-    secondary: '#00cc33', // Darker green for secondary
-    accent: '#00ff41', // Matrix green accent
-    highlight: 'rgba(0, 255, 65, 0.15)', // Translucent green highlight
+    primary: '#00d835', // Softer Matrix green for primary actions
+    secondary: '#00a828', // Darker softer green for secondary
+    accent: '#00d835', // Softer Matrix green accent
+    highlight: 'rgba(0, 216, 53, 0.15)', // Translucent softer green highlight
     muted: '#0a0a0a', // Very dark gray
 
     // Status colors - More variety while keeping Matrix feel
-    success: '#00ff41', // Matrix green
-    warning: '#ffcc00', // Amber warning
-    error: '#ff3333', // Red for errors (more practical)
-    info: '#00ccff', // Cyan for info
+    success: '#00d835', // Softer Matrix green
+    warning: '#d4a000', // Softer amber warning
+    error: '#d63333', // Softer red for errors
+    info: '#00a8d6', // Softer cyan for info
 
     // Additional semantic colors
-    border: 'rgba(0, 255, 65, 0.2)', // Subtle green border
+    border: 'rgba(0, 216, 53, 0.2)', // Subtle softer green border
     backgroundSecondary: '#0a0a0a', // Very dark gray
     backgroundTertiary: '#111111', // Slightly lighter dark gray
-    backgroundLight: 'rgba(0, 255, 65, 0.03)', // Very faint green glow
-    backgroundHover: 'rgba(0, 255, 65, 0.08)', // Subtle green hover
+    backgroundLight: 'rgba(0, 216, 53, 0.03)', // Very faint softer green glow
+    backgroundHover: 'rgba(0, 216, 53, 0.08)', // Subtle softer green hover
     surface: '#050505', // Almost black
-    textSecondary: '#b0b0b0', // Light gray for secondary text
-    textTertiary: '#808080', // Medium gray
-    textMuted: '#606060', // Darker gray
+    textSecondary: '#808080', // Even softer gray for secondary text
+    textTertiary: '#606060', // Much softer medium gray
+    textMuted: '#484848', // Much softer darker gray
 
     // Search highlight colors
-    highlightBg: 'rgba(0, 255, 65, 0.25)', // Green highlight
-    highlightBorder: 'rgba(0, 255, 65, 0.5)', // Stronger green for border
+    highlightBg: 'rgba(0, 216, 53, 0.25)', // Softer green highlight
+    highlightBorder: 'rgba(0, 216, 53, 0.5)', // Stronger softer green for border
   },
 
   // Component variants
@@ -501,41 +501,41 @@ export const matrixMinimalTheme: Theme = {
     '0 2px 4px rgba(0, 0, 0, 0.1)',
     '0 4px 8px rgba(0, 0, 0, 0.15)',
     '0 8px 16px rgba(0, 0, 0, 0.2)',
-    '0 0 20px rgba(0, 255, 65, 0.1)', // Subtle green glow for special elements
+    '0 0 20px rgba(0, 216, 53, 0.1)', // Subtle softer green glow for special elements
   ],
   zIndices: [0, 1, 10, 20, 30, 40, 50],
 
   // Colors - Minimal Matrix theme with white primary/secondary and green accents
   colors: {
     // Base colors - Whites with Matrix green as accent only
-    text: '#e0e0e0', // Soft white for main text
+    text: '#a8a8a8', // Much softer white for main text
     background: '#000000', // Pure black background
-    primary: '#ffffff', // Pure white for primary
-    secondary: '#d0d0d0', // Light gray for secondary
-    accent: '#00ff41', // Matrix green for accents only
-    highlight: 'rgba(0, 255, 65, 0.1)', // Very subtle green highlight
+    primary: '#b8b8b8', // Much softer off-white for primary
+    secondary: '#909090', // Much softer light gray for secondary
+    accent: '#00d835', // Softer Matrix green for accents only
+    highlight: 'rgba(0, 216, 53, 0.1)', // Very subtle softer green highlight
     muted: '#0a0a0a', // Very dark gray
 
     // Status colors - Practical colors
-    success: '#00ff41', // Matrix green for success
-    warning: '#ffcc00', // Amber warning
-    error: '#ff3333', // Red for errors
-    info: '#00ccff', // Cyan for info
+    success: '#00d835', // Softer Matrix green for success
+    warning: '#d4a000', // Softer amber warning
+    error: '#d63333', // Softer red for errors
+    info: '#00a8d6', // Softer cyan for info
 
     // Additional semantic colors
-    border: 'rgba(255, 255, 255, 0.1)', // Subtle white border
+    border: 'rgba(184, 184, 184, 0.1)', // Subtle softer off-white border
     backgroundSecondary: '#0a0a0a', // Very dark gray
     backgroundTertiary: '#111111', // Slightly lighter dark gray
-    backgroundLight: 'rgba(255, 255, 255, 0.02)', // Very faint white glow
-    backgroundHover: 'rgba(0, 255, 65, 0.05)', // Very subtle green hover
+    backgroundLight: 'rgba(184, 184, 184, 0.02)', // Very faint softer off-white glow
+    backgroundHover: 'rgba(0, 216, 53, 0.05)', // Very subtle softer green hover
     surface: '#050505', // Almost black
-    textSecondary: '#b0b0b0', // Light gray for secondary text
-    textTertiary: '#808080', // Medium gray
-    textMuted: '#606060', // Darker gray
+    textSecondary: '#808080', // Even softer gray for secondary text
+    textTertiary: '#606060', // Much softer medium gray
+    textMuted: '#484848', // Much softer darker gray
 
     // Search highlight colors
-    highlightBg: 'rgba(0, 255, 65, 0.2)', // Green highlight for search
-    highlightBorder: 'rgba(0, 255, 65, 0.4)', // Stronger green for border
+    highlightBg: 'rgba(0, 216, 53, 0.2)', // Softer green highlight for search
+    highlightBorder: 'rgba(0, 216, 53, 0.4)', // Stronger softer green for border
   },
 
   // Component variants
