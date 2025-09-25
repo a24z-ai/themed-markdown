@@ -208,14 +208,69 @@ const highlightOverrides = `
     background-color: transparent !important;
     padding: 0 !important;
     border: none !important;
+    box-shadow: none !important;
+    color: var(--text-color) !important;
   }
 
-  /* Remove all hljs styling from any inline code */
-  :not(pre) > code.hljs {
+  /* Remove all hljs styling from any inline code - comprehensive override */
+  :not(pre) > code.hljs,
+  :not(pre) > code[class*="hljs"],
+  :not(pre) > code[class*="language"] {
+    all: unset !important;
+    font-family: var(--monospace-font-family, monospace) !important;
+    font-size: 0.875em !important;
+    color: var(--text-color) !important;
     background: transparent !important;
     background-color: transparent !important;
     padding: 0 !important;
-    color: inherit !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Override all possible hljs token classes for inline code */
+  :not(pre) > code .hljs-keyword,
+  :not(pre) > code .hljs-selector-tag,
+  :not(pre) > code .hljs-literal,
+  :not(pre) > code .hljs-strong,
+  :not(pre) > code .hljs-name,
+  :not(pre) > code .hljs-variable,
+  :not(pre) > code .hljs-number,
+  :not(pre) > code .hljs-string,
+  :not(pre) > code .hljs-comment,
+  :not(pre) > code .hljs-type,
+  :not(pre) > code .hljs-built_in,
+  :not(pre) > code .hljs-builtin-name,
+  :not(pre) > code .hljs-meta,
+  :not(pre) > code .hljs-tag,
+  :not(pre) > code .hljs-title,
+  :not(pre) > code .hljs-attr,
+  :not(pre) > code .hljs-attribute,
+  :not(pre) > code .hljs-addition,
+  :not(pre) > code .hljs-deletion,
+  :not(pre) > code .hljs-link,
+  :not(pre) > code .hljs-doctag,
+  :not(pre) > code .hljs-formula,
+  :not(pre) > code .hljs-section,
+  :not(pre) > code .hljs-selector-class,
+  :not(pre) > code .hljs-selector-attr,
+  :not(pre) > code .hljs-selector-pseudo,
+  :not(pre) > code .hljs-symbol,
+  :not(pre) > code .hljs-bullet,
+  :not(pre) > code .hljs-selector-id,
+  :not(pre) > code .hljs-emphasis,
+  :not(pre) > code .hljs-quote,
+  :not(pre) > code .hljs-template-variable,
+  :not(pre) > code .hljs-regexp,
+  :not(pre) > code .hljs-subst {
+    color: var(--text-color) !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    font-weight: inherit !important;
+    font-style: inherit !important;
+    text-decoration: none !important;
   }
 `;
 

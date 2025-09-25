@@ -841,8 +841,9 @@ export const createIndustryMarkdownComponents = ({
 
       // Inline code - strip any highlight.js classes to prevent background styling
       const cleanClassName = className
-        ?.replace(/hljs(-\w+)?/g, '') // Remove all hljs classes
+        ?.replace(/hljs(-\w+)?/g, '') // Remove all hljs classes (hljs, hljs-keyword, etc.)
         ?.replace(/language-\w+/g, '') // Remove language classes for inline code
+        ?.replace(/\s+/g, ' ') // Clean up multiple spaces
         ?.trim();
 
       return (
