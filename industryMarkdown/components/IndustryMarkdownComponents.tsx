@@ -618,7 +618,6 @@ export const createIndustryMarkdownComponents = ({
         const containerStyle = isPrompt
           ? {
               position: 'relative' as const,
-              margin: `${theme.space[4]}px 0`,
               backgroundColor: darkMode ? theme.colors.backgroundTertiary : theme.colors.highlight,
               border: `2px solid ${theme.colors.accent}`,
               borderRadius: theme.radii[2],
@@ -627,7 +626,6 @@ export const createIndustryMarkdownComponents = ({
             }
           : {
               position: 'relative' as const,
-              margin: `${theme.space[4]}px 0`,
               backgroundColor: theme.colors.backgroundSecondary,
               borderRadius: theme.radii[2],
               overflow: 'hidden',

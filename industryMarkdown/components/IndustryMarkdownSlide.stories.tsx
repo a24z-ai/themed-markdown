@@ -385,6 +385,55 @@ This slide demonstrates automatic width detection using ResizeObserver.
   },
 };
 
+export const ProjectStructure: Story = {
+  name: 'Project Structure Tree',
+  args: {
+    content: `# Project Structure Example
+
+This story demonstrates rendering of file/folder tree structures using ASCII box-drawing characters.
+
+## Principal Window Architecture
+\`\`\`
+src/renderer/principal-window/
+├── components/
+│   └── IntegratedShell/
+│       ├── IntegratedShell.tsx      # Main container
+│       ├── NavigationSidebar.tsx    # Left sidebar navigation
+│       ├── IntegratedTitlebar.tsx   # Integrated titlebar
+│       └── ThemeDropdown.tsx        # Theme selection
+├── views/
+│   ├── RepositoryExplorer/          # Example: migrated from LandingPage
+│   │   ├── index.tsx
+│   │   ├── RepositoryExplorer.tsx   # Main view component
+│   │   ├── components/              # View-specific components
+│   │   └── hooks/                   # View-specific hooks
+│   └── [NewView]/                   # Your new view here
+│       ├── index.tsx
+│       ├── [NewView].tsx
+│       ├── components/
+│       └── hooks/
+└── PrincipalApp.tsx                 # Root component
+\`\`\`
+
+## Key Features
+
+- **Integrated Shell**: Unified container for all views
+- **Navigation Sidebar**: Consistent navigation across the application
+- **View System**: Modular view architecture with dedicated components and hooks
+- **Theme Support**: Built-in theme dropdown for UI customization
+
+## Directory Structure Benefits
+
+1. **Clear separation of concerns** - Components vs Views
+2. **Modular architecture** - Each view is self-contained
+3. **Consistent patterns** - Every view follows the same structure
+4. **Easy to extend** - Add new views by following the pattern`,
+    slideIdPrefix: 'project-structure',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
 export const MermaidFontScaling: Story = {
   name: 'Mermaid with Font Scaling',
   args: {
