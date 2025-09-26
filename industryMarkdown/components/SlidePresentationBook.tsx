@@ -1,4 +1,6 @@
 import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
+import { AnimatedResizableLayout } from '@a24z/panels';
+import '@a24z/panels/dist/style.css';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 import { useTheme } from '../../industryTheme';
@@ -490,8 +492,114 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
           }}
         >
           {slides.length > 0 ? (
-            <>
-              {/* Left Page / Single View */}
+            viewMode === 'book' ? (
+              // Book Mode with AnimatedResizableLayout
+              <AnimatedResizableLayout
+                leftPanel={
+                  <div
+                    style={{
+                      height: '100%',
+                      backgroundColor: 'transparent',
+                      borderRadius: 0,
+                      boxShadow: 'none',
+                      overflowY: 'auto',
+                      overflowX: 'hidden',
+                      position: 'relative',
+                    }}
+                  >
+                    <IndustryMarkdownSlide
+                      content={slides[leftSlideIndex] || ''}
+                      slideIdPrefix={`${slideIdPrefix}-${leftSlideIndex}`}
+                      slideIndex={leftSlideIndex}
+                      isVisible={true}
+                      theme={theme}
+                      onCheckboxChange={onCheckboxChange}
+                      enableHtmlPopout={enableHtmlPopout}
+                      enableKeyboardScrolling={enableKeyboardScrolling}
+                      onLinkClick={onLinkClick}
+                      handleRunBashCommand={handleRunBashCommand}
+                      handlePromptCopy={handlePromptCopy}
+                      fontSizeScale={fontSizeScale}
+                      searchQuery={showSearch ? searchQuery : undefined}
+                      transparentBackground={true}
+                      additionalPadding={{
+                        left: `${theme.space[4]}px`,
+                        right: `${theme.space[2]}px`,
+                      }}
+                      disableScroll={false}
+                    />
+                  </div>
+                }
+                rightPanel={
+                  rightSlideIndex < slides.length ? (
+                    <div
+                      style={{
+                        height: '100%',
+                        backgroundColor: 'transparent',
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        overflowY: 'auto',
+                        overflowX: 'hidden',
+                        position: 'relative',
+                      }}
+                    >
+                      <IndustryMarkdownSlide
+                        content={slides[rightSlideIndex] || ''}
+                        slideIdPrefix={`${slideIdPrefix}-${rightSlideIndex}`}
+                        slideIndex={rightSlideIndex}
+                        isVisible={true}
+                        theme={theme}
+                        onCheckboxChange={onCheckboxChange}
+                        enableHtmlPopout={enableHtmlPopout}
+                        enableKeyboardScrolling={enableKeyboardScrolling}
+                        onLinkClick={onLinkClick}
+                        handleRunBashCommand={handleRunBashCommand}
+                        handlePromptCopy={handlePromptCopy}
+                        fontSizeScale={fontSizeScale}
+                        searchQuery={showSearch ? searchQuery : undefined}
+                        transparentBackground={true}
+                        additionalPadding={{
+                          left: `${theme.space[2]}px`,
+                          right: `${theme.space[4]}px`,
+                        }}
+                        disableScroll={false}
+                      />
+                    </div>
+                  ) : (
+                    // Empty right page for odd number of slides
+                    <div
+                      style={{
+                        height: '100%',
+                        backgroundColor: theme.colors.background,
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: theme.colors.textSecondary || theme.colors.muted,
+                        fontSize: theme.fontSizes[1],
+                        fontFamily: theme.fonts.body,
+                        fontStyle: 'italic',
+                        padding: `0 ${theme.space[4]}px 0 ${theme.space[2]}px`,
+                      }}
+                    >
+                      End of presentation
+                    </div>
+                  )
+                }
+                defaultSize={50}
+                minSize={30}
+                showCollapseButton={false}
+                theme={{
+                  background: theme.colors.background,
+                  border: theme.colors.textSecondary || theme.colors.border,
+                  handle: theme.colors.textSecondary || theme.colors.border,
+                  handleHover: theme.colors.text,
+                  handleActive: theme.colors.primary,
+                }}
+              />
+            ) : (
+              // Single Page View
               <div
                 style={{
                   flex: 1,
@@ -517,91 +625,11 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                   handlePromptCopy={handlePromptCopy}
                   fontSizeScale={fontSizeScale}
                   searchQuery={showSearch ? searchQuery : undefined}
-                  transparentBackground={viewMode === 'book'}
-                  additionalPadding={
-                    viewMode === 'book'
-                      ? {
-                          left: `${theme.space[4]}px`,
-                          right: `${theme.space[2]}px`,
-                        }
-                      : undefined
-                  }
-                  disableScroll={viewMode === 'book'}
+                  transparentBackground={false}
+                  disableScroll={false}
                 />
-                {/* Dividing line for book mode */}
-                {viewMode === 'book' && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      right: `${Math.floor(theme.space[2] / 2)}px`,
-                      bottom: 0,
-                      width: '1px',
-                      backgroundColor: theme.colors.border,
-                    }}
-                  />
-                )}
               </div>
-
-              {/* Right Page (Book Mode Only) */}
-              {viewMode === 'book' && rightSlideIndex < slides.length && (
-                <div
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'transparent',
-                    borderRadius: 0,
-                    boxShadow: 'none',
-                    overflowY: 'auto',
-                    overflowX: 'hidden',
-                    position: 'relative',
-                  }}
-                >
-                  <IndustryMarkdownSlide
-                    content={slides[rightSlideIndex] || ''}
-                    slideIdPrefix={`${slideIdPrefix}-${rightSlideIndex}`}
-                    slideIndex={rightSlideIndex}
-                    isVisible={true}
-                    theme={theme}
-                    onCheckboxChange={onCheckboxChange}
-                    enableHtmlPopout={enableHtmlPopout}
-                    enableKeyboardScrolling={enableKeyboardScrolling}
-                    onLinkClick={onLinkClick}
-                    handleRunBashCommand={handleRunBashCommand}
-                    handlePromptCopy={handlePromptCopy}
-                    fontSizeScale={fontSizeScale}
-                    searchQuery={showSearch ? searchQuery : undefined}
-                    transparentBackground={true}
-                    additionalPadding={{
-                      left: `${theme.space[2]}px`,
-                      right: `${theme.space[4]}px`,
-                    }}
-                    disableScroll={true}
-                  />
-                </div>
-              )}
-
-              {/* Empty right page for odd number of slides in book mode */}
-              {viewMode === 'book' && rightSlideIndex >= slides.length && (
-                <div
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'transparent',
-                    borderRadius: 0,
-                    boxShadow: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: theme.colors.muted,
-                    fontSize: theme.fontSizes[1],
-                    fontFamily: theme.fonts.body,
-                    fontStyle: 'italic',
-                    padding: `0 ${theme.space[4]}px 0 ${theme.space[2]}px`,
-                  }}
-                >
-                  End of presentation
-                </div>
-              )}
-            </>
+            )
           ) : (
             <div
               style={{

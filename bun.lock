@@ -5,6 +5,7 @@
       "name": "themed-markdown",
       "dependencies": {
         "@a24z/markdown-utils": "^0.1.1",
+        "@a24z/panels": "latest",
         "@modelcontextprotocol/sdk": "^1.0.4",
         "@types/d3-hierarchy": "^3.1.7",
         "@types/flexsearch": "^0.7.6",
@@ -16,7 +17,6 @@
         "mermaid": "^11.9.0",
         "picomatch": "^4.0.3",
         "pip-requirements-js": "^0.2.1",
-        "react-resizable-panels": "^2.0.0",
         "typescript": "^5.0.4",
         "uuid": "^10.0.0",
         "ws": "^8.16.0",
@@ -107,6 +107,8 @@
   },
   "packages": {
     "@a24z/markdown-utils": ["@a24z/markdown-utils@0.1.1", "", {}, "sha512-gEtyT0nayqBYioWbK0kxBCJK0CmbT4WkCqa+Bmd4piPbou8S6gYQ+Y+tOUmd8bti1+4AjGNijmrAbIu/avAe1Q=="],
+
+    "@a24z/panels": ["@a24z/panels@1.0.6", "", { "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0", "react-resizable-panels": "^2.0.0" } }, "sha512-/7iZeqfQBHxAXnJsr7ZaGi72SGlkgM+fesRfogkhEfX8HBl/At6SAMwy2AnAwzMtnt/Cmifp8osISAZ3b0xLdg=="],
 
     "@adobe/css-tools": ["@adobe/css-tools@4.4.4", "", {}, "sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg=="],
 

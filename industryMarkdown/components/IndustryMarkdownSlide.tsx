@@ -821,28 +821,28 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
   // Calculate final padding including additional padding
   const finalPadding = useMemo(() => {
     const basePadding = calculateSlidePadding.horizontal;
+    const baseVerticalPadding = calculateSlidePadding.vertical;
 
-    if (!additionalPadding) {
-      return basePadding;
-    }
+    // Parse base padding values
+    const baseHorizontalValue = parseInt(basePadding.replace('px', ''), 10);
+    const baseVerticalValue = parseInt(baseVerticalPadding.replace('px', ''), 10);
 
-    // Parse base padding (assumes format like "20px")
-    const baseValue = parseInt(basePadding.replace('px', ''), 10);
-
-    // Calculate additional padding values
-    const leftExtra = additionalPadding.left ? parseInt(additionalPadding.left.replace('px', ''), 10) : 0;
-    const rightExtra = additionalPadding.right ? parseInt(additionalPadding.right.replace('px', ''), 10) : 0;
-    const topExtra = additionalPadding.top ? parseInt(additionalPadding.top.replace('px', ''), 10) : 0;
-    const bottomExtra = additionalPadding.bottom ? parseInt(additionalPadding.bottom.replace('px', ''), 10) : 0;
+    // Calculate additional padding values from additionalPadding prop
+    const leftExtra = additionalPadding?.left ? parseInt(additionalPadding.left.replace('px', ''), 10) : 0;
+    const rightExtra = additionalPadding?.right ? parseInt(additionalPadding.right.replace('px', ''), 10) : 0;
+    const topExtra = additionalPadding?.top ? parseInt(additionalPadding.top.replace('px', ''), 10) : 0;
+    const bottomExtra = additionalPadding?.bottom ? parseInt(additionalPadding.bottom.replace('px', ''), 10) : 0;
 
     // Create final padding string
-    const top = baseValue + topExtra;
-    const right = baseValue + rightExtra;
-    const bottom = baseValue + bottomExtra;
-    const left = baseValue + leftExtra;
+    // Use vertical padding for top/bottom, horizontal for sides
+    const top = baseVerticalValue + topExtra;
+    const right = baseHorizontalValue + rightExtra;
+    // Add a bit more bottom padding (1.5x) for better visual buffer when scrolling
+    const bottom = Math.round(baseVerticalValue * 1.5) + bottomExtra;
+    const left = baseHorizontalValue + leftExtra;
 
     return `${top}px ${right}px ${bottom}px ${left}px`;
-  }, [calculateSlidePadding.horizontal, additionalPadding]);
+  }, [calculateSlidePadding.horizontal, calculateSlidePadding.vertical, additionalPadding]);
 
   // Save scroll position before update
   useEffect(() => {
@@ -1010,6 +1010,8 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
         // Add subtle focus indicator
         border: '2px solid transparent',
         transition: 'border-color 0.2s ease',
+        // Include padding and border in the element's total height
+        boxSizing: 'border-box',
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}

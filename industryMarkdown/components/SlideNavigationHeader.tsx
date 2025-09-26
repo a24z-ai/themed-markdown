@@ -126,14 +126,14 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: theme.space[2],
             color: theme.colors.textSecondary,
             fontSize: theme.fontSizes[1],
             fontFamily: theme.fonts.monospace,
           }}
         >
-          <span style={{ fontWeight: 600 }}>Slide {currentSlide + 1}</span>
-          <span style={{ opacity: 0.7 }}>of {totalSlides}</span>
+          <span style={{ fontWeight: 600 }}>{currentSlide + 1}</span>
+          <span style={{ opacity: 0.5, margin: '0 0.4em' }}>of</span>
+          <span style={{ fontWeight: 600 }}>{totalSlides}</span>
         </div>
       )}
 
