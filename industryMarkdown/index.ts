@@ -6,6 +6,10 @@ export type { IndustryMarkdownSlideProps } from './components/IndustryMarkdownSl
 export { SlidePresentation } from './components/SlidePresentation';
 export type { SlidePresentationProps } from './components/SlidePresentation';
 
+// Slide presentation with book layout (two slides side-by-side)
+export { SlidePresentationBook } from './components/SlidePresentationBook';
+export type { SlidePresentationBookProps } from './components/SlidePresentationBook';
+
 // Slide navigation components
 export { SlideNavigationHeader } from './components/SlideNavigationHeader';
 export type { SlideNavigationHeaderProps } from './components/SlideNavigationHeader';

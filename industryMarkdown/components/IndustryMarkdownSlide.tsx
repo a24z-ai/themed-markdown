@@ -109,6 +109,9 @@ export interface IndustryMarkdownSlideProps {
   theme?: Theme;
   fontSizeScale?: number; // Scale factor for all font sizes (e.g., 1.25 for 25% larger)
   containerWidth?: number; // Container width passed from parent (optional - will use ResizeObserver if not provided)
+  transparentBackground?: boolean; // If true, no background color is applied (useful when parent handles background)
+  additionalPadding?: { left?: string; right?: string; top?: string; bottom?: string }; // Additional padding to add to calculated padding
+  disableScroll?: boolean; // If true, removes overflow styling (useful when parent handles scrolling)
 
   // === Dynamic Padding Configuration ===
   minScreenWidth?: number; // Min screen width for padding calculation (default: 320)
@@ -451,6 +454,9 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
   theme: themeOverride,
   fontSizeScale = 1.0,
   containerWidth,
+  transparentBackground = false,
+  additionalPadding,
+  disableScroll = false,
 
   // === Dynamic Padding Configuration ===
   minScreenWidth: _minScreenWidth,
@@ -802,6 +808,32 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
     return result;
   }, [containerWidth, measuredContainerWidth]);
 
+  // Calculate final padding including additional padding
+  const finalPadding = useMemo(() => {
+    const basePadding = calculateSlidePadding.horizontal;
+
+    if (!additionalPadding) {
+      return basePadding;
+    }
+
+    // Parse base padding (assumes format like "20px")
+    const baseValue = parseInt(basePadding.replace('px', ''), 10);
+
+    // Calculate additional padding values
+    const leftExtra = additionalPadding.left ? parseInt(additionalPadding.left.replace('px', ''), 10) : 0;
+    const rightExtra = additionalPadding.right ? parseInt(additionalPadding.right.replace('px', ''), 10) : 0;
+    const topExtra = additionalPadding.top ? parseInt(additionalPadding.top.replace('px', ''), 10) : 0;
+    const bottomExtra = additionalPadding.bottom ? parseInt(additionalPadding.bottom.replace('px', ''), 10) : 0;
+
+    // Create final padding string
+    const top = baseValue + topExtra;
+    const right = baseValue + rightExtra;
+    const bottom = baseValue + bottomExtra;
+    const left = baseValue + leftExtra;
+
+    return `${top}px ${right}px ${bottom}px ${left}px`;
+  }, [calculateSlidePadding.horizontal, additionalPadding]);
+
   // Save scroll position before update
   useEffect(() => {
     const slideElement = slideRef.current;
@@ -957,13 +989,13 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
       ref={slideRef}
       style={{
         height: '100%',
-        overflowY: 'auto',
-        overflowX: 'hidden',
+        overflowY: disableScroll ? 'visible' : 'auto',
+        overflowX: disableScroll ? 'visible' : 'hidden',
         position: 'relative',
-        backgroundColor: theme.colors.background,
+        backgroundColor: transparentBackground ? 'transparent' : theme.colors.background,
         color: theme.colors.text,
         fontFamily: theme.fonts.body,
-        padding: `${calculateSlidePadding.horizontal}`,
+        padding: finalPadding,
         outline: 'none',
         // Add subtle focus indicator
         border: '2px solid transparent',
