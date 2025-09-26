@@ -127,6 +127,16 @@ export interface IndustryMarkdownSlideProps {
 
 // Override highlight.js token background colors and ensure proper text colors
 const highlightOverrides = `
+  /* Override root .hljs class with maximum specificity */
+  .markdown-slide .hljs,
+  .markdown-slide pre .hljs,
+  .markdown-slide code.hljs,
+  .markdown-slide pre code.hljs {
+    color: inherit !important;
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
   /* Remove backgrounds from all highlight.js classes in code blocks */
   pre code .hljs,
   pre code .hljs-keyword,
