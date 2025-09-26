@@ -7,11 +7,17 @@ export type { IndustryMarkdownSlideProps } from './industryMarkdown/components/I
 export { SlidePresentation } from './industryMarkdown/components/SlidePresentation';
 export type { SlidePresentationProps } from './industryMarkdown/components/SlidePresentation';
 
+export { SlidePresentationBook } from './industryMarkdown/components/SlidePresentationBook';
+export type { SlidePresentationBookProps } from './industryMarkdown/components/SlidePresentationBook';
+
 export { DocumentView } from './industryMarkdown/components/DocumentView';
 export type { DocumentViewProps } from './industryMarkdown/components/DocumentView';
 
-export { IndustryEditableMarkdownSlide } from './industryMarkdown/components/IndustryEditableMarkdownSlide';
-export type { IndustryEditableMarkdownSlideProps } from './industryMarkdown/components/IndustryEditableMarkdownSlide';
+export { SlideNavigationHeader } from './industryMarkdown/components/SlideNavigationHeader';
+export type { SlideNavigationHeaderProps } from './industryMarkdown/components/SlideNavigationHeader';
+
+export { SlideSearchBar } from './industryMarkdown/components/SlideSearchBar';
+export type { SlideSearchBarProps, SearchResult } from './industryMarkdown/components/SlideSearchBar';
 
 export { createIndustryMarkdownComponents } from './industryMarkdown/components/IndustryMarkdownComponents';
 
