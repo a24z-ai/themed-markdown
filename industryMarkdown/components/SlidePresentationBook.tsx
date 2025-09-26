@@ -498,14 +498,27 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                   <div
                     style={{
                       height: '100%',
-                      backgroundColor: 'transparent',
-                      borderRadius: 0,
-                      boxShadow: 'none',
-                      overflowY: 'auto',
-                      overflowX: 'hidden',
+                      width: '100%',
                       position: 'relative',
+                      overflow: 'hidden',
                     }}
                   >
+                    <div
+                      style={{
+                        height: '100%',
+                        width: '100%',
+                        backgroundColor: 'transparent',
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                        overflowY: 'auto',
+                        overflowX: 'auto',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                      }}
+                    >
                     <IndustryMarkdownSlide
                       content={slides[leftSlideIndex] || ''}
                       slideIdPrefix={`${slideIdPrefix}-${leftSlideIndex}`}
@@ -524,9 +537,11 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                       additionalPadding={{
                         left: `${theme.space[4]}px`,
                         right: `${theme.space[2]}px`,
+                        top: `${theme.space[3]}px`,
                       }}
                       disableScroll={false}
                     />
+                    </div>
                   </div>
                 }
                 rightPanel={
@@ -534,14 +549,27 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                     <div
                       style={{
                         height: '100%',
-                        backgroundColor: 'transparent',
-                        borderRadius: 0,
-                        boxShadow: 'none',
-                        overflowY: 'auto',
-                        overflowX: 'hidden',
+                        width: '100%',
                         position: 'relative',
+                        overflow: 'hidden',
                       }}
                     >
+                      <div
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                          backgroundColor: 'transparent',
+                          borderRadius: 0,
+                          boxShadow: 'none',
+                          overflowY: 'auto',
+                          overflowX: 'auto',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                        }}
+                      >
                       <IndustryMarkdownSlide
                         content={slides[rightSlideIndex] || ''}
                         slideIdPrefix={`${slideIdPrefix}-${rightSlideIndex}`}
@@ -560,9 +588,11 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                         additionalPadding={{
                           left: `${theme.space[2]}px`,
                           right: `${theme.space[4]}px`,
+                          top: `${theme.space[3]}px`,
                         }}
                         disableScroll={false}
                       />
+                      </div>
                     </div>
                   ) : (
                     // Empty right page for odd number of slides

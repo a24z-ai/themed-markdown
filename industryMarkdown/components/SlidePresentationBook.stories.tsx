@@ -310,3 +310,67 @@ export const EmptyRightPage: Story = {
     showNavigation: true,
   },
 };
+
+export const WithWideCodeBlocks: Story = {
+  args: {
+    slides: [
+      `# Wide Code Block Test - Page 1
+
+This page tests how wide code blocks are handled in book mode.
+
+## JavaScript with Long Lines
+
+\`\`\`javascript
+const reallyLongVariableName = someVeryLongFunctionName(anotherReallyLongParameterName, yetAnotherVeryLongParameterName, andOneMoreReallyLongParameterName);
+
+// This is a very long comment that explains what this code does and why it needs to be so long that it might cause horizontal scrolling issues in the code block
+const configurationObject = {
+  apiEndpoint: "https://api.example-with-very-long-domain-name.com/v2/users/authentication/validate",
+  timeout: 30000,
+  retries: 3
+};
+\`\`\``,
+
+      `# Wide Code Block Test - Page 2
+
+## SQL Query Example
+
+\`\`\`sql
+SELECT users.id, users.first_name, users.last_name, users.email, users.created_at, profiles.bio, profiles.location, profiles.website, profiles.social_links, organizations.name as org_name FROM users LEFT JOIN profiles ON users.id = profiles.user_id LEFT JOIN user_organizations ON users.id = user_organizations.user_id LEFT JOIN organizations ON user_organizations.organization_id = organizations.id WHERE users.status = 'active' AND profiles.visibility = 'public' AND organizations.is_verified = true ORDER BY users.created_at DESC LIMIT 100;
+\`\`\`
+
+## Configuration JSON
+
+\`\`\`json
+{
+  "database": {
+    "connection_string": "postgresql://username:password@database-server-with-very-long-hostname.example.com:5432/application_database_name"
+  }
+}
+\`\`\``,
+
+      `# Page 3 - More Wide Content
+
+## Bash Script with Long Commands
+
+\`\`\`bash
+docker run --rm -v /path/to/very/long/directory/structure/that/contains/application/source/code:/app -p 8080:8080 -e NODE_ENV=production myapp:latest
+
+curl -X POST "https://api.example.com/v1/users/authenticate" -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" -d '{"username":"user@example.com","password":"secretpassword"}'
+\`\`\``,
+
+      `# Page 4 - Even More Wide Content
+
+## Python with Long Method Chains
+
+\`\`\`python
+result = DataFrame.from_dict(data_source).filter(column_name="status", value="active").join(other_dataframe, left_on="user_id", right_on="id").group_by("category").aggregate({"revenue": "sum", "count": "count"}).sort_values(by="revenue", ascending=False)
+\`\`\`
+
+This tests horizontal scrolling behavior in both left and right panels of book mode.`
+    ],
+    viewMode: 'book',
+    showNavigation: true,
+    showSlideCounter: true,
+  },
+};

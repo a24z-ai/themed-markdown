@@ -623,6 +623,8 @@ export const createIndustryMarkdownComponents = ({
               borderRadius: theme.radii[2],
               overflow: 'visible',
               boxShadow: theme.shadows[2],
+              marginTop: `${theme.space[2]}px`,
+              marginBottom: `${theme.space[3]}px`,
             }
           : {
               position: 'relative' as const,
@@ -630,6 +632,8 @@ export const createIndustryMarkdownComponents = ({
               borderRadius: theme.radii[2],
               overflow: 'hidden',
               border: `1px solid ${theme.colors.border}`,
+              marginTop: `${theme.space[2]}px`,
+              marginBottom: `${theme.space[3]}px`,
             };
 
         const headerStyle = isPrompt

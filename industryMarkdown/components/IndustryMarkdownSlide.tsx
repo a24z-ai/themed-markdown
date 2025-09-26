@@ -137,6 +137,7 @@ const highlightOverrides = `
     background-color: transparent !important;
   }
 
+
   /* Remove backgrounds from all highlight.js classes in code blocks */
   pre code .hljs,
   pre code .hljs-keyword,
@@ -835,7 +836,8 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
 
     // Create final padding string
     // Use vertical padding for top/bottom, horizontal for sides
-    const top = baseVerticalValue + topExtra;
+    // Add more top padding (1.5x base) for better visual spacing
+    const top = Math.round(baseVerticalValue * 1.5) + topExtra;
     const right = baseHorizontalValue + rightExtra;
     // Add a bit more bottom padding (1.5x) for better visual buffer when scrolling
     const bottom = Math.round(baseVerticalValue * 1.5) + bottomExtra;

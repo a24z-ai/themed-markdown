@@ -48,6 +48,55 @@ function greet(name) {
 greet("World");
 \`\`\`
 
+And some more content after the code block.`,
+    slideIdPrefix: 'story',
+    slideIndex: 0,
+    isVisible: true,
+  },
+};
+
+export const WithWideCodeBlocks: Story = {
+  args: {
+    content: `# Wide Code Block Test
+
+This story tests how really wide code blocks are handled.
+
+## Long Line Example
+
+\`\`\`javascript
+const reallyLongVariableName = someVeryLongFunctionName(anotherReallyLongParameterName, yetAnotherVeryLongParameterName, andOneMoreReallyLongParameterName);
+\`\`\`
+
+## Table with Wide Content
+
+\`\`\`sql
+SELECT users.id, users.first_name, users.last_name, users.email, users.created_at, profiles.bio, profiles.location, profiles.website, profiles.social_links FROM users LEFT JOIN profiles ON users.id = profiles.user_id WHERE users.status = 'active' AND profiles.visibility = 'public';
+\`\`\`
+
+## Configuration Object
+
+\`\`\`json
+{
+  "database": {
+    "connection_string": "postgresql://username:password@localhost:5432/very_long_database_name_that_might_cause_overflow_issues",
+    "pool_settings": {
+      "min_connections": 5,
+      "max_connections": 100,
+      "connection_timeout": 30000,
+      "idle_timeout": 600000,
+      "statement_timeout": 300000
+    }
+  },
+  "api_endpoints": {
+    "authentication_service": "https://auth.example-with-very-long-domain-name.com/api/v2/authenticate",
+    "user_management_service": "https://users.example-with-very-long-domain-name.com/api/v2/users",
+    "notification_service": "https://notifications.example-with-very-long-domain-name.com/api/v2/notifications"
+  }
+}
+\`\`\`
+
+Text after wide code blocks to test spacing.
+
 And some inline \`code\` as well.`,
     slideIdPrefix: 'story',
     slideIndex: 0,
