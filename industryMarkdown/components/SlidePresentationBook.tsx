@@ -1,6 +1,5 @@
 import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
 import { AnimatedResizableLayout } from '@a24z/panels';
-import '@a24z/panels/dist/style.css';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 import { useTheme } from '../../industryTheme';
