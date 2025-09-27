@@ -116,7 +116,7 @@ export function IndustryLazyMermaidDiagram({
   }
 
   return (
-    <div ref={containerRef} style={{ position: 'relative' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%' }}>
       {hasRendered && onShowInPanel && !hasError && (
         <button
           onClick={e => {
