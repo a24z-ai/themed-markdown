@@ -19,6 +19,7 @@ interface IndustryMermaidDiagramProps {
   rootMargin?: string;
   isModalMode?: boolean;
   isFullSlide?: boolean;
+  onExpandClick?: () => void;
 }
 
 // Define mermaid type
@@ -47,6 +48,7 @@ export function IndustryMermaidDiagram({
   rootMargin = '200px',
   isModalMode = false,
   isFullSlide = false,
+  onExpandClick,
 }: IndustryMermaidDiagramProps) {
   const theme = themeOverride || defaultTheme;
   const [errorDetails, setErrorDetails] = useState<{ code: string; message: string } | null>(null);
@@ -54,9 +56,7 @@ export function IndustryMermaidDiagram({
   const [hasRendered, setHasRendered] = useState(false);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1.0); // Individual zoom state for this diagram
-  const [showFullSlide, setShowFullSlide] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   // Callback ref to set up intersection observer when element is attached
   const containerRef = React.useCallback(
@@ -116,7 +116,8 @@ export function IndustryMermaidDiagram({
       try {
         // Configure mermaid with theme colors
         // Create a slightly contrasted background for better visibility
-        const diagramBackground = theme.colors.backgroundSecondary || theme.colors.muted || theme.colors.background;
+        // In modal mode, use the main background to blend with modal
+        const diagramBackground = isModalMode ? theme.colors.background : (theme.colors.backgroundSecondary || theme.colors.muted || theme.colors.background);
         const nodeBackground = theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || theme.colors.primary + '22';
         
         mermaid.initialize({
@@ -187,14 +188,21 @@ export function IndustryMermaidDiagram({
             svgElement.style.maxHeight = '100%';
             svgElement.style.objectFit = 'contain';
           } else if (isModalMode) {
-            // Modal mode: let the diagram be its natural size for the zoom container to handle
+            // Modal mode: remove ALL constraints for full zoom capability
             svgElement.style.width = 'auto';
             svgElement.style.height = 'auto';
-            // Ensure it's not larger than needed
+            svgElement.style.maxWidth = 'none';
+            svgElement.style.maxHeight = 'none';
+            svgElement.style.minWidth = 'auto';
+            svgElement.style.minHeight = 'auto';
+
+            // Get the viewBox to determine natural size
             const viewBox = svgElement.getAttribute('viewBox');
             if (viewBox) {
               const [, , width, height] = viewBox.split(' ').map(Number);
               if (width && height) {
+                // Set explicit dimensions for zoom calculations
+                // Don't scale here - let the parent component handle scaling
                 svgElement.setAttribute('width', width.toString());
                 svgElement.setAttribute('height', height.toString());
               }
@@ -245,14 +253,14 @@ export function IndustryMermaidDiagram({
     renderDiagram();
   }, [hasRendered, code, id, theme, containerElement, onError, isModalMode, isFullSlide]); // Remove zoomLevel from dependencies
 
-  // Apply zoom transformation separately without re-rendering
+  // Apply zoom transformation
   useEffect(() => {
     if (!hasRendered || !containerElement) return;
 
     const svgElement = containerElement.querySelector('svg') as SVGSVGElement | null;
+    if (!svgElement) return;
 
-    if (svgElement) {
-      if (zoomLevel !== 1.0) {
+    if (zoomLevel !== 1.0) {
         // Apply transform scaling from center
         svgElement.style.transform = `scale(${zoomLevel})`;
         svgElement.style.transformOrigin = 'center center';
@@ -265,18 +273,17 @@ export function IndustryMermaidDiagram({
         if (svgRect.width < containerRect.width) {
           svgElement.style.margin = '0 auto';
         }
-      } else {
-        // Reset to normal
-        svgElement.style.transform = '';
-        svgElement.style.transformOrigin = '';
-        svgElement.style.margin = '0 auto';
+    } else {
+      // Reset to normal
+      svgElement.style.transform = '';
+      svgElement.style.transformOrigin = '';
+      svgElement.style.margin = '0 auto';
 
-        // Restore original constraints
-        if (!isModalMode && !isFullSlide) {
-          svgElement.style.maxHeight = '360px';
-          svgElement.style.width = '100%'; // Fill container width
-          svgElement.style.maxWidth = '100%'; // Respect parent container width
-        }
+      // Restore original constraints
+      if (!isModalMode && !isFullSlide) {
+        svgElement.style.maxHeight = '360px';
+        svgElement.style.width = '100%'; // Fill container width
+        svgElement.style.maxWidth = '100%'; // Respect parent container width
       }
     }
   }, [zoomLevel, containerElement, hasRendered, isModalMode, isFullSlide]);
@@ -319,11 +326,13 @@ export function IndustryMermaidDiagram({
     margin: 0,
     overflow: 'auto',
   } : isModalMode ? {
-    // Modal mode: no constraints, let parent handle sizing
+    // Modal mode: fill available space
     position: 'relative',
-    width: 'fit-content',
-    height: 'fit-content',
-    display: 'block',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'transparent',
     border: 'none',
     borderRadius: 0,
@@ -368,27 +377,10 @@ export function IndustryMermaidDiagram({
     );
   }
 
-  // Calculate wrapper styles based on full-slide state
-  const wrapperStyle: React.CSSProperties = showFullSlide && !isFullSlide && !isModalMode ? {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: theme.colors.background,
-    zIndex: 1000,
-    display: 'flex',
-    flexDirection: 'column',
-    padding: theme.space[4],
-  } : {
-    position: 'relative',
-    width: '100%',
-  };
-
   return (
-    <div ref={wrapperRef} style={wrapperStyle} onClick={showFullSlide ? () => setShowFullSlide(false) : undefined}>
-      <div style={{ position: 'relative', width: '100%', height: showFullSlide ? '100%' : 'auto' }}>
-        {hasRendered && (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div style={{ position: 'relative', width: '100%' }}>
+        {hasRendered && !isModalMode && onExpandClick && (
           <div style={{
             position: 'absolute',
             top: theme.space[2],
@@ -397,50 +389,28 @@ export function IndustryMermaidDiagram({
             display: 'flex',
             gap: theme.space[1],
           }}>
-            {showFullSlide ? (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowFullSlide(false);
-                }}
-                style={{
-                  padding: `${theme.space[2]}px ${theme.space[3]}px`,
-                  backgroundColor: theme.colors.background,
-                  color: theme.colors.text,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: theme.radii[1],
-                  fontSize: theme.fontSizes[1],
-                  fontWeight: theme.fontWeights.medium,
-                  cursor: 'pointer',
-                  fontFamily: theme.fonts.body,
-                }}
-              >
-                Close
-              </button>
-            ) : (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowFullSlide(true);
-                }}
-                style={{
-                  padding: theme.space[1],
-                  backgroundColor: theme.colors.backgroundSecondary,
-                  border: `1px solid ${theme.colors.border}`,
-                  borderRadius: theme.radii[1],
-                  color: theme.colors.text,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '28px',
-                  height: '28px',
-                }}
-                title="Expand to full slide"
-              >
-                <Expand size={14} />
-              </button>
-            )}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onExpandClick();
+              }}
+              style={{
+                padding: theme.space[1],
+                backgroundColor: theme.colors.backgroundSecondary,
+                border: `1px solid ${theme.colors.border}`,
+                borderRadius: theme.radii[1],
+                color: theme.colors.text,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '28px',
+                height: '28px',
+              }}
+              title="View fullscreen"
+            >
+              <Expand size={14} />
+            </button>
             <button
               onClick={() => setZoomLevel(Math.min(3.0, zoomLevel + 0.25))}
               disabled={zoomLevel >= 3.0}
@@ -506,34 +476,15 @@ export function IndustryMermaidDiagram({
             </button>
           </div>
         )}
-        <div
-          style={showFullSlide ? {
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'auto',
-          } : {}}
-          onClick={e => e.stopPropagation()}
-        >
-          <div ref={containerRef} style={showFullSlide ? {
-            ...containerStyle,
-            maxHeight: '90%',
-            maxWidth: '90%',
-            margin: 'auto',
-            border: 'none',
-            backgroundColor: 'transparent',
-          } : containerStyle} className="mermaid-container">
-            {!hasRendered && (
-              <div style={placeholderStyle}>
-                <div>📊 Mermaid Diagram</div>
-                <div style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}>
-                  {isIntersecting ? 'Loading...' : 'Scroll to view'}
-                </div>
+        <div ref={containerRef} style={containerStyle} className="mermaid-container">
+          {!hasRendered && (
+            <div style={placeholderStyle}>
+              <div>📊 Mermaid Diagram</div>
+              <div style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}>
+                {isIntersecting ? 'Loading...' : 'Scroll to view'}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

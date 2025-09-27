@@ -12,6 +12,7 @@ interface IndustryLazyMermaidDiagramProps {
   rootMargin?: string;
   onShowInPanel?: (code: string, title?: string) => void;
   theme?: Theme;
+  onExpandClick?: () => void;
 }
 
 export function IndustryLazyMermaidDiagram({
@@ -21,6 +22,7 @@ export function IndustryLazyMermaidDiagram({
   rootMargin = '200px',
   onShowInPanel,
   theme = defaultTheme,
+  onExpandClick,
 }: IndustryLazyMermaidDiagramProps) {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
@@ -163,6 +165,7 @@ export function IndustryLazyMermaidDiagram({
           onCopyError={onCopyError}
           onError={setHasError}
           theme={theme}
+          onExpandClick={onExpandClick}
         />
       ) : (
         <div style={getPlaceholderStyle()}>

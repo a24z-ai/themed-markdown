@@ -5,6 +5,8 @@ import { Theme, useTheme } from '../../industryTheme';
 
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
+type AnimationType = 'linear' | 'easeOut' | 'easeInQuad' | 'easeOutQuad' | 'easeInOutQuad' | 'easeInCubic' | 'easeOutCubic' | 'easeInOutCubic' | 'easeInQuart' | 'easeOutQuart' | 'easeInOutQuart' | 'easeInQuint' | 'easeOutQuint' | 'easeInOutQuint';
+
 interface IndustryZoomableMermaidDiagramProps {
   code: string;
   id: string;
@@ -18,16 +20,21 @@ export function IndustryZoomableMermaidDiagram({
   id,
   theme: themeOverride,
   fitStrategy = 'contain',
-  padding = 0.85,
+  padding = 0.9,  // Use 90% of available space to leave some breathing room
 }: IndustryZoomableMermaidDiagramProps) {
   // Get theme from context or use override
   const { theme: contextTheme } = useTheme();
   const theme = themeOverride || contextTheme;
 
-  const [calculatedScale, setCalculatedScale] = useState(0.8); // Start with reasonable default
+  const [calculatedScale, setCalculatedScale] = useState(1); // Start at 1, will be recalculated
+  const [hasInitialized, setHasInitialized] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const diagramRef = useRef<HTMLDivElement>(null);
   const [isCalculating, setIsCalculating] = useState(true);
+  const transformRef = useRef<{
+    centerView: (scale?: number, animationTime?: number, animationType?: AnimationType) => void;
+    instance: { transformState: { scale: number } }
+  } | null>(null);
 
   useEffect(() => {
     if (!containerRef.current || !diagramRef.current) return;
@@ -50,18 +57,26 @@ export function IndustryZoomableMermaidDiagram({
       // Get the SVG's intrinsic size
       let svgWidth: number, svgHeight: number;
 
-      // Try to get dimensions from viewBox first
+      // First try viewBox for accurate intrinsic dimensions
       const viewBox = svg.getAttribute('viewBox');
       if (viewBox) {
         const [, , width, height] = viewBox.split(' ').map(Number);
         svgWidth = width;
         svgHeight = height;
       } else {
-        // Fallback to actual rendered size
-        const svgRect = svg.getBoundingClientRect();
-        // Since we might already be scaled, we need to account for that
-        svgWidth = svgRect.width / calculatedScale;
-        svgHeight = svgRect.height / calculatedScale;
+        // Then try explicit dimensions
+        const explicitWidth = svg.getAttribute('width');
+        const explicitHeight = svg.getAttribute('height');
+
+        if (explicitWidth && explicitHeight) {
+          svgWidth = parseFloat(explicitWidth);
+          svgHeight = parseFloat(explicitHeight);
+        } else {
+          // Fallback to actual rendered size
+          const svgRect = svg.getBoundingClientRect();
+          svgWidth = svgRect.width;
+          svgHeight = svgRect.height;
+        }
       }
 
       // Get container dimensions
@@ -92,9 +107,10 @@ export function IndustryZoomableMermaidDiagram({
       }
 
       // Cap the scale to reasonable bounds
-      scale = Math.min(Math.max(scale, 0.3), 2); // Between 30% and 200%
+      scale = Math.min(Math.max(scale, 0.3), 3); // Between 30% and 300%
 
       setCalculatedScale(scale);
+      setHasInitialized(true);
       setIsCalculating(false);
     };
 
@@ -106,12 +122,23 @@ export function IndustryZoomableMermaidDiagram({
     resizeObserver.observe(containerRef.current);
 
     // Initial calculation after a short delay to ensure mermaid has rendered
-    setTimeout(calculateOptimalScale, 200);
+    setTimeout(calculateOptimalScale, 100);
+    // Recalculate again after a longer delay to be sure
+    setTimeout(calculateOptimalScale, 500);
 
     return () => {
       resizeObserver.disconnect();
     };
   }, [code, fitStrategy, padding]); // Recalculate when these change
+
+  // Apply the calculated scale once it's ready
+  useEffect(() => {
+    if (hasInitialized && transformRef.current) {
+      const { centerView } = transformRef.current;
+      // Apply the calculated scale
+      centerView(calculatedScale, 0, 'easeOut');
+    }
+  }, [hasInitialized, calculatedScale]);
   const buttonStyle: React.CSSProperties = {
     padding: `${theme.space[1]}px ${theme.space[2]}px`,
     marginRight: theme.space[2],
@@ -135,13 +162,13 @@ export function IndustryZoomableMermaidDiagram({
   };
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
+    <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: theme.colors.background }}>
       <TransformWrapper
         limitToBounds={true}
         doubleClick={{ disabled: true }}
-        minScale={0.3}
+        minScale={0.1}
         maxScale={10}
-        initialScale={calculatedScale}
+        initialScale={1}
         initialPositionX={0}
         initialPositionY={0}
         centerOnInit={true}
@@ -149,7 +176,10 @@ export function IndustryZoomableMermaidDiagram({
         alignmentAnimation={{ disabled: true }}
         zoomAnimation={{ disabled: false, size: 0.2 }}
       >
-        {({ centerView, instance }) => (
+        {({ centerView, instance }) => {
+          // Store the transform instance for use in useEffect
+          transformRef.current = { centerView, instance };
+          return (
           <>
             <div
               style={{
@@ -163,51 +193,13 @@ export function IndustryZoomableMermaidDiagram({
             >
               <button
                 onClick={() => {
-                  // Get current state
-                  const { scale } = instance.transformState;
-                  
-                  // New scale
-                  const newScale = Math.min(scale * 1.2, 10);
-                  
-                  // Apply the transform using centerView
-                  // The library doesn't expose setTransform directly, so we use centerView
-                  centerView(newScale, 200, 'easeOut');
-                }}
-                style={buttonStyle}
-                onMouseEnter={handleButtonHover}
-                onMouseLeave={handleButtonLeave}
-                title="Zoom in"
-              >
-                +
-              </button>
-              <button
-                onClick={() => {
-                  // Get current state
-                  const { scale } = instance.transformState;
-                  
-                  // New scale
-                  const newScale = Math.max(scale * 0.833, 0.3);
-                  
-                  // Apply the transform using centerView
-                  // The library doesn't expose setTransform directly, so we use centerView
-                  centerView(newScale, 200, 'easeOut');
-                }}
-                style={buttonStyle}
-                onMouseEnter={handleButtonHover}
-                onMouseLeave={handleButtonLeave}
-                title="Zoom out"
-              >
-                −
-              </button>
-              <button
-                onClick={() => {
                   // Reset to initial calculated scale and center
                   centerView(calculatedScale, 200, 'easeOut');
                 }}
                 style={buttonStyle}
                 onMouseEnter={handleButtonHover}
                 onMouseLeave={handleButtonLeave}
-                title="Reset zoom"
+                title="Reset view"
               >
                 ⟲
               </button>
@@ -225,19 +217,18 @@ export function IndustryZoomableMermaidDiagram({
               )}
             </div>
             <TransformComponent
-              wrapperStyle={{ 
-                width: '100%', 
+              wrapperStyle={{
+                width: '100%',
                 height: '100%',
+                backgroundColor: theme.colors.background,
                 overflow: 'hidden', // Contain the content
               }}
               contentStyle={{
-                width: 'fit-content',
-                height: 'fit-content',
+                width: '100%',
+                height: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minWidth: '100%',
-                minHeight: '100%',
               }}
             >
               <div
@@ -246,17 +237,16 @@ export function IndustryZoomableMermaidDiagram({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: 'fit-content',
-                  height: 'fit-content',
-                  minWidth: '100%',
-                  minHeight: '100%',
+                  width: '100%',
+                  height: '100%',
                 }}
               >
                 <IndustryMermaidDiagram code={code} id={id} isModalMode={true} />
               </div>
             </TransformComponent>
           </>
-        )}
+          );
+        }}
       </TransformWrapper>
     </div>
   );

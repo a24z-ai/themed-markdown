@@ -508,7 +508,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
 
   // Mermaid Modal state
   const [mermaidModalOpen, setMermaidModalOpen] = useState(false);
-  const [mermaidModalCode, setMermaidModalCode] = useState('');
+  const [mermaidModalCode, setMermaidModalCode] = useState<string>('');
 
   // Placeholder Modal state
   const [placeholderModalOpen, setPlaceholderModalOpen] = useState(false);
@@ -766,6 +766,12 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
   const closePlaceholderModal = () => {
     setPlaceholderModalOpen(false);
     setPlaceholderModalData(null);
+  };
+
+  // Function to open mermaid modal with code
+  const openMermaidModal = (code: string) => {
+    setMermaidModalCode(code);
+    setMermaidModalOpen(true);
   };
 
   const closeMermaidModal = () => {
@@ -1065,6 +1071,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
               onCopyError: onCopyMermaidError,
               rootMargin: rootMargin,
               theme: theme,
+              onExpandClick: () => openMermaidModal(chunk.content),
             };
 
             // Only add onShowInPanel if onShowMermaidInPanel is provided

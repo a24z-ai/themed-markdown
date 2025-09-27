@@ -53,7 +53,7 @@ export function IndustryMermaidModal({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.9)',  // Darker backdrop overlay
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -66,11 +66,11 @@ export function IndustryMermaidModal({
         onClick={e => e.stopPropagation()}
         style={{
           position: 'relative',
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme.colors.background,  // Keep theme background
           borderRadius: theme.radii[3],
-          padding: theme.space[5],
-          width: '90vw',
-          height: '90vh',
+          padding: 0,  // No padding to maximize diagram space
+          width: '95vw',
+          height: '95vh',  // Use more screen space
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -81,12 +81,13 @@ export function IndustryMermaidModal({
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: theme.space[4],
-            right: theme.space[4],
-            background: 'none',
-            border: 'none',
-            fontSize: theme.fontSizes[5],
-            color: theme.colors.textSecondary,
+            top: theme.space[2],
+            right: theme.space[2],
+            zIndex: 100,  // Ensure button is above diagram
+            background: theme.colors.background,
+            border: `1px solid ${theme.colors.border}`,
+            fontSize: theme.fontSizes[4],
+            color: theme.colors.text,
             cursor: 'pointer',
             lineHeight: 1,
             padding: `${theme.space[1]}px`,
@@ -99,18 +100,24 @@ export function IndustryMermaidModal({
             transition: 'all 0.2s ease',
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.backgroundColor = theme.colors.backgroundTertiary;
+            e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
             e.currentTarget.style.color = theme.colors.text;
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = theme.colors.textSecondary;
+            e.currentTarget.style.backgroundColor = theme.colors.background;
+            e.currentTarget.style.color = theme.colors.text;
           }}
           aria-label="Close"
         >
           ×
         </button>
-        <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+        <div style={{
+          flex: 1,
+          overflow: 'hidden',
+          position: 'relative',
+          backgroundColor: theme.colors.background,
+          padding: `${theme.space[5]}px ${theme.space[2]}px ${theme.space[2]}px ${theme.space[2]}px`  // Add top padding to avoid X button
+        }}>
           <IndustryZoomableMermaidDiagram
             id="mermaid-modal-diagram"
             code={mermaidCode}
