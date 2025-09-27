@@ -1066,12 +1066,12 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
               rootMargin: rootMargin,
               theme: theme,
             };
-            
+
             // Only add onShowInPanel if onShowMermaidInPanel is provided
             if (onShowMermaidInPanel) {
               mermaidProps.onShowInPanel = onShowMermaidInPanel;
             }
-            
+
             return <IndustryLazyMermaidDiagram key={chunk.id} {...mermaidProps} />;
           }
           return null;

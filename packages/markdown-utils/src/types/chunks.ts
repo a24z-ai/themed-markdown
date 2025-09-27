@@ -33,8 +33,8 @@ export type ContentChunk = MarkdownChunk | MermaidChunk | CodeChunk;
 export const isMarkdownChunk = (chunk: BaseChunk): chunk is MarkdownChunk => 
   chunk.type === CHUNK_TYPES.MARKDOWN;
 
-export const isMermaidChunk = (chunk: BaseChunk): chunk is MermaidChunk => 
+export const isMermaidChunk = (chunk: BaseChunk): chunk is MermaidChunk =>
   chunk.type === CHUNK_TYPES.MERMAID;
 
-export const isCodeChunk = (chunk: BaseChunk): chunk is CodeChunk => 
+export const isCodeChunk = (chunk: BaseChunk): chunk is CodeChunk =>
   chunk.type === CHUNK_TYPES.CODE;
