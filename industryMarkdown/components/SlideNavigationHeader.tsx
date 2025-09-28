@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X, PanelLeftClose, PanelRightClose } from 'lucide-react';
 import React from 'react';
 
 import { Theme } from '../../industryTheme';
@@ -11,10 +11,15 @@ export interface SlideNavigationHeaderProps {
   showSlideCounter: boolean;
   showFullscreenButton: boolean;
   theme: Theme;
+  viewMode?: 'single' | 'book';
+  collapseLeft?: boolean;
+  collapseRight?: boolean;
   onPrevious: () => void;
   onNext: () => void;
   onToggleTOC: () => void;
   onToggleFullscreen: () => void;
+  onCollapseLeft?: () => void;
+  onCollapseRight?: () => void;
 }
 
 export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
@@ -25,10 +30,15 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
   showSlideCounter,
   showFullscreenButton,
   theme,
+  viewMode = 'single',
+  collapseLeft = false,
+  collapseRight = false,
   onPrevious,
   onNext,
   onToggleTOC,
   onToggleFullscreen,
+  onCollapseLeft,
+  onCollapseRight,
 }) => {
   const navigationHeight = '48px';
 
@@ -118,6 +128,37 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
           <ChevronLeft size={18} />
           Previous
         </button>
+
+        {/* Collapse Left Panel button (for book mode) */}
+        {viewMode === 'book' && onCollapseLeft && (
+          <button
+            onClick={onCollapseLeft}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '36px',
+              height: '36px',
+              backgroundColor: collapseLeft ? theme.colors.backgroundSecondary : 'transparent',
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: theme.radii[1],
+              color: theme.colors.textSecondary,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseOver={e => {
+              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
+              e.currentTarget.style.borderColor = theme.colors.text;
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.backgroundColor = collapseLeft ? theme.colors.backgroundSecondary : 'transparent';
+              e.currentTarget.style.borderColor = theme.colors.border;
+            }}
+            title={collapseLeft ? 'Expand left panel' : 'Collapse left panel'}
+          >
+            <PanelLeftClose size={18} style={{ transform: collapseLeft ? 'rotate(180deg)' : 'none' }} />
+          </button>
+        )}
       </div>
 
       {/* Center: Slide counter */}
@@ -145,6 +186,37 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
           gap: theme.space[2],
         }}
       >
+        {/* Collapse Right Panel button (for book mode) */}
+        {viewMode === 'book' && onCollapseRight && (
+          <button
+            onClick={onCollapseRight}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '36px',
+              height: '36px',
+              backgroundColor: collapseRight ? theme.colors.backgroundSecondary : 'transparent',
+              border: `1px solid ${theme.colors.border}`,
+              borderRadius: theme.radii[1],
+              color: theme.colors.textSecondary,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseOver={e => {
+              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
+              e.currentTarget.style.borderColor = theme.colors.text;
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.backgroundColor = collapseRight ? theme.colors.backgroundSecondary : 'transparent';
+              e.currentTarget.style.borderColor = theme.colors.border;
+            }}
+            title={collapseRight ? 'Expand right panel' : 'Collapse right panel'}
+          >
+            <PanelRightClose size={18} style={{ transform: collapseRight ? 'rotate(180deg)' : 'none' }} />
+          </button>
+        )}
+
         <button
           onClick={onNext}
           disabled={currentSlide === totalSlides - 1}

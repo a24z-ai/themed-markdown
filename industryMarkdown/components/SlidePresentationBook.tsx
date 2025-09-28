@@ -63,6 +63,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [currentSearchResult, setCurrentSearchResult] = useState(-1);
   const [searchStartSlide, setSearchStartSlide] = useState(0);
+  const [collapsedSide, setCollapsedSide] = useState<'left' | 'right' | null>(null);
+  const [lastInteractedSide, setLastInteractedSide] = useState<'left' | 'right'>('left');
   const containerRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
@@ -149,6 +151,17 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
   const goToNextSlide = useCallback(() => {
     navigateToSlide(currentSlide + stepSize);
   }, [currentSlide, navigateToSlide, stepSize]);
+
+  // Handle collapse toggles
+  const handleCollapseLeft = useCallback(() => {
+    setLastInteractedSide('left');
+    setCollapsedSide(collapsedSide === 'left' ? null : 'left');
+  }, [collapsedSide]);
+
+  const handleCollapseRight = useCallback(() => {
+    setLastInteractedSide('right');
+    setCollapsedSide(collapsedSide === 'right' ? null : 'right');
+  }, [collapsedSide]);
 
   // Handle fullscreen
   const toggleFullscreen = useCallback(() => {
@@ -314,10 +327,15 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
           showSlideCounter={showSlideCounter}
           showFullscreenButton={showFullscreenButton}
           theme={theme}
+          viewMode={viewMode}
+          collapseLeft={collapsedSide === 'left'}
+          collapseRight={collapsedSide === 'right'}
           onPrevious={goToPreviousSlide}
           onNext={goToNextSlide}
           onToggleTOC={() => setShowTOC(prev => !prev)}
           onToggleFullscreen={toggleFullscreen}
+          onCollapseLeft={handleCollapseLeft}
+          onCollapseRight={handleCollapseRight}
         />
       )}
 
@@ -494,6 +512,9 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
             viewMode === 'book' ? (
               // Book Mode with AnimatedResizableLayout
               <AnimatedResizableLayout
+                key={`${lastInteractedSide}-${collapsedSide}`} // Force re-mount when collapse state changes
+                collapsed={collapsedSide !== null}
+                collapsibleSide={lastInteractedSide}
                 leftPanel={
                   <div
                     style={{
