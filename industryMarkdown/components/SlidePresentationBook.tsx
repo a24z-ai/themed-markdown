@@ -527,8 +527,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
           }}
         >
           {slides.length > 0 ? (
-            viewMode === 'book' ? (
-              // Book Mode with AnimatedResizableLayout
+            viewMode === 'book' && slides.length > 1 ? (
+              // Book Mode with AnimatedResizableLayout (only when we have more than 1 slide)
               <AnimatedResizableLayout
                 key={`${lastInteractedSide}-${collapsedSide}`} // Force re-mount when collapse state changes
                 collapsed={collapsedSide !== null}
@@ -667,7 +667,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                 }}
               />
             ) : (
-              // Single Page View
+              // Single Page View (or Book Mode with only 1 slide)
               <div
                 style={{
                   flex: 1,
@@ -677,25 +677,45 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                   overflowY: 'auto',
                   overflowX: 'hidden',
                   position: 'relative',
+                  // Center the single slide in book mode
+                  ...(viewMode === 'book' && slides.length === 1 ? {
+                    display: 'flex',
+                    justifyContent: 'center',
+                  } : {}),
                 }}
               >
-                <IndustryMarkdownSlide
-                  content={slides[leftSlideIndex] || ''}
-                  slideIdPrefix={`${slideIdPrefix}-${leftSlideIndex}`}
-                  slideIndex={leftSlideIndex}
-                  isVisible={true}
-                  theme={theme}
-                  onCheckboxChange={onCheckboxChange}
-                  enableHtmlPopout={enableHtmlPopout}
-                  enableKeyboardScrolling={enableKeyboardScrolling}
-                  onLinkClick={onLinkClick}
-                  handleRunBashCommand={handleRunBashCommand}
-                  handlePromptCopy={handlePromptCopy}
-                  fontSizeScale={fontSizeScale}
-                  searchQuery={showSearch ? searchQuery : undefined}
-                  transparentBackground={false}
-                  disableScroll={false}
-                />
+                <div
+                  style={{
+                    // In book mode with 1 slide, constrain width to look like a single page
+                    ...(viewMode === 'book' && slides.length === 1 ? {
+                      width: '50%',
+                      maxWidth: '800px',
+                      minWidth: '400px',
+                      height: '100%',
+                    } : {
+                      width: '100%',
+                      height: '100%',
+                    }),
+                  }}
+                >
+                  <IndustryMarkdownSlide
+                    content={slides[leftSlideIndex] || ''}
+                    slideIdPrefix={`${slideIdPrefix}-${leftSlideIndex}`}
+                    slideIndex={leftSlideIndex}
+                    isVisible={true}
+                    theme={theme}
+                    onCheckboxChange={onCheckboxChange}
+                    enableHtmlPopout={enableHtmlPopout}
+                    enableKeyboardScrolling={enableKeyboardScrolling}
+                    onLinkClick={onLinkClick}
+                    handleRunBashCommand={handleRunBashCommand}
+                    handlePromptCopy={handlePromptCopy}
+                    fontSizeScale={fontSizeScale}
+                    searchQuery={showSearch ? searchQuery : undefined}
+                    transparentBackground={false}
+                    disableScroll={false}
+                  />
+                </div>
               </div>
             )
           ) : (
@@ -715,8 +735,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
           )}
         </div>
 
-        {/* Page numbers in the padding area (Book Mode Only) */}
-        {viewMode === 'book' && slides.length > 0 && (
+        {/* Page numbers in the padding area (Book Mode with multiple slides only) */}
+        {viewMode === 'book' && slides.length > 1 && (
           <>
             {/* Left page number */}
             <div

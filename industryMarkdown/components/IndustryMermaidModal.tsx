@@ -35,7 +35,8 @@ export function IndustryMermaidModal({
   }, [isOpen, onClose]);
 
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    // Only close if clicking directly on the backdrop, not its children
+    if (event.target === event.currentTarget) {
       onClose();
     }
   };
@@ -78,7 +79,10 @@ export function IndustryMermaidModal({
         }}
       >
         <button
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
           style={{
             position: 'absolute',
             top: theme.space[2],

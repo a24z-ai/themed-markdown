@@ -5,7 +5,7 @@
  * This is a replacement for ConfigurableMermaidDiagram that doesn't depend on the old theme system
  */
 
-import { ZoomIn, ZoomOut, RotateCcw, Expand } from 'lucide-react';
+import { Expand } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Theme, theme as defaultTheme } from '../../industryTheme';
@@ -55,7 +55,6 @@ export function IndustryMermaidDiagram({
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
-  const [zoomLevel, setZoomLevel] = useState(1.0); // Individual zoom state for this diagram
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Callback ref to set up intersection observer when element is attached
@@ -251,42 +250,7 @@ export function IndustryMermaidDiagram({
     };
 
     renderDiagram();
-  }, [hasRendered, code, id, theme, containerElement, onError, isModalMode, isFullSlide]); // Remove zoomLevel from dependencies
-
-  // Apply zoom transformation
-  useEffect(() => {
-    if (!hasRendered || !containerElement) return;
-
-    const svgElement = containerElement.querySelector('svg') as SVGSVGElement | null;
-    if (!svgElement) return;
-
-    if (zoomLevel !== 1.0) {
-        // Apply transform scaling from center
-        svgElement.style.transform = `scale(${zoomLevel})`;
-        svgElement.style.transformOrigin = 'center center';
-
-        // Ensure the container can accommodate the scaled content
-        const containerRect = containerElement.getBoundingClientRect();
-        const svgRect = svgElement.getBoundingClientRect();
-
-        // If the scaled SVG is smaller than container, center it
-        if (svgRect.width < containerRect.width) {
-          svgElement.style.margin = '0 auto';
-        }
-    } else {
-      // Reset to normal
-      svgElement.style.transform = '';
-      svgElement.style.transformOrigin = '';
-      svgElement.style.margin = '0 auto';
-
-      // Restore original constraints
-      if (!isModalMode && !isFullSlide) {
-        svgElement.style.maxHeight = '360px';
-        svgElement.style.width = '100%'; // Fill container width
-        svgElement.style.maxWidth = '100%'; // Respect parent container width
-      }
-    }
-  }, [zoomLevel, containerElement, hasRendered, isModalMode, isFullSlide]);
+  }, [hasRendered, code, id, theme, containerElement, onError, isModalMode, isFullSlide]);
 
   // Handle copy error action
   useEffect(() => {
@@ -410,69 +374,6 @@ export function IndustryMermaidDiagram({
               title="View fullscreen"
             >
               <Expand size={14} />
-            </button>
-            <button
-              onClick={() => setZoomLevel(Math.min(3.0, zoomLevel + 0.25))}
-              disabled={zoomLevel >= 3.0}
-              style={{
-                padding: theme.space[1],
-                backgroundColor: theme.colors.backgroundSecondary,
-                border: `1px solid ${theme.colors.border}`,
-                borderRadius: theme.radii[1],
-                color: theme.colors.text,
-                cursor: zoomLevel >= 3.0 ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '28px',
-                height: '28px',
-                opacity: zoomLevel >= 3.0 ? 0.5 : 1,
-              }}
-              title="Zoom In"
-            >
-              <ZoomIn size={14} />
-            </button>
-            <button
-              onClick={() => setZoomLevel(Math.max(0.5, zoomLevel - 0.25))}
-              disabled={zoomLevel <= 0.5}
-              style={{
-                padding: theme.space[1],
-                backgroundColor: theme.colors.backgroundSecondary,
-                border: `1px solid ${theme.colors.border}`,
-                borderRadius: theme.radii[1],
-                color: theme.colors.text,
-                cursor: zoomLevel <= 0.5 ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '28px',
-                height: '28px',
-                opacity: zoomLevel <= 0.5 ? 0.5 : 1,
-              }}
-              title="Zoom Out"
-            >
-              <ZoomOut size={14} />
-            </button>
-            <button
-              onClick={() => setZoomLevel(1.0)}
-              disabled={zoomLevel === 1.0}
-              style={{
-                padding: theme.space[1],
-                backgroundColor: theme.colors.backgroundSecondary,
-                border: `1px solid ${theme.colors.border}`,
-                borderRadius: theme.radii[1],
-                color: theme.colors.text,
-                cursor: zoomLevel === 1.0 ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '28px',
-                height: '28px',
-                opacity: zoomLevel === 1.0 ? 0.5 : 1,
-              }}
-              title="Reset Zoom"
-            >
-              <RotateCcw size={14} />
             </button>
           </div>
         )}
