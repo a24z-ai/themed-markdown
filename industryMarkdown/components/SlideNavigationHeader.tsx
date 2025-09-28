@@ -1,7 +1,9 @@
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X, PanelLeftClose, PanelRightClose } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X, PanelLeftClose, PanelRightClose, Columns } from 'lucide-react';
 import React from 'react';
 
 import { Theme } from '../../industryTheme';
+
+import { FocusLeftIcon, FocusRightIcon } from './FocusLeftIcon';
 
 export interface SlideNavigationHeaderProps {
   currentSlide: number;
@@ -129,7 +131,7 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
           Previous
         </button>
 
-        {/* Collapse Left Panel button (for book mode) */}
+        {/* Focus/Expand Left Panel button (for book mode) */}
         {viewMode === 'book' && onCollapseLeft && (
           <button
             onClick={onCollapseLeft}
@@ -139,7 +141,7 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
               justifyContent: 'center',
               width: '36px',
               height: '36px',
-              backgroundColor: collapseLeft ? theme.colors.backgroundSecondary : 'transparent',
+              backgroundColor: collapseRight ? theme.colors.backgroundSecondary : 'transparent',
               border: `1px solid ${theme.colors.border}`,
               borderRadius: theme.radii[1],
               color: theme.colors.textSecondary,
@@ -151,12 +153,18 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
               e.currentTarget.style.borderColor = theme.colors.text;
             }}
             onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = collapseLeft ? theme.colors.backgroundSecondary : 'transparent';
+              e.currentTarget.style.backgroundColor = collapseRight ? theme.colors.backgroundSecondary : 'transparent';
               e.currentTarget.style.borderColor = theme.colors.border;
             }}
-            title={collapseLeft ? 'Expand left panel' : 'Collapse left panel'}
+            title={collapseLeft ? 'Expand left panel' : (collapseRight ? 'Show both panels' : 'Focus on left panel')}
           >
-            <PanelLeftClose size={18} style={{ transform: collapseLeft ? 'rotate(180deg)' : 'none' }} />
+            {collapseLeft ? (
+              <PanelLeftClose size={18} style={{ transform: 'rotate(180deg)' }} />
+            ) : collapseRight ? (
+              <Columns size={18} />
+            ) : (
+              <FocusLeftIcon size={18} />
+            )}
           </button>
         )}
       </div>
@@ -186,7 +194,7 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
           gap: theme.space[2],
         }}
       >
-        {/* Collapse Right Panel button (for book mode) */}
+        {/* Focus/Expand Right Panel button (for book mode) */}
         {viewMode === 'book' && onCollapseRight && (
           <button
             onClick={onCollapseRight}
@@ -196,7 +204,7 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
               justifyContent: 'center',
               width: '36px',
               height: '36px',
-              backgroundColor: collapseRight ? theme.colors.backgroundSecondary : 'transparent',
+              backgroundColor: collapseLeft ? theme.colors.backgroundSecondary : 'transparent',
               border: `1px solid ${theme.colors.border}`,
               borderRadius: theme.radii[1],
               color: theme.colors.textSecondary,
@@ -208,12 +216,18 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
               e.currentTarget.style.borderColor = theme.colors.text;
             }}
             onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = collapseRight ? theme.colors.backgroundSecondary : 'transparent';
+              e.currentTarget.style.backgroundColor = collapseLeft ? theme.colors.backgroundSecondary : 'transparent';
               e.currentTarget.style.borderColor = theme.colors.border;
             }}
-            title={collapseRight ? 'Expand right panel' : 'Collapse right panel'}
+            title={collapseRight ? 'Expand right panel' : (collapseLeft ? 'Show both panels' : 'Focus on right panel')}
           >
-            <PanelRightClose size={18} style={{ transform: collapseRight ? 'rotate(180deg)' : 'none' }} />
+            {collapseRight ? (
+              <PanelRightClose size={18} style={{ transform: 'rotate(180deg)' }} />
+            ) : collapseLeft ? (
+              <Columns size={18} />
+            ) : (
+              <FocusRightIcon size={18} />
+            )}
           </button>
         )}
 

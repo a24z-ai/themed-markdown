@@ -152,15 +152,33 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
     navigateToSlide(currentSlide + stepSize);
   }, [currentSlide, navigateToSlide, stepSize]);
 
-  // Handle collapse toggles
+  // Handle collapse toggles with focus behavior
   const handleCollapseLeft = useCallback(() => {
-    setLastInteractedSide('left');
-    setCollapsedSide(collapsedSide === 'left' ? null : 'left');
+    if (collapsedSide === 'left') {
+      // If left is hidden, show it (expand back)
+      setCollapsedSide(null);
+    } else if (collapsedSide === 'right') {
+      // If focused on left (right is hidden), unfocus by showing both
+      setCollapsedSide(null);
+    } else {
+      // Focus on left by hiding right
+      setLastInteractedSide('right');
+      setCollapsedSide('right');
+    }
   }, [collapsedSide]);
 
   const handleCollapseRight = useCallback(() => {
-    setLastInteractedSide('right');
-    setCollapsedSide(collapsedSide === 'right' ? null : 'right');
+    if (collapsedSide === 'right') {
+      // If right is hidden, show it (expand back)
+      setCollapsedSide(null);
+    } else if (collapsedSide === 'left') {
+      // If focused on right (left is hidden), unfocus by showing both
+      setCollapsedSide(null);
+    } else {
+      // Focus on right by hiding left
+      setLastInteractedSide('left');
+      setCollapsedSide('left');
+    }
   }, [collapsedSide]);
 
   // Handle fullscreen
