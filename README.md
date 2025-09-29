@@ -24,8 +24,7 @@ bun add themed-markdown
 ## Usage
 
 ```tsx
-import { IndustryMarkdownSlide } from 'themed-markdown/industryMarkdown';
-import { ThemeProvider } from 'themed-markdown/industryTheme';
+import { IndustryMarkdownSlide, ThemeProvider } from 'themed-markdown';
 
 function App() {
   const markdownContent = `

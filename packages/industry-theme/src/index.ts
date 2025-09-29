@@ -141,7 +141,14 @@ export interface Theme {
 export const theme: Theme = terminalTheme;
 
 // Export all themes for direct access
-export { terminalTheme, regalTheme, glassmorphismTheme } from './themes';
+export {
+  terminalTheme,
+  regalTheme,
+  glassmorphismTheme,
+  matrixTheme,
+  matrixMinimalTheme,
+  slateTheme,
+} from './themes';
 
 /**
  * Scale font sizes in a theme by a given factor

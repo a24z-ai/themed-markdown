@@ -4,7 +4,7 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import { Save, Edit, Eye } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import { useTheme } from '../../industryTheme';
+import { useTheme } from '@a24z/industry-theme';
 import { extractAllSlideTitles } from '../utils/extractSlideTitles';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';

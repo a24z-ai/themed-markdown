@@ -69,7 +69,7 @@ import rehypeSanitize from 'rehype-sanitize';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-import { useTheme, Theme } from '../../industryTheme';
+import { useTheme, Theme } from '@a24z/industry-theme';
 import { KeyboardBinding } from '../types/keyboard';
 import { highlightSearchMatches } from '../utils/highlightSearchMatches';
 import { parseMarkdownChunks } from '../utils/markdownUtils';

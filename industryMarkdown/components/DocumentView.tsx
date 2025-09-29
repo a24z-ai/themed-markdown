@@ -1,7 +1,7 @@
 import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '@a24z/markdown-utils';
 import React, { useRef, useCallback } from 'react';
 
-import { useTheme } from '../../industryTheme';
+import { useTheme } from '@a24z/industry-theme';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
 

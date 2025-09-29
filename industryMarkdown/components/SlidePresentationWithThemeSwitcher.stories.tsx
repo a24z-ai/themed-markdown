@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import { ThemeProvider, useTheme, theme as defaultTheme, addMode } from '../../industryTheme';
+import { ThemeProvider, useTheme, theme as defaultTheme, addMode } from '@a24z/industry-theme';
 
 import { SlidePresentation } from './SlidePresentation';
 

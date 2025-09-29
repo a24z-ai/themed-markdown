@@ -8,8 +8,8 @@ This module provides markdown components that use the Theme UI spec-compliant in
 import {
   IndustryMarkdownSlide,
   ThemeProvider,
-  industryTheme,
-} from 'markdown-slides-shared-lib/industry-markdown';
+  defaultTheme as industryTheme,
+} from 'themed-markdown';
 
 function App() {
   return (
@@ -92,20 +92,20 @@ To migrate from `ConfigurableMarkdownSlide` to `IndustryMarkdownSlide`:
 
    ```tsx
    // Old
-   import { ConfigurableMarkdownSlide } from 'markdown-slides-shared-lib';
+   import { ConfigurableMarkdownSlide } from 'some-old-package';
 
    // New
-   import { IndustryMarkdownSlide } from 'markdown-slides-shared-lib/industry-markdown';
+   import { IndustryMarkdownSlide } from 'themed-markdown';
    ```
 
 2. Update the theme provider:
 
    ```tsx
    // Old
-   import { ThemeProvider, darkTheme } from 'markdown-slides-shared-lib';
+   import { ThemeProvider, darkTheme } from 'some-old-package';
 
    // New
-   import { ThemeProvider, industryTheme } from 'markdown-slides-shared-lib/industry-markdown';
+   import { ThemeProvider, defaultTheme as industryTheme } from 'themed-markdown';
    ```
 
 3. Component props remain largely the same, but theme-related props work differently.

@@ -1,7 +1,6 @@
 src/
 tests/
 industryMarkdown/
-industryTheme/
 .git/
 .gitignore
 .prettierrc.json

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
-import { Theme, useTheme } from '../../industryTheme';
+import { Theme, useTheme } from '@a24z/industry-theme';
 
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
