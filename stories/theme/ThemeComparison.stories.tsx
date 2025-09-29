@@ -1,9 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { matrixTheme, matrixMinimalTheme, slateTheme } from './themes';
-
-import { ThemeProvider, useTheme, terminalTheme, regalTheme } from './index';
+import {
+  matrixTheme,
+  matrixMinimalTheme,
+  slateTheme,
+  ThemeProvider,
+  useTheme,
+  terminalTheme,
+  regalTheme,
+} from '@a24z/industry-theme';
 
 // Component to show theme details
 const ThemeShowcase = () => {

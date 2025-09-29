@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import { SlidePresentation } from '../industryMarkdown/components/SlidePresentation';
+import { SlidePresentation } from '../../industryMarkdown/components/SlidePresentation';
 
-import { ThemeProvider, terminalTheme, regalTheme, glassmorphismTheme } from './index';
+import { ThemeProvider, terminalTheme, regalTheme, glassmorphismTheme } from '@a24z/industry-theme';
 
 // Sample slides array
 const slides = [

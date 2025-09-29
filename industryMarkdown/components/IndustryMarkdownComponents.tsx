@@ -2,7 +2,7 @@ import { BashCommandOptions, BashCommandResult, RepositoryInfo, parseBashCommand
 import { Copy, Monitor, FileText, Check } from 'lucide-react';
 import React, { useMemo, useState, useRef } from 'react';
 
-import { Theme } from '../../industryTheme';
+import { Theme } from '@a24z/industry-theme';
 import {
   MarkdownComponentProps,
   HeadingProps,

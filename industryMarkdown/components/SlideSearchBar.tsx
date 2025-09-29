@@ -1,7 +1,7 @@
 import { Search, X } from 'lucide-react';
 import React, { useRef, useEffect } from 'react';
 
-import { Theme } from '../../industryTheme';
+import { Theme } from '@a24z/industry-theme';
 
 export interface SearchResult {
   slideIndex: number;

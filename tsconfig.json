@@ -20,17 +20,18 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["bun"]
+    "types": ["bun"],
+    "baseUrl": ".",
+    "paths": {
+      "@a24z/industry-theme": ["packages/industry-theme/src"],
+      "@a24z/markdown-utils": ["packages/markdown-utils/src"]
+    }
   },
-  "include": [
-    "index.ts",
-    "industryMarkdown/**/*",
-    "industryTheme/**/*",
-    "tests/**/*"
+  "files": [
+    "index.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "coverage"
+  "references": [
+    { "path": "./packages/industry-theme" },
+    { "path": "./packages/markdown-utils" }
   ]
 }

@@ -8,7 +8,7 @@
 import { Expand } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Theme, useTheme } from '../../industryTheme';
+import { Theme, useTheme } from '@a24z/industry-theme';
 
 interface IndustryMermaidDiagramProps {
   code: string;

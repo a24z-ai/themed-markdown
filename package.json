@@ -44,7 +44,8 @@
   "author": "PrincipleMD Team",
   "license": "MIT",
   "dependencies": {
-    "@a24z/markdown-utils": "^0.1.1",
+    "@a24z/industry-theme": "workspace:*",
+    "@a24z/markdown-utils": "workspace:*",
     "@a24z/panels": "latest",
     "@modelcontextprotocol/sdk": "^1.0.4",
     "@types/d3-hierarchy": "^3.1.7",
@@ -177,5 +178,8 @@
     "type": "git",
     "url": "git+https://github.com/a24z-ai/themed-markdown.git"
   },
-  "homepage": "https://a24z.ai"
+  "homepage": "https://a24z.ai",
+  "workspaces": [
+    "packages/*"
+  ]
 }

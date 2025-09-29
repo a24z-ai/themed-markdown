@@ -1,7 +1,7 @@
 import { Pencil, Save, X } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import { Theme, useTheme } from '../../industryTheme';
+import { Theme, useTheme } from '@a24z/industry-theme';
 
 import { IndustryMarkdownSlide, IndustryMarkdownSlideProps } from './IndustryMarkdownSlide';
 

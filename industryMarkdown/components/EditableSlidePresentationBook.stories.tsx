@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { theme } from '../../industryTheme';
-import { ThemeProvider } from '../../industryTheme/ThemeProvider';
+import { theme, ThemeProvider } from '@a24z/industry-theme';
 
 import { EditableSlidePresentationBook } from './EditableSlidePresentationBook';
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { ThemeProvider, theme } from '../../industryTheme';
+import { ThemeProvider, theme } from '@a24z/industry-theme';
 
 import { IndustryEditableMermaidDiagram } from './IndustryEditableMermaidDiagram';
 
