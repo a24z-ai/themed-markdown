@@ -155,6 +155,9 @@ export function IndustryMermaidDiagram({
             labelTextColor: theme.colors.text,
             nodeTextColor: theme.colors.text,
 
+            // Edge label styling
+            edgeLabelBackground: theme.colors.background,
+
             // Error styling
             errorBkgColor: theme.colors.error + '33',
             errorTextColor: theme.colors.error,
