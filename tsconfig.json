@@ -21,17 +21,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "types": ["bun"],
-    "baseUrl": ".",
-    "paths": {
-      "@a24z/industry-theme": ["packages/industry-theme/src"],
-      "@a24z/markdown-utils": ["packages/markdown-utils/src"]
-    }
+    "baseUrl": "."
   },
   "files": [
     "index.ts"
-  ],
-  "references": [
-    { "path": "./packages/industry-theme" },
-    { "path": "./packages/markdown-utils" }
   ]
 }
