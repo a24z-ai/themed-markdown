@@ -10,6 +10,10 @@ export type { SlidePresentationProps } from './components/SlidePresentation';
 export { SlidePresentationBook } from './components/SlidePresentationBook';
 export type { SlidePresentationBookProps } from './components/SlidePresentationBook';
 
+// Editable slide presentation with book layout (editor on left, preview on right)
+export { EditableSlidePresentationBook } from './components/EditableSlidePresentationBook';
+export type { EditableSlidePresentationBookProps } from './components/EditableSlidePresentationBook';
+
 // Slide navigation components
 export { SlideNavigationHeader } from './components/SlideNavigationHeader';
 export type { SlideNavigationHeaderProps } from './components/SlideNavigationHeader';

@@ -1,7 +1,7 @@
 import { MoveRight } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Theme, theme as defaultTheme } from '../../industryTheme';
+import { Theme, useTheme } from '../../industryTheme';
 
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
@@ -21,9 +21,12 @@ export function IndustryLazyMermaidDiagram({
   onCopyError,
   rootMargin = '200px',
   onShowInPanel,
-  theme = defaultTheme,
+  theme: themeOverride,
   onExpandClick,
 }: IndustryLazyMermaidDiagramProps) {
+  // Get theme from context or use override
+  const { theme: contextTheme } = useTheme();
+  const theme = themeOverride || contextTheme;
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
   const [isMounted, setIsMounted] = useState(false);

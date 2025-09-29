@@ -22,6 +22,8 @@ export interface SlideNavigationHeaderProps {
   onToggleFullscreen: () => void;
   onCollapseLeft?: () => void;
   onCollapseRight?: () => void;
+  additionalButtons?: React.ReactNode;
+  additionalButtonsPosition?: 'after-toc' | 'before-collapse';
 }
 
 export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({

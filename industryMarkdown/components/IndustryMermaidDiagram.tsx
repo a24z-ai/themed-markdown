@@ -8,7 +8,7 @@
 import { Expand } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Theme, theme as defaultTheme } from '../../industryTheme';
+import { Theme, useTheme } from '../../industryTheme';
 
 interface IndustryMermaidDiagramProps {
   code: string;
@@ -50,7 +50,9 @@ export function IndustryMermaidDiagram({
   isFullSlide = false,
   onExpandClick,
 }: IndustryMermaidDiagramProps) {
-  const theme = themeOverride || defaultTheme;
+  // Get theme from context or use override
+  const { theme: contextTheme } = useTheme();
+  const theme = themeOverride || contextTheme;
   const [errorDetails, setErrorDetails] = useState<{ code: string; message: string } | null>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
@@ -115,29 +117,45 @@ export function IndustryMermaidDiagram({
       try {
         // Configure mermaid with theme colors
         // Create a slightly contrasted background for better visibility
-        // In modal mode, use the main background to blend with modal
-        const diagramBackground = isModalMode ? theme.colors.background : (theme.colors.backgroundSecondary || theme.colors.muted || theme.colors.background);
+        // Use backgroundSecondary for consistency between modal and inline views
+        const diagramBackground = theme.colors.backgroundSecondary || theme.colors.background;
         const nodeBackground = theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || theme.colors.primary + '22';
         
         mermaid.initialize({
           startOnLoad: false,
           theme: 'base',
           themeVariables: {
+            // Primary node colors
             primaryColor: nodeBackground,
             primaryTextColor: theme.colors.text,
             primaryBorderColor: theme.colors.border,
-            lineColor: theme.colors.border,
+
+            // Secondary and tertiary colors
             secondaryColor: theme.colors.secondary + '44', // Add some transparency
             tertiaryColor: theme.colors.accent + '44',
+
+            // Backgrounds
             background: diagramBackground,
             mainBkg: nodeBackground,
             secondBkg: theme.colors.backgroundSecondary || theme.colors.muted,
             tertiaryBkg: theme.colors.backgroundTertiary || theme.colors.accent + '22',
+            altBackground: theme.colors.muted,
+
+            // Cluster/Subgraph specific - ensure good contrast
+            clusterBkg: theme.colors.muted || theme.colors.backgroundTertiary || theme.colors.backgroundSecondary,
+            clusterBorder: theme.colors.border,
+
+            // Borders
+            lineColor: theme.colors.border,
             secondaryBorderColor: theme.colors.border,
             tertiaryBorderColor: theme.colors.accent,
+
+            // Text colors - ensure they work on various backgrounds
             textColor: theme.colors.text,
             labelTextColor: theme.colors.text,
-            altBackground: theme.colors.muted,
+            nodeTextColor: theme.colors.text,
+
+            // Error styling
             errorBkgColor: theme.colors.error + '33',
             errorTextColor: theme.colors.error,
           },
@@ -297,7 +315,7 @@ export function IndustryMermaidDiagram({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: theme.colors.backgroundSecondary,
     border: 'none',
     borderRadius: 0,
     padding: 0,
@@ -308,7 +326,7 @@ export function IndustryMermaidDiagram({
     position: 'relative',
     maxHeight: '400px', // Smart height limit - diagrams initially fit within 400px
     display: 'block',
-    backgroundColor: hasRendered ? 'transparent' : theme.colors.backgroundSecondary,
+    backgroundColor: hasRendered ? theme.colors.backgroundSecondary : theme.colors.backgroundSecondary,
     border: hasRendered ? `1px solid ${theme.colors.border}` : `1px solid ${theme.colors.border}`,
     borderRadius: theme.radii[2],
     padding: hasRendered ? theme.space[3] : theme.space[4],
