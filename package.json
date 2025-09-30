@@ -1,6 +1,6 @@
 {
   "name": "themed-markdown",
-  "version": "0.1.47",
+  "version": "0.1.48",
   "description": "Industry-themed markdown renderer with presentation capabilities",
   "type": "module",
   "main": "dist/index.mjs",
@@ -44,7 +44,7 @@
   "author": "PrincipleMD Team",
   "license": "MIT",
   "dependencies": {
-    "@a24z/industry-theme": "^0.1.0",
+    "@a24z/industry-theme": "^0.1.1",
     "@a24z/markdown-utils": "^0.1.2",
     "@a24z/panels": "latest",
     "@modelcontextprotocol/sdk": "^1.0.4",
