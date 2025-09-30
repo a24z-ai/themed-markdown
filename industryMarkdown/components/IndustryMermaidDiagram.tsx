@@ -118,7 +118,7 @@ export function IndustryMermaidDiagram({
         // Configure mermaid with theme colors
         // Create a slightly contrasted background for better visibility
         // Use backgroundSecondary for consistency between modal and inline views
-        const diagramBackground = theme.colors.backgroundSecondary || theme.colors.background;
+        const diagramBackground = isModalMode ? 'transparent' : theme.colors.backgroundSecondary || theme.colors.background;
         const nodeBackground = theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || theme.colors.primary + '22';
         
         mermaid.initialize({
@@ -319,7 +319,7 @@ export function IndustryMermaidDiagram({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.backgroundSecondary,
+    backgroundColor: 'transparent',
     border: 'none',
     borderRadius: 0,
     padding: 0,
