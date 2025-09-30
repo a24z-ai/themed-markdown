@@ -23,20 +23,6 @@ const config: StorybookConfig = {
     check: false,
     reactDocgen: 'react-docgen-typescript',
   },
-  webpackFinal: async (config) => {
-    if (config.resolve) {
-      config.resolve.modules = [
-        ...(config.resolve.modules || []),
-        path.resolve(__dirname, '..'),
-      ];
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@a24z/industry-theme': path.resolve(__dirname, '../packages/industry-theme/src'),
-        '@a24z/markdown-utils': path.resolve(__dirname, '../packages/markdown-utils/src'),
-      };
-    }
-    return config;
-  },
   docs: {
     autodocs: 'tag',
   },

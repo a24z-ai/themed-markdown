@@ -144,6 +144,7 @@ export function IndustryMermaidDiagram({
             // Cluster/Subgraph specific - ensure good contrast
             clusterBkg: theme.colors.muted || theme.colors.backgroundTertiary || theme.colors.backgroundSecondary,
             clusterBorder: theme.colors.border,
+            titleColor: theme.colors.text,
 
             // Borders
             lineColor: theme.colors.border,
