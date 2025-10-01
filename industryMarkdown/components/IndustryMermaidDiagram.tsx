@@ -5,10 +5,9 @@
  * This is a replacement for ConfigurableMermaidDiagram that doesn't depend on the old theme system
  */
 
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { Expand } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-
-import { Theme, useTheme } from '@a24z/industry-theme';
 
 interface IndustryMermaidDiagramProps {
   code: string;
@@ -51,8 +50,7 @@ export function IndustryMermaidDiagram({
   onExpandClick,
 }: IndustryMermaidDiagramProps) {
   // Get theme from context or use override
-  const { theme: contextTheme } = useTheme();
-  const theme = themeOverride || contextTheme;
+  const theme = themeOverride ?? defaultTheme;
   const [errorDetails, setErrorDetails] = useState<{ code: string; message: string } | null>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);

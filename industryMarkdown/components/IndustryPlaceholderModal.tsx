@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-
 import { Theme } from '@a24z/industry-theme';
+import React, { useState } from 'react';
 
 export interface IndustryPlaceholderModalProps {
   isOpen: boolean;

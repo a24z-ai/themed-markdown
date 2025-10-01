@@ -1,7 +1,6 @@
+import { ThemeProvider, theme as defaultTheme } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
-
-import { ThemeProvider } from '@a24z/industry-theme';
 
 import { SlidePresentationBook } from './SlidePresentationBook';
 
@@ -19,6 +18,9 @@ const meta: Meta<typeof SlidePresentationBook> = {
   ],
   parameters: {
     layout: 'fullscreen',
+  },
+  args: {
+    theme: defaultTheme,
   },
   argTypes: {
     viewMode: {

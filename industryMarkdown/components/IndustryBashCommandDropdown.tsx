@@ -1,8 +1,7 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { BashCommand, getCommandDisplayName } from '@a24z/markdown-utils';
 import { Play, ChevronDown } from 'lucide-react';
 import React, { useState, useRef, useEffect } from 'react';
-
-import { Theme, useTheme } from '@a24z/industry-theme';
 
 interface IndustryBashCommandDropdownProps {
   commands: BashCommand[];
@@ -26,8 +25,7 @@ export const IndustryBashCommandDropdown: React.FC<IndustryBashCommandDropdownPr
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Get theme from context or use override
-  const { theme: contextTheme } = useTheme();
-  const theme = themeOverride || contextTheme;
+  const theme = themeOverride ?? defaultTheme;
 
   // Close dropdown when clicking outside
   useEffect(() => {

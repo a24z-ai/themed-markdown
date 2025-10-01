@@ -1,7 +1,6 @@
+import { ThemeProvider, theme as defaultTheme } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-
-import { ThemeProvider } from '@a24z/industry-theme';
 
 import { SlidePresentation } from './SlidePresentation';
 
@@ -13,13 +12,16 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <ThemeProvider>
+      <ThemeProvider theme={defaultTheme}>
         <div style={{ height: '100vh', width: '100vw' }}>
           <Story />
         </div>
       </ThemeProvider>
     ),
   ],
+  args: {
+    theme: defaultTheme,
+  },
 } satisfies Meta<typeof SlidePresentation>;
 
 export default meta;

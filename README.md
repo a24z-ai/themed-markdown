@@ -24,7 +24,7 @@ bun add themed-markdown
 ## Usage
 
 ```tsx
-import { IndustryMarkdownSlide, ThemeProvider } from 'themed-markdown';
+import { IndustryMarkdownSlide, ThemeProvider, defaultTheme } from 'themed-markdown';
 
 function App() {
   const markdownContent = `
@@ -38,10 +38,13 @@ Content for the second slide
   `;
 
   return (
-    <ThemeProvider>
-      <IndustryMarkdownSlide 
-        markdown={markdownContent}
-        slideId="slide-1"
+    <ThemeProvider theme={defaultTheme}>
+      <IndustryMarkdownSlide
+        content={markdownContent}
+        slideIdPrefix="demo"
+        slideIndex={0}
+        isVisible
+        theme={defaultTheme}
       />
     </ThemeProvider>
   );

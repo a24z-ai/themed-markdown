@@ -1,7 +1,6 @@
+import { ThemeProvider, theme as defaultTheme } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-
-import { ThemeProvider } from '@a24z/industry-theme';
 
 import { DocumentView } from './DocumentView';
 
@@ -19,6 +18,9 @@ const meta: Meta<typeof DocumentView> = {
   ],
   parameters: {
     layout: 'fullscreen',
+  },
+  args: {
+    theme: defaultTheme,
   },
   argTypes: {},
 };

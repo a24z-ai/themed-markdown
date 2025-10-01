@@ -1,7 +1,6 @@
+import { ThemeProvider, useTheme, glassmorphismTheme } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-
-import { ThemeProvider, useTheme, glassmorphismTheme } from '@a24z/industry-theme';
 
 // Glassmorphism showcase component
 const GlassmorphismShowcase = () => {

@@ -1,7 +1,6 @@
+import { ThemeProvider, useTheme, theme as defaultTheme, addMode } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-
-import { ThemeProvider, useTheme, theme as defaultTheme, addMode } from '@a24z/industry-theme';
 
 import { SlidePresentation } from './SlidePresentation';
 
@@ -206,7 +205,7 @@ const SlidePresentationWithThemeSwitcher = ({ slides, ...props }: SlidePresentat
       
       {/* Slide Presentation */}
       <div style={{ flex: 1, overflow: 'hidden' }}>
-        <SlidePresentation slides={slides} {...props} />
+        <SlidePresentation slides={slides} {...props} theme={theme} />
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
+import { ThemeProvider, theme as defaultTheme } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-
-import { ThemeProvider } from '@a24z/industry-theme';
 
 import { SlidePresentation } from './SlidePresentation';
 
@@ -19,6 +18,9 @@ const meta: Meta<typeof SlidePresentation> = {
   ],
   parameters: {
     layout: 'fullscreen',
+  },
+  args: {
+    theme: defaultTheme,
   },
   argTypes: {
     initialSlide: {
@@ -130,7 +132,6 @@ sequenceDiagram
 ### React Component Example
 
 \`\`\`jsx
-import React, { useState } from 'react';
 import { SlidePresentation } from 'themed-markdown';
 
 function MyPresentation() {

@@ -1,7 +1,6 @@
+import { ThemeProvider, theme } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
-
-import { ThemeProvider, theme } from '@a24z/industry-theme';
 
 import { IndustryEditableMermaidDiagram } from './IndustryEditableMermaidDiagram';
 
@@ -10,7 +9,7 @@ const meta: Meta<typeof IndustryEditableMermaidDiagram> = {
   component: IndustryEditableMermaidDiagram,
   decorators: [
     Story => (
-      <ThemeProvider>
+      <ThemeProvider theme={theme}>
         <div style={{ height: '100vh', width: '100%' }}>
           <Story />
         </div>
@@ -19,6 +18,9 @@ const meta: Meta<typeof IndustryEditableMermaidDiagram> = {
   ],
   parameters: {
     layout: 'fullscreen',
+  },
+  args: {
+    theme,
   },
   argTypes: {
     theme: {

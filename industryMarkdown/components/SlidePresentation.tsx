@@ -1,7 +1,7 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import { useTheme } from '@a24z/industry-theme';
 import { extractAllSlideTitles } from '../utils/extractSlideTitles';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
@@ -31,6 +31,7 @@ export interface SlidePresentationProps {
   handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
   fontSizeScale?: number;
+  theme?: Theme;
 }
 
 export const SlidePresentation: React.FC<SlidePresentationProps> = ({
@@ -49,6 +50,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   handleRunBashCommand,
   handlePromptCopy,
   fontSizeScale,
+  theme: themeProp,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(initialSlide);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -59,7 +61,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   const [currentSearchResult, setCurrentSearchResult] = useState(-1); // -1 means no selection
   const [searchStartSlide, setSearchStartSlide] = useState(0); // Track where search was initiated
   const containerRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
+  const theme = themeProp ?? defaultTheme;
   
   // Extract slide titles for TOC
   const slideTitles = extractAllSlideTitles(slides);

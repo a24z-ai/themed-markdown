@@ -1,7 +1,6 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import React, { useEffect, useRef, useState } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-
-import { Theme, useTheme } from '@a24z/industry-theme';
 
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
@@ -23,8 +22,7 @@ export function IndustryZoomableMermaidDiagram({
   padding = 0.9,  // Use 90% of available space to leave some breathing room
 }: IndustryZoomableMermaidDiagramProps) {
   // Get theme from context or use override
-  const { theme: contextTheme } = useTheme();
-  const theme = themeOverride || contextTheme;
+  const theme = themeOverride ?? defaultTheme;
 
   const [calculatedScale, setCalculatedScale] = useState(1); // Start at 1, will be recalculated
   const [hasInitialized, setHasInitialized] = useState(false);
@@ -241,7 +239,7 @@ export function IndustryZoomableMermaidDiagram({
                   height: '100%',
                 }}
               >
-                <IndustryMermaidDiagram code={code} id={id} isModalMode={true} />
+                <IndustryMermaidDiagram code={code} id={id} isModalMode={true} theme={theme} />
               </div>
             </TransformComponent>
           </>

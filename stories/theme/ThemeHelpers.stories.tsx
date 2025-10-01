@@ -1,7 +1,6 @@
+import { ThemeProvider, useTheme, theme as defaultTheme, overrideColors, makeTheme, addMode } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-
-import { ThemeProvider, useTheme, theme as defaultTheme, overrideColors, makeTheme, addMode } from '@a24z/industry-theme';
 
 // Create a theme with multiple modes
 const themeWithModes = addMode(

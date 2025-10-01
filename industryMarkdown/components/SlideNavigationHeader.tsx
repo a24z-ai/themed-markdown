@@ -1,7 +1,6 @@
+import { Theme } from '@a24z/industry-theme';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X, PanelLeftClose, PanelRightClose, Columns } from 'lucide-react';
 import React from 'react';
-
-import { Theme } from '@a24z/industry-theme';
 
 import { FocusLeftIcon, FocusRightIcon } from './FocusLeftIcon';
 

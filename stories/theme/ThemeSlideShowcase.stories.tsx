@@ -1,9 +1,9 @@
+import { ThemeProvider, terminalTheme, regalTheme, glassmorphismTheme } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 import { SlidePresentation } from '../../industryMarkdown/components/SlidePresentation';
 
-import { ThemeProvider, terminalTheme, regalTheme, glassmorphismTheme } from '@a24z/industry-theme';
 
 // Sample slides array
 const slides = [
@@ -86,6 +86,7 @@ const TerminalSlides = () => (
       <SlidePresentation
         slides={slides}
         containerHeight="100%"
+        theme={terminalTheme}
       />
     </ThemeProvider>
   </div>
@@ -98,6 +99,7 @@ const RegalSlides = () => (
       <SlidePresentation
         slides={slides}
         containerHeight="100%"
+        theme={regalTheme}
       />
     </ThemeProvider>
   </div>
@@ -114,6 +116,7 @@ const GlassmorphismSlides = () => (
       <SlidePresentation
         slides={slides}
         containerHeight="100%"
+        theme={glassmorphismTheme}
       />
     </ThemeProvider>
   </div>

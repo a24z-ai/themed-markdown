@@ -1,7 +1,6 @@
+import { Theme } from '@a24z/industry-theme';
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-
-import { Theme } from '@a24z/industry-theme';
 
 import { IndustryZoomableMermaidDiagram } from './IndustryZoomableMermaidDiagram';
 

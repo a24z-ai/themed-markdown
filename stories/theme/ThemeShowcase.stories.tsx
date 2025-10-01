@@ -1,17 +1,16 @@
+import {
+  Theme,
+  ThemeProvider,
+  ThemeShowcase,
+  glassmorphismTheme,
+  matrixMinimalTheme,
+  matrixTheme,
+  regalTheme,
+  slateTheme,
+  terminalTheme
+} from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
-
-import {
-  slateTheme,
-  matrixTheme,
-  matrixMinimalTheme,
-  ThemeProvider,
-  terminalTheme,
-  regalTheme,
-  glassmorphismTheme,
-  ThemeShowcase,
-  Theme,
-} from '@a24z/industry-theme';
 
 // Interactive theme editor demo
 const InteractiveThemeEditor = () => {

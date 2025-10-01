@@ -1,7 +1,6 @@
+import { theme, ThemeProvider } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
-
-import { theme, ThemeProvider } from '@a24z/industry-theme';
 
 import { EditableSlidePresentationBook } from './EditableSlidePresentationBook';
 
@@ -18,6 +17,9 @@ const meta = {
       </ThemeProvider>
     ),
   ],
+  args: {
+    theme,
+  },
 } satisfies Meta<typeof EditableSlidePresentationBook>;
 
 export default meta;
