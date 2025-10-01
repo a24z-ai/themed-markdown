@@ -1,7 +1,6 @@
-import { Pencil, Save, X } from 'lucide-react';
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-
 import { Theme } from '@a24z/industry-theme';
+import { Pencil, Save, X } from 'lucide-react';
+
 
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 

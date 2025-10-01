@@ -77,7 +77,6 @@ export type { Theme } from '@a24z/industry-theme';
 export { theme as defaultTheme } from '@a24z/industry-theme';
 export {
   ThemeProvider,
-  useTheme,
   withTheme
 } from '@a24z/industry-theme';
 export {

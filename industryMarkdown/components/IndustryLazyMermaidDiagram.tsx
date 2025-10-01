@@ -1,7 +1,6 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { MoveRight } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-
-import { Theme, useTheme } from '@a24z/industry-theme';
 
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
@@ -25,8 +24,7 @@ export function IndustryLazyMermaidDiagram({
   onExpandClick,
 }: IndustryLazyMermaidDiagramProps) {
   // Get theme from context or use override
-  const { theme: contextTheme } = useTheme();
-  const theme = themeOverride || contextTheme;
+  const theme = themeOverride ?? defaultTheme;
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
   const [isMounted, setIsMounted] = useState(false);

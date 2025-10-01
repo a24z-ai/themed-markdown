@@ -1,8 +1,8 @@
+import { Theme } from '@a24z/industry-theme';
 import { BashCommandOptions, BashCommandResult, RepositoryInfo, parseBashCommands } from '@a24z/markdown-utils';
 import { Copy, Monitor, FileText, Check } from 'lucide-react';
 import React, { useMemo, useState, useRef } from 'react';
 
-import { Theme } from '@a24z/industry-theme';
 import {
   MarkdownComponentProps,
   HeadingProps,

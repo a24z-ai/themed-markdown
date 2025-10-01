@@ -59,6 +59,7 @@
  * ```
  */
 
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '@a24z/markdown-utils';
 import { defaultSchema } from 'hast-util-sanitize';
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
@@ -69,7 +70,6 @@ import rehypeSanitize from 'rehype-sanitize';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-import { useTheme, Theme } from '@a24z/industry-theme';
 import { KeyboardBinding } from '../types/keyboard';
 import { highlightSearchMatches } from '../utils/highlightSearchMatches';
 import { parseMarkdownChunks } from '../utils/markdownUtils';
@@ -779,22 +779,7 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
     setMermaidModalCode('');
   };
 
-  // Get theme from prop or context
-  let industryTheme;
-  try {
-    const themeContext = useTheme();
-    industryTheme = themeContext.theme;
-  } catch {
-    // Context not available, will use prop
-    industryTheme = undefined;
-  }
-  const baseTheme = themeOverride || industryTheme;
-
-  if (!baseTheme) {
-    throw new Error(
-      'IndustryMarkdownSlide: theme must be provided as a prop when ThemeProvider is not available',
-    );
-  }
+  const baseTheme = themeOverride ?? defaultTheme;
 
   // Apply font size scaling if provided
   const theme = useMemo(() => {

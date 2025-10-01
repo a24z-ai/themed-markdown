@@ -19,11 +19,14 @@ function App() {
         slideIdPrefix="slide"
         slideIndex={0}
         isVisible={true}
+        theme={industryTheme}
       />
     </ThemeProvider>
   );
 }
 ```
+
+> **Note:** All components accept a `theme` prop. If you do not provide one, the component will fall back to `defaultTheme`, but passing your active theme explicitly keeps styling predictable.
 
 ## Key Differences from ConfigurableMarkdownSlide
 
@@ -53,7 +56,6 @@ function App() {
 
 ### Hooks
 
-- `useTheme` - Hook to access theme values
 - `useIndustryHtmlModal` - Hook for managing HTML modal state
 
 ### Theme System

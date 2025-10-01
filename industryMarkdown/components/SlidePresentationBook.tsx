@@ -1,8 +1,8 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
 import { AnimatedResizableLayout } from '@a24z/panels';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import { useTheme } from '@a24z/industry-theme';
 import { extractAllSlideTitles } from '../utils/extractSlideTitles';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
@@ -33,6 +33,7 @@ export interface SlidePresentationBookProps {
   handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
   fontSizeScale?: number;
+  theme?: Theme;
 }
 
 export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
@@ -52,6 +53,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
   handleRunBashCommand,
   handlePromptCopy,
   fontSizeScale,
+  theme: themeProp,
 }) => {
   // Ensure initial slide is even in book mode for proper page pairing
   const adjustedInitialSlide = viewMode === 'book' ? Math.floor(initialSlide / 2) * 2 : initialSlide;
@@ -66,7 +68,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
   const [collapsedSide, setCollapsedSide] = useState<'left' | 'right' | null>(null);
   const [lastInteractedSide, setLastInteractedSide] = useState<'left' | 'right'>('left');
   const containerRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
+  const theme = themeProp ?? defaultTheme;
 
   // Extract slide titles for TOC
   const slideTitles = extractAllSlideTitles(slides);

@@ -1,7 +1,6 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { BashCommandOptions, BashCommandResult, RepositoryInfo } from '@a24z/markdown-utils';
 import React, { useRef, useCallback } from 'react';
-
-import { useTheme } from '@a24z/industry-theme';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
 
@@ -31,6 +30,7 @@ export interface DocumentViewProps {
   handlePromptCopy?: (filledPrompt: string) => void;
   repositoryInfo?: RepositoryInfo;
   fontSizeScale?: number;
+  theme?: Theme;
 }
 
 export const DocumentView: React.FC<DocumentViewProps> = ({
@@ -50,10 +50,11 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
   handlePromptCopy,
   repositoryInfo,
   fontSizeScale,
+  theme: themeProp,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const { theme } = useTheme();
+  const theme = themeProp ?? defaultTheme;
 
   // Handle scroll to section
   const scrollToSection = useCallback((sectionIndex: number) => {

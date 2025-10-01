@@ -1,10 +1,10 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
 import { AnimatedResizableLayout } from '@a24z/panels';
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import { Save, Edit, Eye } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import { useTheme } from '@a24z/industry-theme';
 import { extractAllSlideTitles } from '../utils/extractSlideTitles';
 
 import { IndustryMarkdownSlide } from './IndustryMarkdownSlide';
@@ -33,6 +33,7 @@ export interface EditableSlidePresentationBookProps {
   editorFontSize?: number;
   editorTheme?: 'light' | 'dark' | 'auto';
   autoSaveDelay?: number;
+  theme?: Theme;
 }
 
 export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBookProps> = ({
@@ -57,6 +58,7 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
   editorFontSize = 14,
   editorTheme = 'auto',
   autoSaveDelay = 1000,
+  theme: themeProp,
 }) => {
   const adjustedInitialSlide = viewMode === 'book' ? Math.floor(initialSlide / 2) * 2 : initialSlide;
   const [currentSlide, setCurrentSlide] = useState(adjustedInitialSlide);
@@ -75,7 +77,7 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
   const [editingSide, setEditingSide] = useState<'left' | 'right' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const { theme } = useTheme();
+  const theme = themeProp ?? defaultTheme;
 
   const slideTitles = extractAllSlideTitles(editingSlides);
   const stepSize = viewMode === 'book' ? 2 : 1;

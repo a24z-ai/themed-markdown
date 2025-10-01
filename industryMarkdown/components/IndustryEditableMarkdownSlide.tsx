@@ -1,7 +1,6 @@
+import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { Pencil, Save, X } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-
-import { Theme, useTheme } from '@a24z/industry-theme';
 
 import { IndustryMarkdownSlide, IndustryMarkdownSlideProps } from './IndustryMarkdownSlide';
 
@@ -24,22 +23,7 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
   theme: themeProp,
   ...slideProps
 }) => {
-  // Try to get theme from context, but don't fail if not available
-  let contextTheme;
-  try {
-    const themeContext = useTheme();
-    contextTheme = themeContext.theme;
-  } catch {
-    // Context not available, will use prop
-  }
-
-  const theme = themeProp || contextTheme;
-
-  if (!theme) {
-    throw new Error(
-      'IndustryEditableMarkdownSlide: theme must be provided either as a prop or through ThemeProvider',
-    );
-  }
+  const theme = themeProp ?? defaultTheme;
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
   const [isSaving, setIsSaving] = useState(false);
