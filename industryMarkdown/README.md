@@ -26,7 +26,7 @@ function App() {
 }
 ```
 
-> **Note:** All components accept a `theme` prop. If you do not provide one, the component will fall back to `defaultTheme`, but passing your active theme explicitly keeps styling predictable.
+> **Note:** All components accept a `theme` prop. `DocumentView` requires you to pass a theme explicitly. Other components will fall back to `defaultTheme` if one is not provided, but passing your active theme explicitly keeps styling predictable.
 
 ## Key Differences from ConfigurableMarkdownSlide
 
