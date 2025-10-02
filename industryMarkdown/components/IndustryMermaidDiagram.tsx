@@ -6,7 +6,7 @@
  */
 
 import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
-import { Expand } from 'lucide-react';
+import { Expand, Copy, Check } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface IndustryMermaidDiagramProps {
@@ -60,6 +60,7 @@ export function IndustryMermaidDiagram({
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
   const [containerElement, setContainerElement] = useState<HTMLDivElement | null>(null);
+  const [copiedError, setCopiedError] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Callback ref to set up intersection observer when element is attached
@@ -248,26 +249,9 @@ export function IndustryMermaidDiagram({
         setErrorDetails({ code, message: errorMessage });
         if (onError) onError(true);
 
-        // Show error in container
+        // Clear container so we can show error via React state
         if (containerElement) {
-          containerElement.innerHTML = `
-            <div style="
-              padding: ${theme.space[4]}px;
-              background: ${theme.colors.error}22;
-              border: 1px solid ${theme.colors.error};
-              border-radius: ${theme.radii[2]}px;
-              color: ${theme.colors.text};
-              font-family: ${theme.fonts.monospace};
-              font-size: ${theme.fontSizes[1]}px;
-            ">
-              <div style="font-weight: ${theme.fontWeights.bold}; margin-bottom: ${theme.space[2]}px;">
-                Failed to render Mermaid diagram
-              </div>
-              <div style="font-size: ${theme.fontSizes[0]}px; opacity: 0.8;">
-                ${errorMessage}
-              </div>
-            </div>
-          `;
+          containerElement.innerHTML = '';
         }
       }
     };
@@ -276,23 +260,30 @@ export function IndustryMermaidDiagram({
   }, [hasRendered, code, id, theme, containerElement, onError, isModalMode, isFullSlide]);
 
   // Handle copy error action
-  useEffect(() => {
-    if (errorDetails && onCopyError) {
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'c' && window.getSelection()?.toString()) {
-          onCopyError(errorDetails.code, errorDetails.message);
-        }
-      };
+  const handleCopyError = async () => {
+    if (!errorDetails) return;
 
-      if (containerElement) {
-        containerElement.addEventListener('keydown', handleKeyDown);
-        return () => {
-          containerElement.removeEventListener('keydown', handleKeyDown);
-        };
+    const errorText = `Mermaid Rendering Error:
+${errorDetails.message}
+
+Failed Mermaid Code:
+\`\`\`mermaid
+${errorDetails.code}
+\`\`\``;
+
+    try {
+      await navigator.clipboard.writeText(errorText);
+      setCopiedError(true);
+      setTimeout(() => setCopiedError(false), 2000);
+
+      // Call onCopyError callback if provided
+      if (onCopyError) {
+        onCopyError(errorDetails.code, errorDetails.message);
       }
+    } catch (err) {
+      console.error('Failed to copy error to clipboard:', err);
     }
-    return undefined;
-  }, [errorDetails, onCopyError, containerElement]);
+  };
 
   const containerStyle: React.CSSProperties = isFullSlide ? {
     // Full-slide mode: take up entire slide area
@@ -360,6 +351,60 @@ export function IndustryMermaidDiagram({
             </div>
           </div>
         )}
+        {errorDetails && (
+          <div
+            style={{
+              padding: theme.space[4],
+              background: `${theme.colors.error}22`,
+              border: `1px solid ${theme.colors.error}`,
+              borderRadius: theme.radii[2],
+              color: theme.colors.text,
+              fontFamily: theme.fonts.monospace,
+              fontSize: theme.fontSizes[1],
+              maxWidth: '600px',
+              margin: '0 auto',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: theme.space[2] }}>
+              <div style={{ fontWeight: theme.fontWeights.bold }}>
+                Failed to render Mermaid diagram
+              </div>
+              <button
+                onClick={handleCopyError}
+                style={{
+                  padding: theme.space[1],
+                  backgroundColor: copiedError ? theme.colors.success : theme.colors.backgroundSecondary,
+                  border: `1px solid ${copiedError ? theme.colors.success : theme.colors.border}`,
+                  borderRadius: theme.radii[1],
+                  color: copiedError ? theme.colors.background : theme.colors.text,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: theme.space[1],
+                  fontSize: theme.fontSizes[0],
+                  fontFamily: theme.fonts.body,
+                  transition: 'all 0.2s ease',
+                }}
+                title="Copy error details"
+              >
+                {copiedError ? (
+                  <>
+                    <Check size={14} />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy size={14} />
+                    Copy Error
+                  </>
+                )}
+              </button>
+            </div>
+            <div style={{ fontSize: theme.fontSizes[0], opacity: 0.8, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+              {errorDetails.message}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -367,7 +412,7 @@ export function IndustryMermaidDiagram({
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <div style={{ position: 'relative', width: '100%' }}>
-        {hasRendered && !isModalMode && onExpandClick && (
+        {hasRendered && !isModalMode && onExpandClick && !errorDetails && (
           <div style={{
             position: 'absolute',
             top: theme.space[2],
@@ -406,6 +451,58 @@ export function IndustryMermaidDiagram({
               <div>📊 Mermaid Diagram</div>
               <div style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}>
                 {isIntersecting ? 'Loading...' : 'Scroll to view'}
+              </div>
+            </div>
+          )}
+          {errorDetails && (
+            <div
+              style={{
+                padding: theme.space[4],
+                background: `${theme.colors.error}22`,
+                border: `1px solid ${theme.colors.error}`,
+                borderRadius: theme.radii[2],
+                color: theme.colors.text,
+                fontFamily: theme.fonts.monospace,
+                fontSize: theme.fontSizes[1],
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: theme.space[2] }}>
+                <div style={{ fontWeight: theme.fontWeights.bold }}>
+                  Failed to render Mermaid diagram
+                </div>
+                <button
+                  onClick={handleCopyError}
+                  style={{
+                    padding: theme.space[1],
+                    backgroundColor: copiedError ? theme.colors.success : theme.colors.backgroundSecondary,
+                    border: `1px solid ${copiedError ? theme.colors.success : theme.colors.border}`,
+                    borderRadius: theme.radii[1],
+                    color: copiedError ? theme.colors.background : theme.colors.text,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: theme.space[1],
+                    fontSize: theme.fontSizes[0],
+                    fontFamily: theme.fonts.body,
+                    transition: 'all 0.2s ease',
+                  }}
+                  title="Copy error details"
+                >
+                  {copiedError ? (
+                    <>
+                      <Check size={14} />
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={14} />
+                      Copy Error
+                    </>
+                  )}
+                </button>
+              </div>
+              <div style={{ fontSize: theme.fontSizes[0], opacity: 0.8, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                {errorDetails.message}
               </div>
             </div>
           )}

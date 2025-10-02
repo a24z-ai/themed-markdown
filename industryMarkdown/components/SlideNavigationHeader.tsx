@@ -181,9 +181,19 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
             fontFamily: theme.fonts.monospace,
           }}
         >
-          <span style={{ fontWeight: 600 }}>{currentSlide + 1}</span>
-          <span style={{ opacity: 0.5, margin: '0 0.4em' }}>of</span>
-          <span style={{ fontWeight: 600 }}>{totalSlides}</span>
+          {viewMode === 'book' ? (
+            <>
+              <span style={{ fontWeight: 600 }}>{Math.floor(currentSlide / 2) + 1}</span>
+              <span style={{ opacity: 0.5, margin: '0 0.4em' }}>of</span>
+              <span style={{ fontWeight: 600 }}>{Math.ceil(totalSlides / 2)}</span>
+            </>
+          ) : (
+            <>
+              <span style={{ fontWeight: 600 }}>{currentSlide + 1}</span>
+              <span style={{ opacity: 0.5, margin: '0 0.4em' }}>of</span>
+              <span style={{ fontWeight: 600 }}>{totalSlides}</span>
+            </>
+          )}
         </div>
       )}
 
