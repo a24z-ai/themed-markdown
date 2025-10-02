@@ -25,6 +25,11 @@ interface IndustryMermaidDiagramProps {
 interface MermaidAPI {
   initialize: (config: object) => void;
   run: (options: { nodes: HTMLElement[] }) => Promise<void>;
+  render: (
+    id: string,
+    code: string,
+    container?: HTMLElement,
+  ) => Promise<{ svg: string; bindFunctions?: (element: Element) => void }>;
 }
 
 // Get mermaid instance
@@ -170,18 +175,16 @@ export function IndustryMermaidDiagram({
 
         // Create a unique element ID
         const elementId = `mermaid-${id}-${Date.now()}`;
-        const graphDiv = document.createElement('div');
-        graphDiv.id = elementId;
-        graphDiv.textContent = code;
-        containerElement.appendChild(graphDiv);
 
-        // Render the diagram
-        await mermaid.run({
-          nodes: [graphDiv],
-        });
+        // Render the diagram into the container
+        const { bindFunctions } = await mermaid.render(elementId, code, containerElement);
+
+        if (bindFunctions) {
+          bindFunctions(containerElement);
+        }
 
         // Override mermaid's max-width constraint to allow full container usage
-        const svgElement = graphDiv.querySelector('svg');
+        const svgElement = containerElement.querySelector('svg');
         if (svgElement) {
 
           // Remove mermaid's default constraints
