@@ -449,3 +449,28 @@ classDiagram
     slideIdPrefix: 'mermaid-doc',
   },
 };
+
+export const TransparentBackground: Story = {
+  args: {
+    content: singleDocumentContent,
+    showSegmented: false,
+    maxWidth: '900px',
+    padding: '24px',
+    slideIdPrefix: 'transparent-doc',
+    transparentBackground: true,
+  },
+  decorators: [
+    Story => (
+      <ThemeProvider>
+        <div style={{
+          height: '100vh',
+          width: '100%',
+          background: 'linear-gradient(to right, #74ebd5, #acb6e5)',
+          padding: '20px'
+        }}>
+          <Story />
+        </div>
+      </ThemeProvider>
+    ),
+  ],
+};

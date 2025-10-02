@@ -31,6 +31,7 @@ export interface DocumentViewProps {
   repositoryInfo?: RepositoryInfo;
   fontSizeScale?: number;
   theme?: Theme;
+  transparentBackground?: boolean;
 }
 
 export const DocumentView: React.FC<DocumentViewProps> = ({
@@ -51,10 +52,12 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
   repositoryInfo,
   fontSizeScale,
   theme: themeProp,
+  transparentBackground = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const theme = themeProp ?? defaultTheme;
+  const backgroundColor = transparentBackground ? 'transparent' : theme.colors.background;
 
   // Handle scroll to section
   const scrollToSection = useCallback((sectionIndex: number) => {
@@ -83,7 +86,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
         style={{
           height: '100%',
           overflow: 'auto',
-          backgroundColor: theme.colors.background,
+          backgroundColor: backgroundColor,
           padding: typeof padding === 'number' ? `${padding}px` : padding,
         }}
       >
@@ -122,7 +125,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
         style={{
           height: '100%',
           overflow: 'auto',
-          backgroundColor: theme.colors.background,
+          backgroundColor: backgroundColor,
           padding: typeof padding === 'number' ? `${padding}px` : padding,
         }}
       >
@@ -159,7 +162,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
       style={{
         height: '100%',
         overflow: 'auto',
-        backgroundColor: theme.colors.background,
+        backgroundColor: backgroundColor,
         padding: typeof padding === 'number' ? `${padding}px` : padding,
       }}
     >
