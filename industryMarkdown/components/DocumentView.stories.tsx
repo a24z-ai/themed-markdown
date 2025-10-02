@@ -105,10 +105,10 @@ npm install themed-markdown
 Import and use the components in your React application:
 
 \`\`\`javascript
-import { DocumentView } from 'themed-markdown';
+import { DocumentView, defaultTheme } from 'themed-markdown';
 
 function App() {
-  return <DocumentView content={markdownContent} />;
+  return <DocumentView content={markdownContent} theme={defaultTheme} />;
 }
 \`\`\``,
   

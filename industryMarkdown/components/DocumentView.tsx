@@ -30,7 +30,7 @@ export interface DocumentViewProps {
   handlePromptCopy?: (filledPrompt: string) => void;
   repositoryInfo?: RepositoryInfo;
   fontSizeScale?: number;
-  theme?: Theme;
+  theme: Theme;
   transparentBackground?: boolean;
 }
 
@@ -51,13 +51,13 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
   handlePromptCopy,
   repositoryInfo,
   fontSizeScale,
-  theme: themeProp,
+  theme,
   transparentBackground = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const theme = themeProp ?? defaultTheme;
-  const backgroundColor = transparentBackground ? 'transparent' : theme.colors.background;
+  const resolvedTheme = theme ?? defaultTheme;
+  const backgroundColor = transparentBackground ? 'transparent' : resolvedTheme.colors.background;
 
   // Handle scroll to section
   const scrollToSection = useCallback((sectionIndex: number) => {
@@ -101,7 +101,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
             slideIdPrefix={slideIdPrefix}
             slideIndex={0}
             isVisible={true}
-            theme={theme}
+            theme={resolvedTheme}
             onCheckboxChange={onCheckboxChange}
             enableHtmlPopout={enableHtmlPopout}
             enableKeyboardScrolling={enableKeyboardScrolling}
@@ -140,7 +140,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
             slideIdPrefix={slideIdPrefix}
             slideIndex={0}
             isVisible={true}
-            theme={theme}
+            theme={resolvedTheme}
             onCheckboxChange={onCheckboxChange}
             enableHtmlPopout={enableHtmlPopout}
             enableKeyboardScrolling={enableKeyboardScrolling}
@@ -193,7 +193,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
                   justifyContent: 'space-between',
                   marginBottom: '16px',
                   paddingBottom: '8px',
-                  borderBottom: `1px solid ${theme.colors.border}`,
+                  borderBottom: `1px solid ${resolvedTheme.colors.border}`,
                   opacity: 0.7,
                   cursor: 'pointer',
                   transition: 'opacity 0.2s ease',
@@ -209,7 +209,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
                   style={{
                     fontSize: '11px',
                     fontWeight: 600,
-                    color: theme.colors.textSecondary,
+                    color: resolvedTheme.colors.textSecondary,
                     textTransform: 'uppercase',
                     letterSpacing: '0.5px',
                   }}
@@ -227,7 +227,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
               slideIdPrefix={`${slideIdPrefix}-${index}`}
               slideIndex={index}
               isVisible={true}
-              theme={theme}
+              theme={resolvedTheme}
               onCheckboxChange={onCheckboxChange}
               enableHtmlPopout={enableHtmlPopout}
               enableKeyboardScrolling={enableKeyboardScrolling}
@@ -245,7 +245,7 @@ export const DocumentView: React.FC<DocumentViewProps> = ({
                   marginTop: '32px',
                   marginBottom: '32px',
                   height: '1px',
-                  backgroundColor: theme.colors.border,
+                  backgroundColor: resolvedTheme.colors.border,
                   opacity: 0.3,
                 }}
               />
