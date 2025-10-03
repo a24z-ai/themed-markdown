@@ -178,7 +178,8 @@ export function IndustryMermaidDiagram({
         const elementId = `mermaid-${id}-${Date.now()}`;
 
         // Render the diagram into the container
-        const { bindFunctions } = await mermaid.render(elementId, code, containerElement);
+        const { svg, bindFunctions } = await mermaid.render(elementId, code);
+        containerElement.innerHTML = svg;
 
         if (bindFunctions) {
           bindFunctions(containerElement);
