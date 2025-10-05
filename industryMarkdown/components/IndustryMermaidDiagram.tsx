@@ -9,6 +9,8 @@ import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
 import { Expand, Copy, Check } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { hasDOMSupport } from '../utils/platformDetection';
+
 interface IndustryMermaidDiagramProps {
   code: string;
   id: string;
@@ -56,6 +58,57 @@ export function IndustryMermaidDiagram({
 }: IndustryMermaidDiagramProps) {
   // Get theme from context or use override
   const theme = themeOverride ?? defaultTheme;
+
+  // Check if we're in a supported environment (web with DOM)
+  if (!hasDOMSupport()) {
+    // Fallback for React Native or environments without DOM support
+    return (
+      <div
+        style={{
+          padding: theme.space[4],
+          backgroundColor: theme.colors.backgroundSecondary,
+          border: `2px solid ${theme.colors.warning || theme.colors.primary}`,
+          borderRadius: theme.radii[2],
+          margin: `${theme.space[4]}px 0`,
+        }}
+      >
+        <div
+          style={{
+            color: theme.colors.warning || theme.colors.text,
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSizes[2],
+            marginBottom: theme.space[2],
+            fontWeight: theme.fontWeights.bold,
+          }}
+        >
+          ⚠️ Mermaid diagrams not supported
+        </div>
+        <div
+          style={{
+            color: theme.colors.textSecondary || theme.colors.text,
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSizes[1],
+            opacity: 0.8,
+            marginBottom: theme.space[2],
+          }}
+        >
+          Mermaid diagrams require browser DOM APIs and are only available in web environments.
+        </div>
+        <div
+          style={{
+            color: theme.colors.textTertiary || theme.colors.textSecondary,
+            fontFamily: theme.fonts.monospace,
+            fontSize: theme.fontSizes[0],
+            opacity: 0.6,
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+          }}
+        >
+          Diagram code: {code.substring(0, 100)}{code.length > 100 ? '...' : ''}
+        </div>
+      </div>
+    );
+  }
   const [errorDetails, setErrorDetails] = useState<{ code: string; message: string } | null>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
   const [hasRendered, setHasRendered] = useState(false);
