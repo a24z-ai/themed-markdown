@@ -376,3 +376,70 @@ This tests horizontal scrolling behavior in both left and right panels of book m
     showSlideCounter: true,
   },
 };
+
+export const BookModeWithPopout: Story = {
+  args: {
+    slides: [
+      `# Pop-out Book Mode Demo
+
+## Pop-out Feature in Book View
+
+This story demonstrates the pop-out button functionality in book mode.
+
+### How It Works
+
+- Click the **pop-out button** (📤) in the top-right corner
+- The book view opens in a new window
+- When in pop-out mode, you'll see a **close button** (✕) instead
+
+Both pages will open together in the new window.`,
+
+      `# Second Page
+
+This is the right page of the first spread.
+
+Try clicking the pop-out button to see the book presentation in a new window!
+
+### Features Preserved
+
+- ✅ Both pages visible
+- ✅ Navigation works
+- ✅ Panel collapse/expand
+- ✅ All markdown features`,
+
+      `# Third Page
+
+This continues the demonstration.`,
+
+      `# Fourth Page
+
+All features work in pop-out mode!`,
+    ],
+    viewMode: 'book',
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showPopoutButton: true,
+    slideIdPrefix: 'book-popout',
+    onPopout: () => {
+      console.log('Pop-out requested - opening book view in new window');
+      window.open(window.location.href, '_blank', 'width=1400,height=900');
+    },
+  },
+};
+
+export const BookModePopoutMode: Story = {
+  args: {
+    slides: presentationSlides,
+    viewMode: 'book',
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    isPopout: true,
+    slideIdPrefix: 'book-popout-mode',
+    onClose: () => {
+      console.log('Close requested - window should close');
+      window.close();
+    },
+  },
+};

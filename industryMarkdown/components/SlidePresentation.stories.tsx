@@ -564,3 +564,57 @@ export const StartFromMiddle: Story = {
     slideIdPrefix: 'middle-start',
   },
 };
+
+export const WithPopoutButton: Story = {
+  args: {
+    slides: [
+      `# Pop-out Window Demo
+
+## Pop-out Feature
+
+This story demonstrates the pop-out button functionality.
+
+### How It Works
+
+- Click the **pop-out button** (📤) in the top-right corner
+- The presentation opens in a new window
+- When in pop-out mode, you'll see a **close button** (✕) instead
+
+### Use Cases
+
+- Present on external display while controlling from main window
+- Keep reference slides visible while working
+- Share specific slides in separate windows`,
+
+      `# Second Slide
+
+This is just to show that navigation works with the pop-out feature.
+
+Try clicking the pop-out button to see the presentation in a new window!`,
+    ],
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showPopoutButton: true,
+    slideIdPrefix: 'popout',
+    onPopout: () => {
+      console.log('Pop-out requested - opening new window');
+      window.open(window.location.href, '_blank', 'width=1200,height=800');
+    },
+  },
+};
+
+export const PopoutMode: Story = {
+  args: {
+    slides: presentationSlides,
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    isPopout: true,
+    slideIdPrefix: 'popout-mode',
+    onClose: () => {
+      console.log('Close requested - window should close');
+      window.close();
+    },
+  },
+};

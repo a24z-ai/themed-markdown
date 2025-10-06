@@ -2,14 +2,16 @@ import { Theme } from '@a24z/industry-theme';
 import React, { useEffect, useRef } from 'react';
 
 import { hasReactDOMSupport } from '../utils/platformDetection';
+
 import { IndustryZoomableMermaidDiagram } from './IndustryZoomableMermaidDiagram';
 
 // Lazy load ReactDOM only on web platforms
 let ReactDOM: typeof import('react-dom') | null = null;
 if (hasReactDOMSupport()) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     ReactDOM = require('react-dom');
-  } catch (error) {
+  } catch {
     console.warn('ReactDOM is not available. Modal features will be disabled.');
   }
 }

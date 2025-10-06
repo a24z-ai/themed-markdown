@@ -22,8 +22,14 @@ export interface SlidePresentationBookProps {
   showNavigation?: boolean;
   showSlideCounter?: boolean;
   showFullscreenButton?: boolean;
+  showPopoutButton?: boolean;
+  isPopout?: boolean;
   containerHeight?: string;
   viewMode?: 'single' | 'book';
+
+  // Pop-out handlers
+  onPopout?: () => void;
+  onClose?: () => void;
 
   // IndustryMarkdownSlide props pass-through
   slideIdPrefix?: string;
@@ -44,8 +50,12 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
   showNavigation = true,
   showSlideCounter = true,
   showFullscreenButton = false,
+  showPopoutButton = false,
+  isPopout = false,
   containerHeight = '100%',
   viewMode = 'single',
+  onPopout,
+  onClose,
   slideIdPrefix = 'slide',
   enableHtmlPopout = true,
   enableKeyboardScrolling = true,
@@ -346,6 +356,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
           isFullscreen={isFullscreen}
           showSlideCounter={showSlideCounter}
           showFullscreenButton={showFullscreenButton}
+          showPopoutButton={showPopoutButton}
+          isPopout={isPopout}
           theme={theme}
           viewMode={viewMode}
           collapseLeft={collapsedSide === 'left'}
@@ -354,6 +366,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
           onNext={goToNextSlide}
           onToggleTOC={() => setShowTOC(prev => !prev)}
           onToggleFullscreen={toggleFullscreen}
+          onPopout={onPopout}
+          onClose={onClose}
           onCollapseLeft={handleCollapseLeft}
           onCollapseRight={handleCollapseRight}
         />

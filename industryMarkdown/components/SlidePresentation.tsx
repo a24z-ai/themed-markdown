@@ -21,7 +21,13 @@ export interface SlidePresentationProps {
   showNavigation?: boolean;
   showSlideCounter?: boolean;
   showFullscreenButton?: boolean;
+  showPopoutButton?: boolean;
+  isPopout?: boolean;
   containerHeight?: string;
+
+  // Pop-out handlers
+  onPopout?: () => void;
+  onClose?: () => void;
 
   // IndustryMarkdownSlide props pass-through
   slideIdPrefix?: string;
@@ -42,7 +48,11 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   showNavigation = true,
   showSlideCounter = true,
   showFullscreenButton = false,
+  showPopoutButton = false,
+  isPopout = false,
   containerHeight = '100%',
+  onPopout,
+  onClose,
   slideIdPrefix = 'slide',
   enableHtmlPopout = true,
   enableKeyboardScrolling = true,
@@ -324,11 +334,15 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
           isFullscreen={isFullscreen}
           showSlideCounter={showSlideCounter}
           showFullscreenButton={showFullscreenButton}
+          showPopoutButton={showPopoutButton}
+          isPopout={isPopout}
           theme={theme}
           onPrevious={goToPreviousSlide}
           onNext={goToNextSlide}
           onToggleTOC={() => setShowTOC(prev => !prev)}
           onToggleFullscreen={toggleFullscreen}
+          onPopout={onPopout}
+          onClose={onClose}
         />
       )}
 

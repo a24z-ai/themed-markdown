@@ -1,8 +1,81 @@
 import { Theme } from '@a24z/industry-theme';
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X, PanelLeftClose, PanelRightClose, Columns } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X, PanelLeftClose, PanelRightClose, Columns, ExternalLink } from 'lucide-react';
 import React from 'react';
 
 import { FocusLeftIcon, FocusRightIcon } from './FocusLeftIcon';
+
+interface HeaderButtonProps {
+  onClick: () => void;
+  disabled?: boolean;
+  active?: boolean;
+  title: string;
+  theme: Theme;
+  children: React.ReactNode;
+  width?: string;
+  minWidth?: string;
+  padding?: string;
+}
+
+const HeaderButton: React.FC<HeaderButtonProps> = ({
+  onClick,
+  disabled = false,
+  active = false,
+  title,
+  theme,
+  children,
+  width = '36px',
+  minWidth,
+  padding,
+}) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: theme.space[1],
+        width: minWidth ? undefined : width,
+        minWidth: minWidth,
+        height: '36px',
+        padding: padding || (minWidth ? `0 ${theme.space[2]}px` : undefined),
+        backgroundColor: isHovered && !disabled && !active
+          ? theme.colors.backgroundSecondary
+          : active
+          ? theme.colors.primary
+          : 'transparent',
+        border: `1px solid ${
+          isHovered && !disabled
+            ? theme.colors.text
+            : active
+            ? theme.colors.primary
+            : theme.colors.border
+        }`,
+        borderRadius: theme.radii[1],
+        color: active
+          ? theme.colors.background
+          : disabled
+          ? theme.colors.muted
+          : isHovered
+          ? theme.colors.text
+          : theme.colors.textSecondary,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        fontSize: theme.fontSizes[1],
+        fontFamily: theme.fonts.body,
+        opacity: disabled ? 0.5 : 1,
+        transition: 'all 0.2s ease',
+      }}
+      title={title}
+    >
+      {children}
+    </button>
+  );
+};
 
 export interface SlideNavigationHeaderProps {
   currentSlide: number;
@@ -11,6 +84,8 @@ export interface SlideNavigationHeaderProps {
   isFullscreen: boolean;
   showSlideCounter: boolean;
   showFullscreenButton: boolean;
+  showPopoutButton?: boolean;
+  isPopout?: boolean;
   theme: Theme;
   viewMode?: 'single' | 'book';
   collapseLeft?: boolean;
@@ -19,6 +94,8 @@ export interface SlideNavigationHeaderProps {
   onNext: () => void;
   onToggleTOC: () => void;
   onToggleFullscreen: () => void;
+  onPopout?: () => void;
+  onClose?: () => void;
   onCollapseLeft?: () => void;
   onCollapseRight?: () => void;
   additionalButtons?: React.ReactNode;
@@ -32,6 +109,8 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
   isFullscreen,
   showSlideCounter,
   showFullscreenButton,
+  showPopoutButton = false,
+  isPopout = false,
   theme,
   viewMode = 'single',
   collapseLeft = false,
@@ -40,6 +119,8 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
   onNext,
   onToggleTOC,
   onToggleFullscreen,
+  onPopout,
+  onClose,
   onCollapseLeft,
   onCollapseRight,
 }) => {
@@ -68,95 +149,32 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
         }}
       >
         {/* Table of Contents button */}
-        <button
+        <HeaderButton
           onClick={onToggleTOC}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '36px',
-            height: '36px',
-            backgroundColor: showTOC ? theme.colors.primary : 'transparent',
-            border: `1px solid ${showTOC ? theme.colors.primary : theme.colors.border}`,
-            borderRadius: theme.radii[1],
-            color: showTOC ? theme.colors.background : theme.colors.text,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseOver={e => {
-            if (!showTOC) {
-              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-            }
-          }}
-          onMouseOut={e => {
-            if (!showTOC) {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }
-          }}
+          active={showTOC}
+          theme={theme}
           title={showTOC ? 'Close table of contents (Esc)' : 'Open table of contents (T)'}
         >
           {showTOC ? <X size={18} /> : <Menu size={18} />}
-        </button>
+        </HeaderButton>
 
-        <button
+        <HeaderButton
           onClick={onPrevious}
           disabled={currentSlide === 0}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: theme.space[1],
-            padding: `0 ${theme.space[2]}px`,
-            height: '36px',
-            minWidth: '100px',
-            backgroundColor: 'transparent',
-            border: `1px solid ${theme.colors.border}`,
-            borderRadius: theme.radii[1],
-            color: currentSlide === 0 ? theme.colors.muted : theme.colors.text,
-            cursor: currentSlide === 0 ? 'not-allowed' : 'pointer',
-            fontSize: theme.fontSizes[1],
-            fontFamily: theme.fonts.body,
-            opacity: currentSlide === 0 ? 0.5 : 1,
-            transition: 'all 0.2s ease',
-          }}
-          onMouseOver={e => {
-            if (currentSlide !== 0) {
-              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-            }
-          }}
-          onMouseOut={e => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
+          theme={theme}
+          title="Previous slide"
+          minWidth="100px"
         >
           <ChevronLeft size={18} />
           Previous
-        </button>
+        </HeaderButton>
 
         {/* Focus/Expand Left Panel button (for book mode) */}
         {viewMode === 'book' && onCollapseLeft && (
-          <button
+          <HeaderButton
             onClick={onCollapseLeft}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '36px',
-              height: '36px',
-              backgroundColor: collapseRight ? theme.colors.backgroundSecondary : 'transparent',
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[1],
-              color: theme.colors.textSecondary,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-              e.currentTarget.style.borderColor = theme.colors.text;
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = collapseRight ? theme.colors.backgroundSecondary : 'transparent';
-              e.currentTarget.style.borderColor = theme.colors.border;
-            }}
+            active={collapseRight}
+            theme={theme}
             title={collapseLeft ? 'Expand left panel' : (collapseRight ? 'Show both panels' : 'Focus on left panel')}
           >
             {collapseLeft ? (
@@ -166,7 +184,7 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
             ) : (
               <FocusLeftIcon size={18} />
             )}
-          </button>
+          </HeaderButton>
         )}
       </div>
 
@@ -207,29 +225,10 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
       >
         {/* Focus/Expand Right Panel button (for book mode) */}
         {viewMode === 'book' && onCollapseRight && (
-          <button
+          <HeaderButton
             onClick={onCollapseRight}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '36px',
-              height: '36px',
-              backgroundColor: collapseLeft ? theme.colors.backgroundSecondary : 'transparent',
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[1],
-              color: theme.colors.textSecondary,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-              e.currentTarget.style.borderColor = theme.colors.text;
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = collapseLeft ? theme.colors.backgroundSecondary : 'transparent';
-              e.currentTarget.style.borderColor = theme.colors.border;
-            }}
+            active={collapseLeft}
+            theme={theme}
             title={collapseRight ? 'Expand right panel' : (collapseLeft ? 'Show both panels' : 'Focus on right panel')}
           >
             {collapseRight ? (
@@ -239,69 +238,46 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
             ) : (
               <FocusRightIcon size={18} />
             )}
-          </button>
+          </HeaderButton>
         )}
 
-        <button
+        <HeaderButton
           onClick={onNext}
           disabled={currentSlide === totalSlides - 1}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: theme.space[1],
-            padding: `0 ${theme.space[2]}px`,
-            height: '36px',
-            minWidth: '100px',
-            backgroundColor: 'transparent',
-            border: `1px solid ${theme.colors.border}`,
-            borderRadius: theme.radii[1],
-            color: currentSlide === totalSlides - 1 ? theme.colors.muted : theme.colors.text,
-            cursor: currentSlide === totalSlides - 1 ? 'not-allowed' : 'pointer',
-            fontSize: theme.fontSizes[1],
-            fontFamily: theme.fonts.body,
-            opacity: currentSlide === totalSlides - 1 ? 0.5 : 1,
-            transition: 'all 0.2s ease',
-          }}
-          onMouseOver={e => {
-            if (currentSlide !== totalSlides - 1) {
-              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-            }
-          }}
-          onMouseOut={e => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
+          theme={theme}
+          title="Next slide"
+          minWidth="100px"
         >
           Next
           <ChevronRight size={18} />
-        </button>
+        </HeaderButton>
 
-        {showFullscreenButton && (
-          <button
+        {showPopoutButton && onPopout && !isPopout && (
+          <HeaderButton
+            onClick={onPopout}
+            theme={theme}
+            title="Pop out to new window"
+          >
+            <ExternalLink size={18} />
+          </HeaderButton>
+        )}
+        {isPopout && onClose && (
+          <HeaderButton
+            onClick={onClose}
+            theme={theme}
+            title="Close window"
+          >
+            <X size={18} />
+          </HeaderButton>
+        )}
+        {showFullscreenButton && !showPopoutButton && (
+          <HeaderButton
             onClick={onToggleFullscreen}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '36px',
-              height: '36px',
-              backgroundColor: 'transparent',
-              border: `1px solid ${theme.colors.border}`,
-              borderRadius: theme.radii[1],
-              color: theme.colors.textSecondary,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.backgroundColor = theme.colors.backgroundSecondary;
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
+            theme={theme}
             title={isFullscreen ? 'Exit fullscreen (F)' : 'Enter fullscreen (F)'}
           >
             {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
-          </button>
+          </HeaderButton>
         )}
       </div>
     </div>
