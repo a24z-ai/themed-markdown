@@ -106,7 +106,7 @@ export interface IndustryMarkdownSlideProps {
 
   // === Layout & Styling ===
   slideHeaderMarginTopOverride?: number;
-  theme?: Theme;
+  theme: Theme;
   fontSizeScale?: number; // Scale factor for all font sizes (e.g., 1.25 for 25% larger)
   containerWidth?: number; // Container width passed from parent (optional - will use ResizeObserver if not provided)
   transparentBackground?: boolean; // If true, no background color is applied (useful when parent handles background)

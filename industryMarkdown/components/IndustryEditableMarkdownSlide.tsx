@@ -1,4 +1,4 @@
-import { Theme, theme as defaultTheme } from '@a24z/industry-theme';
+import { Theme } from '@a24z/industry-theme';
 import { Pencil, Save, X } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
@@ -10,7 +10,6 @@ export interface IndustryEditableMarkdownSlideProps extends IndustryMarkdownSlid
   autoSaveDelay?: number;
   editable?: boolean;
   showEditButton?: boolean;
-  theme?: Theme; // Add theme as optional prop
 }
 
 export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSlideProps> = ({
@@ -20,10 +19,9 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
   autoSaveDelay = 1000,
   editable = true,
   showEditButton = true,
-  theme: themeProp,
   ...slideProps
 }) => {
-  const theme = themeProp ?? defaultTheme;
+  const theme = slideProps.theme;
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
   const [isSaving, setIsSaving] = useState(false);
