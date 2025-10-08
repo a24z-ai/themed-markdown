@@ -1,20 +1,8 @@
 import { Theme } from '@a24z/industry-theme';
 import React, { useEffect, useRef } from 'react';
-
-import { hasReactDOMSupport } from '../utils/platformDetection';
+import { createPortal } from 'react-dom';
 
 import { IndustryZoomableMermaidDiagram } from './IndustryZoomableMermaidDiagram';
-
-// Lazy load ReactDOM only on web platforms
-let ReactDOM: typeof import('react-dom') | null = null;
-if (hasReactDOMSupport()) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    ReactDOM = require('react-dom');
-  } catch {
-    console.warn('ReactDOM is not available. Modal features will be disabled.');
-  }
-}
 
 interface IndustryMermaidModalProps {
   isOpen: boolean;
@@ -56,44 +44,6 @@ export function IndustryMermaidModal({
     return null;
   }
 
-  // Check if we're in a supported environment
-  if (!ReactDOM || !hasReactDOMSupport()) {
-    // Fallback for React Native or environments without DOM support
-    return (
-      <div
-        style={{
-          padding: theme.space[4],
-          backgroundColor: theme.colors.background,
-          border: `2px solid ${theme.colors.warning || theme.colors.primary}`,
-          borderRadius: theme.radii[2],
-          margin: theme.space[4],
-        }}
-      >
-        <div
-          style={{
-            color: theme.colors.warning || theme.colors.text,
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSizes[2],
-            marginBottom: theme.space[2],
-            fontWeight: theme.fontWeights.bold,
-          }}
-        >
-          ⚠️ Mermaid diagrams are not supported in React Native
-        </div>
-        <div
-          style={{
-            color: theme.colors.textSecondary || theme.colors.text,
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSizes[1],
-            opacity: 0.8,
-          }}
-        >
-          Mermaid diagrams require browser DOM APIs and are only available in web environments.
-          Consider using a WebView component or alternative visualization library for React Native.
-        </div>
-      </div>
-    );
-  }
 
   const modalContent = (
     <div
@@ -182,8 +132,5 @@ export function IndustryMermaidModal({
     </div>
   );
 
-  // TypeScript guard - this should never happen due to check above
-  if (!ReactDOM) return null;
-
-  return ReactDOM.createPortal(modalContent, document.body);
+  return createPortal(modalContent, document.body);
 }
