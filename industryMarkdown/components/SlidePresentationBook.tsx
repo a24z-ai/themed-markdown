@@ -692,6 +692,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                   overflowY: 'auto',
                   overflowX: 'hidden',
                   position: 'relative',
+                  width: '100%',
                   // Center the single slide in book mode
                   ...(viewMode === 'book' && slides.length === 1 ? {
                     display: 'flex',
