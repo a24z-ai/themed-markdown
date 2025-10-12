@@ -376,6 +376,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
       <div
         style={{
           flex: 1,
+          width: '100%',
           overflow: 'hidden',
           position: 'relative',
           display: 'flex',
