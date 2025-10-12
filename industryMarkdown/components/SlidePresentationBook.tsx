@@ -687,7 +687,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
               // Single Page View (or Book Mode with only 1 slide)
               <div
                 style={{
-                  flex: 1,
+                  flex: '1 1 0%',
                   backgroundColor: 'transparent',
                   borderRadius: 0,
                   boxShadow: 'none',
