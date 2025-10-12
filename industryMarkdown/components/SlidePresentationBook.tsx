@@ -540,6 +540,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
             gap: 0,
             padding: 0,
             backgroundColor: theme.colors.background,
+            width: '100%',
           }}
         >
           {slides.length > 0 ? (
