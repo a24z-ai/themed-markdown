@@ -52,7 +52,7 @@ export function createGithubFileSource(
  */
 export function parseMarkdownIntoPresentation(
   markdownContent: string,
-  repositoryInfo?: RepositoryInfo
+  repositoryInfo?: RepositoryInfo,
 ): MarkdownPresentation {
   // Use core library implementation - always using header format
   return parseMarkdownIntoPresentationCore(markdownContent, repositoryInfo);

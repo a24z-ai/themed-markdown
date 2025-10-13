@@ -11,7 +11,7 @@ const meta = {
     layout: 'fullscreen',
   },
   decorators: [
-    (Story) => (
+    Story => (
       <ThemeProvider theme={theme}>
         <Story />
       </ThemeProvider>
@@ -120,7 +120,6 @@ export const Default: Story = {
     slides: defaultSlides,
   },
 };
-
 
 export const DarkTheme: Story = {
   args: {

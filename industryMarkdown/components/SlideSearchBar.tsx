@@ -70,7 +70,7 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
         ref={searchInputRef}
         type="text"
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={e => setSearchQuery(e.target.value)}
         placeholder="Search slides..."
         style={{
           flex: '0 0 auto',
@@ -84,10 +84,10 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
           fontFamily: theme.fonts.body,
           outline: 'none',
         }}
-        onFocus={(e) => {
+        onFocus={e => {
           e.currentTarget.style.borderColor = theme.colors.primary;
         }}
-        onBlur={(e) => {
+        onBlur={e => {
           e.currentTarget.style.borderColor = theme.colors.border;
         }}
       />
@@ -104,7 +104,8 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
         >
           {searchResults.length > 0 ? (
             <>
-              {searchResults.reduce((sum, r) => sum + r.count, 0)} matches in {searchResults.length} slide
+              {searchResults.reduce((sum, r) => sum + r.count, 0)} matches in {searchResults.length}{' '}
+              slide
               {searchResults.length !== 1 ? 's' : ''}
             </>
           ) : (
@@ -145,9 +146,7 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
               opacity: 0.7,
             }}
           >
-            <span style={{ fontWeight: 600 }}>
-              #{searchStartSlide + 1} (start)
-            </span>
+            <span style={{ fontWeight: 600 }}>#{searchStartSlide + 1} (start)</span>
             <span style={{ opacity: 0.8 }}>(no matches)</span>
           </div>
         )}
@@ -161,17 +160,12 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
               gap: theme.space[1],
               padding: `${theme.space[1]}px ${theme.space[2]}px`,
               backgroundColor:
-                currentSearchResult === index
-                  ? theme.colors.primary
-                  : theme.colors.background,
+                currentSearchResult === index ? theme.colors.primary : theme.colors.background,
               border: `1px solid ${
                 currentSearchResult === index ? theme.colors.primary : theme.colors.border
               }`,
               borderRadius: theme.radii[2],
-              color:
-                currentSearchResult === index
-                  ? theme.colors.background
-                  : theme.colors.text,
+              color: currentSearchResult === index ? theme.colors.background : theme.colors.text,
               fontSize: theme.fontSizes[0],
               fontFamily: theme.fonts.monospace,
               cursor: 'pointer',
@@ -179,21 +173,19 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
               whiteSpace: 'nowrap',
               flexShrink: 0,
             }}
-            onMouseOver={(e) => {
+            onMouseOver={e => {
               if (currentSearchResult !== index) {
                 e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
               }
             }}
-            onMouseOut={(e) => {
+            onMouseOut={e => {
               if (currentSearchResult !== index) {
                 e.currentTarget.style.backgroundColor = theme.colors.background;
               }
             }}
             title={`Slide ${result.slideIndex + 1}: ${slideTitles[result.slideIndex]}`}
           >
-            <span style={{ fontWeight: 600 }}>
-              #{result.slideIndex + 1}
-            </span>
+            <span style={{ fontWeight: 600 }}>#{result.slideIndex + 1}</span>
             <span style={{ opacity: 0.8 }}>
               ({result.count} match{result.count !== 1 ? 'es' : ''})
             </span>
@@ -222,10 +214,10 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
             transition: 'all 0.2s ease',
             flexShrink: 0,
           }}
-          onMouseOver={(e) => {
+          onMouseOver={e => {
             e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
           }}
-          onMouseOut={(e) => {
+          onMouseOut={e => {
             e.currentTarget.style.backgroundColor = 'transparent';
           }}
           title="Clear search"
@@ -251,10 +243,10 @@ export const SlideSearchBar: React.FC<SlideSearchBarProps> = ({
           transition: 'all 0.2s ease',
           flexShrink: 0,
         }}
-        onMouseOver={(e) => {
+        onMouseOver={e => {
           e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
         }}
-        onMouseOut={(e) => {
+        onMouseOut={e => {
           e.currentTarget.style.backgroundColor = 'transparent';
         }}
         title="Close search (Esc)"

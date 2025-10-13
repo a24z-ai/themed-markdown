@@ -24,7 +24,7 @@ export function highlightSearchMatches(content: string, searchQuery: string): st
     codeMatches.push({
       start: match.index,
       end: match.index + match[0].length,
-      text: match[0]
+      text: match[0],
     });
   }
 
@@ -32,18 +32,18 @@ export function highlightSearchMatches(content: string, searchQuery: string): st
   if (codeMatches.length === 0) {
     segments.push({ text: content, isCode: false });
   } else {
-    codeMatches.forEach((codeMatch) => {
+    codeMatches.forEach(codeMatch => {
       // Add text before code block
       if (lastIndex < codeMatch.start) {
         segments.push({
           text: content.slice(lastIndex, codeMatch.start),
-          isCode: false
+          isCode: false,
         });
       }
       // Add code block
       segments.push({
         text: codeMatch.text,
-        isCode: true
+        isCode: true,
       });
       lastIndex = codeMatch.end;
     });
@@ -51,7 +51,7 @@ export function highlightSearchMatches(content: string, searchQuery: string): st
     if (lastIndex < content.length) {
       segments.push({
         text: content.slice(lastIndex),
-        isCode: false
+        isCode: false,
       });
     }
   }

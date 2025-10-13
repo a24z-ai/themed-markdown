@@ -260,12 +260,20 @@ export const InteractiveToggle: Story = {
 
     return (
       <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '10px', backgroundColor: '#f0f0f0', display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div
+          style={{
+            padding: '10px',
+            backgroundColor: '#f0f0f0',
+            display: 'flex',
+            gap: '10px',
+            alignItems: 'center',
+          }}
+        >
           <label>
             View Mode:
             <select
               value={viewMode}
-              onChange={(e) => setViewMode(e.target.value as 'single' | 'book')}
+              onChange={e => setViewMode(e.target.value as 'single' | 'book')}
               style={{ marginLeft: '10px', padding: '5px' }}
             >
               <option value="single">Single Slide</option>
@@ -273,7 +281,9 @@ export const InteractiveToggle: Story = {
             </select>
           </label>
           <span style={{ marginLeft: 'auto', fontSize: '14px', color: '#666' }}>
-            {viewMode === 'book' ? '📖 Book Mode - Showing 2 slides' : '📄 Single Mode - Showing 1 slide'}
+            {viewMode === 'book'
+              ? '📖 Book Mode - Showing 2 slides'
+              : '📄 Single Mode - Showing 1 slide'}
           </span>
         </div>
         <div style={{ flex: 1 }}>
@@ -369,7 +379,7 @@ curl -X POST "https://api.example.com/v1/users/authenticate" -H "Content-Type: a
 result = DataFrame.from_dict(data_source).filter(column_name="status", value="active").join(other_dataframe, left_on="user_id", right_on="id").group_by("category").aggregate({"revenue": "sum", "count": "count"}).sort_values(by="revenue", ascending=False)
 \`\`\`
 
-This tests horizontal scrolling behavior in both left and right panels of book mode.`
+This tests horizontal scrolling behavior in both left and right panels of book mode.`,
     ],
     viewMode: 'book',
     showNavigation: true,

@@ -27,7 +27,10 @@ export interface EditableSlidePresentationBookProps {
   enableHtmlPopout?: boolean;
   enableKeyboardScrolling?: boolean;
   onLinkClick?: (href: string, event?: MouseEvent) => void;
-  handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
+  handleRunBashCommand?: (
+    command: string,
+    options?: BashCommandOptions,
+  ) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
   fontSizeScale?: number;
   editorFontSize?: number;
@@ -60,7 +63,8 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
   autoSaveDelay = 1000,
   theme,
 }) => {
-  const adjustedInitialSlide = viewMode === 'book' ? Math.floor(initialSlide / 2) * 2 : initialSlide;
+  const adjustedInitialSlide =
+    viewMode === 'book' ? Math.floor(initialSlide / 2) * 2 : initialSlide;
   const [currentSlide, setCurrentSlide] = useState(adjustedInitialSlide);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showTOC, setShowTOC] = useState(false);
@@ -184,7 +188,7 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
     editingSlides.forEach((slide, slideIndex) => {
       const lines = slide.split('\n');
       let matchCount = 0;
-      lines.forEach((line) => {
+      lines.forEach(line => {
         if (line.toLowerCase().includes(query)) {
           matchCount++;
         }
@@ -204,7 +208,6 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
       setCurrentSearchResult(-1);
     }
   }, [searchQuery, editingSlides]);
-
 
   const navigatePrevious = useCallback(() => {
     navigateToSlide(currentSlide - stepSize);
@@ -293,11 +296,11 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
           zIndex: 10,
           transition: 'all 0.2s ease',
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           e.currentTarget.style.backgroundColor = theme.colors.background;
           e.currentTarget.style.transform = 'translateY(-1px)';
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           e.currentTarget.style.backgroundColor = theme.colors.muted;
           e.currentTarget.style.transform = 'translateY(0)';
         }}
@@ -312,22 +315,26 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
           value={editingSlides[slideIndex]}
           language="markdown"
           placeholder="Enter markdown here..."
-          onChange={(e) => handleEditorChange(e.target.value, slideIndex)}
+          onChange={e => handleEditorChange(e.target.value, slideIndex)}
           padding={15}
           data-color-mode={getEditorTheme()}
-          style={{
-            fontSize: `${editorFontSize}px`,
-            backgroundColor: theme.colors.backgroundSecondary,
-            color: theme.colors.text,
-            fontFamily: theme.fonts?.monospace || 'ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace',
-            minHeight: '100%',
-            // Additional theme-aware styles
-            caretColor: theme.colors.primary,
-            '::selection': {
-              backgroundColor: theme.colors.primary,
-              color: theme.colors.background,
-            },
-          } as React.CSSProperties}
+          style={
+            {
+              fontSize: `${editorFontSize}px`,
+              backgroundColor: theme.colors.backgroundSecondary,
+              color: theme.colors.text,
+              fontFamily:
+                theme.fonts?.monospace ||
+                'ui-monospace, SFMono-Regular, SF Mono, Consolas, Liberation Mono, Menlo, monospace',
+              minHeight: '100%',
+              // Additional theme-aware styles
+              caretColor: theme.colors.primary,
+              '::selection': {
+                backgroundColor: theme.colors.primary,
+                color: theme.colors.background,
+              },
+            } as React.CSSProperties
+          }
         />
         <style>{`
           /* Override prettylights syntax highlighting colors */
@@ -417,8 +424,9 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
   );
 
   const renderSlide = (slideIndex: number, side: 'left' | 'right') => {
-    const isBeingEdited = (side === 'left' && editingSide === 'left' && slideIndex === currentSlide) ||
-                         (side === 'right' && editingSide === 'right' && slideIndex === currentSlide + 1);
+    const isBeingEdited =
+      (side === 'left' && editingSide === 'left' && slideIndex === currentSlide) ||
+      (side === 'right' && editingSide === 'right' && slideIndex === currentSlide + 1);
 
     return (
       <div style={{ position: 'relative', height: '100%', width: '100%' }}>
@@ -426,7 +434,12 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
           content={editingSlides[slideIndex]}
           slideIndex={slideIndex}
           slideIdPrefix={`${slideIdPrefix}-${slideIndex}`}
-          onCheckboxChange={onCheckboxChange ? (slideIdx: number, lineNumber: number, checked: boolean) => onCheckboxChange(slideIdx, lineNumber, checked) : undefined}
+          onCheckboxChange={
+            onCheckboxChange
+              ? (slideIdx: number, lineNumber: number, checked: boolean) =>
+                  onCheckboxChange(slideIdx, lineNumber, checked)
+              : undefined
+          }
           searchQuery={searchQuery}
           enableHtmlPopout={enableHtmlPopout}
           enableKeyboardScrolling={enableKeyboardScrolling}
@@ -457,8 +470,12 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
               transition: 'opacity 0.2s ease',
               zIndex: 5,
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.8'; }}
+            onMouseEnter={e => {
+              e.currentTarget.style.opacity = '1';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.opacity = '0.8';
+            }}
             onClick={() => setEditingSide(side)}
             title={`Edit slide ${slideIndex + 1}`}
           >
@@ -644,7 +661,9 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
             boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
           }}
         >
-          <h3 style={{ marginBottom: theme.space[3], fontSize: theme.fontSizes[3] }}>Table of Contents</h3>
+          <h3 style={{ marginBottom: theme.space[3], fontSize: theme.fontSizes[3] }}>
+            Table of Contents
+          </h3>
           {slideTitles.map((title, index) => (
             <div
               key={index}
@@ -652,8 +671,14 @@ export const EditableSlidePresentationBook: React.FC<EditableSlidePresentationBo
               style={{
                 padding: `${theme.space[2]} ${theme.space[3]}`,
                 cursor: 'pointer',
-                backgroundColor: currentSlide === index || (viewMode === 'book' && currentSlide === index - 1) ? theme.colors.accent : 'transparent',
-                color: currentSlide === index || (viewMode === 'book' && currentSlide === index - 1) ? theme.colors.background : theme.colors.text,
+                backgroundColor:
+                  currentSlide === index || (viewMode === 'book' && currentSlide === index - 1)
+                    ? theme.colors.accent
+                    : 'transparent',
+                color:
+                  currentSlide === index || (viewMode === 'book' && currentSlide === index - 1)
+                    ? theme.colors.background
+                    : theme.colors.text,
                 borderRadius: theme.radii[1],
                 marginBottom: theme.space[1],
                 transition: 'background-color 0.2s',

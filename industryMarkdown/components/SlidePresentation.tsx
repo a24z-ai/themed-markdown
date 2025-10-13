@@ -34,7 +34,10 @@ export interface SlidePresentationProps {
   enableHtmlPopout?: boolean;
   enableKeyboardScrolling?: boolean;
   onLinkClick?: (href: string, event?: MouseEvent) => void;
-  handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
+  handleRunBashCommand?: (
+    command: string,
+    options?: BashCommandOptions,
+  ) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
   fontSizeScale?: number;
   theme: Theme;
@@ -71,7 +74,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   const [currentSearchResult, setCurrentSearchResult] = useState(-1); // -1 means no selection
   const [searchStartSlide, setSearchStartSlide] = useState(0); // Track where search was initiated
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // Extract slide titles for TOC
   const slideTitles = extractAllSlideTitles(slides);
 
@@ -123,7 +126,8 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
       if (currentSearchResult === -1) {
         newIndex = resultIndex < 0 ? searchResults.length - 1 : 0;
       } else {
-        newIndex = ((resultIndex % searchResults.length) + searchResults.length) % searchResults.length;
+        newIndex =
+          ((resultIndex % searchResults.length) + searchResults.length) % searchResults.length;
       }
 
       setCurrentSearchResult(newIndex);
@@ -134,7 +138,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
         navigateToSlide(targetSlide);
       }
     },
-    [searchResults, navigateToSlide, currentSlide, currentSearchResult]
+    [searchResults, navigateToSlide, currentSlide, currentSearchResult],
   );
 
   const closeSearch = useCallback(() => {
@@ -176,7 +180,10 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
       // Don't interfere with typing in inputs
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
         // Allow Tab navigation in search
-        if (showSearch && (event.key === 'Tab' || event.key === 'Enter' || event.key === 'Escape')) {
+        if (
+          showSearch &&
+          (event.key === 'Tab' || event.key === 'Enter' || event.key === 'Escape')
+        ) {
           // Continue to handle these keys
         } else {
           return;
@@ -290,7 +297,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
           }
           break;
       }
-      
+
       // Number keys 1-9 jump to specific slides
       if (!event.ctrlKey && !event.metaKey && !event.altKey) {
         const num = parseInt(event.key);
@@ -303,7 +310,18 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToPreviousSlide, goToNextSlide, navigateToSlide, slides.length, toggleFullscreen, showTOC, showSearch, closeSearch, navigateToSearchResult, currentSearchResult]);
+  }, [
+    goToPreviousSlide,
+    goToNextSlide,
+    navigateToSlide,
+    slides.length,
+    toggleFullscreen,
+    showTOC,
+    showSearch,
+    closeSearch,
+    navigateToSearchResult,
+    currentSearchResult,
+  ]);
 
   // Update state when slides change externally
   useEffect(() => {
@@ -311,7 +329,6 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
       setCurrentSlide(slides.length - 1);
     }
   }, [slides.length, currentSlide]);
-
 
   return (
     <div
@@ -404,7 +421,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
               {slides.length} {slides.length === 1 ? 'slide' : 'slides'}
             </p>
           </div>
-          
+
           {/* TOC Items */}
           <div style={{ padding: theme.space[2] }}>
             {slideTitles.map((title, index) => (
@@ -470,7 +487,8 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
                       transform: 'translateY(-50%)',
                       width: '3px',
                       height: '60%',
-                      backgroundColor: currentSlide === index ? theme.colors.background : theme.colors.primary,
+                      backgroundColor:
+                        currentSlide === index ? theme.colors.background : theme.colors.primary,
                       borderRadius: '0 2px 2px 0',
                     }}
                   />
@@ -479,7 +497,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
             ))}
           </div>
         </div>
-        
+
         {/* Overlay to close TOC when clicking outside */}
         {showTOC && (
           <div
@@ -496,7 +514,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
             }}
           />
         )}
-        
+
         {/* Slide Content */}
         <div
           style={{
@@ -505,36 +523,36 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
           }}
         >
           {slides.length > 0 ? (
-          <IndustryMarkdownSlide
-            content={slides[currentSlide] || ''}
-            slideIdPrefix={`${slideIdPrefix}-${currentSlide}`}
-            slideIndex={currentSlide}
-            isVisible={true}
-            theme={theme}
-            onCheckboxChange={onCheckboxChange}
-            enableHtmlPopout={enableHtmlPopout}
-            enableKeyboardScrolling={enableKeyboardScrolling}
-            onLinkClick={onLinkClick}
-            handleRunBashCommand={handleRunBashCommand}
-            handlePromptCopy={handlePromptCopy}
-            fontSizeScale={fontSizeScale}
-            searchQuery={showSearch ? searchQuery : undefined}
-          />
-        ) : (
-          <div
-            style={{
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: theme.colors.muted,
-              fontSize: theme.fontSizes[2],
-              fontFamily: theme.fonts.body,
-            }}
-          >
-            No slides available
-          </div>
-        )}
+            <IndustryMarkdownSlide
+              content={slides[currentSlide] || ''}
+              slideIdPrefix={`${slideIdPrefix}-${currentSlide}`}
+              slideIndex={currentSlide}
+              isVisible={true}
+              theme={theme}
+              onCheckboxChange={onCheckboxChange}
+              enableHtmlPopout={enableHtmlPopout}
+              enableKeyboardScrolling={enableKeyboardScrolling}
+              onLinkClick={onLinkClick}
+              handleRunBashCommand={handleRunBashCommand}
+              handlePromptCopy={handlePromptCopy}
+              fontSizeScale={fontSizeScale}
+              searchQuery={showSearch ? searchQuery : undefined}
+            />
+          ) : (
+            <div
+              style={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: theme.colors.muted,
+                fontSize: theme.fontSizes[2],
+                fontFamily: theme.fonts.body,
+              }}
+            >
+              No slides available
+            </div>
+          )}
         </div>
       </div>
 

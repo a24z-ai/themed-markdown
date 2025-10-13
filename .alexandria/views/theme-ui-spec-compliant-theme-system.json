@@ -7,21 +7,13 @@
   "cols": 2,
   "referenceGroups": {
     "Files": {
-      "coordinates": [
-        0,
-        0
-      ],
-      "files": [
-      ],
+      "coordinates": [0, 0],
+      "files": [],
       "priority": 0
     },
     "Example Component": {
-      "coordinates": [
-        0,
-        1
-      ],
-      "files": [
-      ],
+      "coordinates": [0, 1],
+      "files": [],
       "priority": 0
     }
   },

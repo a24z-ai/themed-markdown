@@ -502,7 +502,7 @@ npm run build
     showNavigation: true,
     showSlideCounter: true,
     slideIdPrefix: 'interactive',
-    onSlideChange: (slideIndex) => {
+    onSlideChange: slideIndex => {
       console.log('Slide changed to:', slideIndex);
     },
     onCheckboxChange: (slideIndex, lineNumber, checked) => {
@@ -517,7 +517,8 @@ npm run build
 
 export const SingleSlide: Story = {
   args: {
-    slides: [`# Single Slide Presentation
+    slides: [
+      `# Single Slide Presentation
 
 Sometimes you just need one slide.
 
@@ -536,7 +537,8 @@ Even with a single slide, you still get:
 - Interactive elements
 - Responsive layout
 
-No navigation controls are shown when there's only one slide.`],
+No navigation controls are shown when there's only one slide.`,
+    ],
     showNavigation: true,
     showSlideCounter: true,
     slideIdPrefix: 'single',

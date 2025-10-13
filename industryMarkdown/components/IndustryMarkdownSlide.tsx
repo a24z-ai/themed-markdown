@@ -359,7 +359,6 @@ const injectStyles = () => {
   }
 };
 
-
 // Keyboard scroll configuration type
 export interface KeyboardScrollConfig {
   scrollAmount?: number; // Pixels to scroll per arrow key (default: 100)
@@ -820,10 +819,18 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
     const baseVerticalValue = parseInt(baseVerticalPadding.replace('px', ''), 10);
 
     // Calculate additional padding values from additionalPadding prop
-    const leftExtra = additionalPadding?.left ? parseInt(additionalPadding.left.replace('px', ''), 10) : 0;
-    const rightExtra = additionalPadding?.right ? parseInt(additionalPadding.right.replace('px', ''), 10) : 0;
-    const topExtra = additionalPadding?.top ? parseInt(additionalPadding.top.replace('px', ''), 10) : 0;
-    const bottomExtra = additionalPadding?.bottom ? parseInt(additionalPadding.bottom.replace('px', ''), 10) : 0;
+    const leftExtra = additionalPadding?.left
+      ? parseInt(additionalPadding.left.replace('px', ''), 10)
+      : 0;
+    const rightExtra = additionalPadding?.right
+      ? parseInt(additionalPadding.right.replace('px', ''), 10)
+      : 0;
+    const topExtra = additionalPadding?.top
+      ? parseInt(additionalPadding.top.replace('px', ''), 10)
+      : 0;
+    const bottomExtra = additionalPadding?.bottom
+      ? parseInt(additionalPadding.bottom.replace('px', ''), 10)
+      : 0;
 
     // Create final padding string
     // Use vertical padding for top/bottom, horizontal for sides
@@ -909,8 +916,23 @@ export const IndustryMarkdownSlide = React.memo(function IndustryMarkdownSlide({
         hr: [...(defaultSchema.attributes?.hr || []), 'style', 'className'],
         // Additional elements for inline styling (badges, labels, etc.)
         label: [...(defaultSchema.attributes?.label || []), 'style', 'className', 'for'],
-        input: [...(defaultSchema.attributes?.input || []), 'style', 'className', 'type', 'placeholder', 'value', 'checked', 'disabled'],
-        button: [...(defaultSchema.attributes?.button || []), 'style', 'className', 'type', 'disabled'],
+        input: [
+          ...(defaultSchema.attributes?.input || []),
+          'style',
+          'className',
+          'type',
+          'placeholder',
+          'value',
+          'checked',
+          'disabled',
+        ],
+        button: [
+          ...(defaultSchema.attributes?.button || []),
+          'style',
+          'className',
+          'type',
+          'disabled',
+        ],
         details: [...(defaultSchema.attributes?.details || []), 'style', 'className', 'open'],
         summary: [...(defaultSchema.attributes?.summary || []), 'style', 'className'],
         footer: [...(defaultSchema.attributes?.footer || []), 'style', 'className'],

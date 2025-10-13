@@ -4,7 +4,6 @@ import React from 'react';
 
 import { SlidePresentation } from '../../industryMarkdown/components/SlidePresentation';
 
-
 // Sample slides array
 const slides = [
   `# Theme Showcase
@@ -76,18 +75,14 @@ Buttons and interactive components adapt to each theme's style:
 
 Each theme tells a different story.
 
-Choose the one that matches your voice.`
+Choose the one that matches your voice.`,
 ];
 
 // Terminal theme slides
 const TerminalSlides = () => (
   <div style={{ width: '100%', height: '100vh', backgroundColor: terminalTheme.colors.background }}>
     <ThemeProvider theme={terminalTheme}>
-      <SlidePresentation
-        slides={slides}
-        containerHeight="100%"
-        theme={terminalTheme}
-      />
+      <SlidePresentation slides={slides} containerHeight="100%" theme={terminalTheme} />
     </ThemeProvider>
   </div>
 );
@@ -96,28 +91,22 @@ const TerminalSlides = () => (
 const RegalSlides = () => (
   <div style={{ width: '100%', height: '100vh', backgroundColor: regalTheme.colors.background }}>
     <ThemeProvider theme={regalTheme}>
-      <SlidePresentation
-        slides={slides}
-        containerHeight="100%"
-        theme={regalTheme}
-      />
+      <SlidePresentation slides={slides} containerHeight="100%" theme={regalTheme} />
     </ThemeProvider>
   </div>
 );
 
 // Glassmorphism theme slides - showing limitations without custom CSS
 const GlassmorphismSlides = () => (
-  <div style={{
-    width: '100%',
-    height: '100vh',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  }}>
+  <div
+    style={{
+      width: '100%',
+      height: '100vh',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    }}
+  >
     <ThemeProvider theme={glassmorphismTheme}>
-      <SlidePresentation
-        slides={slides}
-        containerHeight="100%"
-        theme={glassmorphismTheme}
-      />
+      <SlidePresentation slides={slides} containerHeight="100%" theme={glassmorphismTheme} />
     </ThemeProvider>
   </div>
 );
@@ -146,7 +135,8 @@ export const Glassmorphism: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Note: Full glassmorphism effects (backdrop-filter) require CSS properties not available in theme objects alone. This shows the color transparency aspects only.',
+        story:
+          'Note: Full glassmorphism effects (backdrop-filter) require CSS properties not available in theme objects alone. This shows the color transparency aspects only.',
       },
     },
   },

@@ -23,7 +23,5 @@
     "types": ["bun"],
     "baseUrl": "."
   },
-  "files": [
-    "index.ts"
-  ]
+  "files": ["index.ts"]
 }

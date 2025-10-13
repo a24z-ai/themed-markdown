@@ -154,7 +154,7 @@ Common issues and solutions.`;
       expect(slide.id).toContain('slide-');
       // Each slide should have a unique ID
       const otherSlides = result.slides.filter((_, i) => i !== index);
-      expect(otherSlides.every((other) => other.id !== slide.id)).toBe(true);
+      expect(otherSlides.every(other => other.id !== slide.id)).toBe(true);
     });
   });
 

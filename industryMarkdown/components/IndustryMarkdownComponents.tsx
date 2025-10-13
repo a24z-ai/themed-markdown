@@ -1,5 +1,10 @@
 import { Theme } from '@a24z/industry-theme';
-import { BashCommandOptions, BashCommandResult, RepositoryInfo, parseBashCommands } from '@a24z/markdown-utils';
+import {
+  BashCommandOptions,
+  BashCommandResult,
+  RepositoryInfo,
+  parseBashCommands,
+} from '@a24z/markdown-utils';
 import { Copy, Monitor, FileText, Check } from 'lucide-react';
 import React, { useMemo, useState, useRef } from 'react';
 
@@ -45,12 +50,12 @@ const failedImageCache = new Set<string>();
 const isVideoUrl = (url: string, alt?: string): boolean => {
   const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv', '.m4v'];
   const lowercaseUrl = url.toLowerCase();
-  
+
   // Check for file extensions in URL
   if (videoExtensions.some(ext => lowercaseUrl.includes(ext))) {
     return true;
   }
-  
+
   // Check alt text for hints that this is a video
   if (alt) {
     const altLower = alt.toLowerCase();
@@ -58,7 +63,7 @@ const isVideoUrl = (url: string, alt?: string): boolean => {
       return true;
     }
   }
-  
+
   // For GitHub attachments without extensions, we can't reliably detect video vs image
   // So we'll treat them as images by default unless alt text suggests otherwise
   return false;
@@ -358,7 +363,8 @@ export const createIndustryMarkdownComponents = ({
           }
         });
 
-        const checked = (checkbox as React.ReactElement<CheckboxElementProps>)?.props?.checked || false;
+        const checked =
+          (checkbox as React.ReactElement<CheckboxElementProps>)?.props?.checked || false;
         const lineNumber =
           props.sourcePosition?.start?.line ||
           (props.node as { position?: { start?: { line?: number } } })?.position?.start?.line ||
@@ -521,7 +527,9 @@ export const createIndustryMarkdownComponents = ({
     ),
 
     // Picture elements
-    picture: ({ children, ...props }: MarkdownComponentProps) => <picture {...props}>{children}</picture>,
+    picture: ({ children, ...props }: MarkdownComponentProps) => (
+      <picture {...props}>{children}</picture>
+    ),
 
     // Video elements
     video: ({ children, ...props }: MarkdownComponentProps) => (
@@ -594,9 +602,12 @@ export const createIndustryMarkdownComponents = ({
         isCodeBlock = false;
       } else {
         isCodeBlock = hasLanguageClass || codeString.length > 50;
-        const nodeWithParent = node as { parent?: { tagName?: string; parent?: { tagName?: string } } };
+        const nodeWithParent = node as {
+          parent?: { tagName?: string; parent?: { tagName?: string } };
+        };
         const isInsideParagraph =
-          nodeWithParent?.parent?.tagName === 'p' || nodeWithParent?.parent?.parent?.tagName === 'p';
+          nodeWithParent?.parent?.tagName === 'p' ||
+          nodeWithParent?.parent?.parent?.tagName === 'p';
         isInline = !isCodeBlock || isInsideParagraph;
       }
 

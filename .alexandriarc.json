@@ -4,9 +4,7 @@
   "context": {
     "useGitignore": true,
     "patterns": {
-      "exclude": [
-        ".alexandria/**"
-      ]
+      "exclude": [".alexandria/**"]
     },
     "rules": [
       {
@@ -14,10 +12,7 @@
         "severity": "warning",
         "enabled": true,
         "options": {
-          "rootExceptions": [
-            "README.md",
-            "AGENTS.md"
-          ]
+          "rootExceptions": ["README.md", "AGENTS.md"]
         }
       },
       {
@@ -26,10 +21,7 @@
         "enabled": true,
         "options": {
           "style": "kebab-case",
-          "exceptions": [
-            "README.md",
-            "AGENTS.md"
-          ]
+          "exceptions": ["README.md", "AGENTS.md"]
         }
       }
     ]

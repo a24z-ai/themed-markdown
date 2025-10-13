@@ -11,7 +11,7 @@ const meta = {
     layout: 'fullscreen',
   },
   decorators: [
-    (Story) => (
+    Story => (
       <ThemeProvider theme={defaultTheme}>
         <div style={{ height: '100vh', width: '100vw' }}>
           <Story />
@@ -140,7 +140,7 @@ React continues to evolve with new features and patterns.
 - TypeScript integration is seamless
 - Testing is a first-class concern
 
-Thank you for joining this presentation on React!`
+Thank you for joining this presentation on React!`,
 ];
 
 export const WithSearch: Story = {
@@ -174,7 +174,7 @@ Try searching for common terms like:
 - "hooks" (specific to certain slides)
 - "performance" (focused topic)
 - "TypeScript" (single slide match)`,
-      ...searchableSlides
+      ...searchableSlides,
     ],
     showNavigation: true,
     showSlideCounter: true,
@@ -190,7 +190,9 @@ export const LongPresentation: Story = {
 This presentation has many slides to test search across large content.
 
 Press **Cmd/Ctrl + F** to search across all ${20} slides.`,
-      ...Array.from({ length: 19 }, (_, i) => `# Slide ${i + 2}
+      ...Array.from(
+        { length: 19 },
+        (_, i) => `# Slide ${i + 2}
 
 ## Content for slide ${i + 2}
 
@@ -208,7 +210,8 @@ console.log('This is slide ' + slideNumber);
 \`\`\`
 
 More text to make the slide longer and provide more search targets.
-The quick brown fox jumps over the lazy dog.`)
+The quick brown fox jumps over the lazy dog.`,
+      ),
     ],
     showNavigation: true,
     showSlideCounter: true,
@@ -233,7 +236,7 @@ The search bar will show "No results" when nothing matches.`,
 
 This slide has different content to search through.
 
-But it won't match the terms suggested in the first slide.`
+But it won't match the terms suggested in the first slide.`,
     ],
     showNavigation: true,
     showSlideCounter: true,

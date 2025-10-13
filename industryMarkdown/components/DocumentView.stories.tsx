@@ -111,7 +111,7 @@ function App() {
   return <DocumentView content={markdownContent} theme={defaultTheme} />;
 }
 \`\`\``,
-  
+
   `# Section 2: Configuration
 
 This section covers configuration options and customization.
@@ -135,7 +135,7 @@ const customTheme = {
 - **maxWidth**: Control the maximum width of the content
 - **padding**: Adjust the spacing around content
 - **showSectionHeaders**: Toggle section headers in segmented view`,
-  
+
   `# Section 3: Advanced Features
 
 Explore advanced features and capabilities.
@@ -462,12 +462,14 @@ export const TransparentBackground: Story = {
   decorators: [
     Story => (
       <ThemeProvider>
-        <div style={{
-          height: '100vh',
-          width: '100%',
-          background: 'linear-gradient(to right, #74ebd5, #acb6e5)',
-          padding: '20px'
-        }}>
+        <div
+          style={{
+            height: '100vh',
+            width: '100%',
+            background: 'linear-gradient(to right, #74ebd5, #acb6e5)',
+            padding: '20px',
+          }}
+        >
           <Story />
         </div>
       </ThemeProvider>

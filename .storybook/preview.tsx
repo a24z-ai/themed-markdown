@@ -6,7 +6,7 @@ import '@a24z/panels/dist/style.css';
 
 // Dynamically import mermaid for Storybook
 if (typeof window !== 'undefined') {
-  import('mermaid').then((mermaidModule) => {
+  import('mermaid').then(mermaidModule => {
     (window as Window & { mermaid?: typeof mermaidModule.default }).mermaid = mermaidModule.default;
   });
 }
@@ -35,7 +35,7 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story) => {
+    Story => {
       return (
         <ThemeProvider theme={theme}>
           <Story />

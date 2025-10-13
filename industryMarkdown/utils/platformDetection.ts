@@ -6,21 +6,14 @@
  * Detects if the code is running in a React Native environment
  */
 export function isReactNative(): boolean {
-  return (
-    typeof navigator !== 'undefined' &&
-    navigator.product === 'ReactNative'
-  );
+  return typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
 }
 
 /**
  * Detects if the code is running in a web browser environment
  */
 export function isWeb(): boolean {
-  return (
-    typeof window !== 'undefined' &&
-    typeof document !== 'undefined' &&
-    !isReactNative()
-  );
+  return typeof window !== 'undefined' && typeof document !== 'undefined' && !isReactNative();
 }
 
 /**
@@ -39,8 +32,7 @@ export function hasReactDOMSupport(): boolean {
   try {
     // Try to import ReactDOM to check if it's available
     // This is a runtime check that won't fail in React Native
-    return typeof document !== 'undefined' &&
-           typeof document.body !== 'undefined';
+    return typeof document !== 'undefined' && typeof document.body !== 'undefined';
   } catch {
     return false;
   }

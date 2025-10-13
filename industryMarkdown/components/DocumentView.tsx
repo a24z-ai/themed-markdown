@@ -26,7 +26,10 @@ export interface DocumentViewProps {
   enableHtmlPopout?: boolean;
   enableKeyboardScrolling?: boolean;
   onLinkClick?: (href: string, event?: MouseEvent) => void;
-  handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
+  handleRunBashCommand?: (
+    command: string,
+    options?: BashCommandOptions,
+  ) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
   repositoryInfo?: RepositoryInfo;
   fontSizeScale?: number;

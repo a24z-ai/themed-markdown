@@ -1,4 +1,3 @@
-import { Theme } from '@a24z/industry-theme';
 import { Pencil, Save, X } from 'lucide-react';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
@@ -65,26 +64,29 @@ export const IndustryEditableMarkdownSlide: React.FC<IndustryEditableMarkdownSli
     setIsEditing(false);
   }, [content]);
 
-  const handleSave = useCallback(async (exitEditMode = true) => {
-    if (onContentChange) {
-      onContentChange(editContent);
-    }
-
-    if (onSave) {
-      setIsSaving(true);
-      try {
-        await onSave(editContent);
-      } catch (error) {
-        console.error('Failed to save:', error);
-      } finally {
-        setIsSaving(false);
+  const handleSave = useCallback(
+    async (exitEditMode = true) => {
+      if (onContentChange) {
+        onContentChange(editContent);
       }
-    }
 
-    if (exitEditMode) {
-      setIsEditing(false);
-    }
-  }, [editContent, onContentChange, onSave]);
+      if (onSave) {
+        setIsSaving(true);
+        try {
+          await onSave(editContent);
+        } catch (error) {
+          console.error('Failed to save:', error);
+        } finally {
+          setIsSaving(false);
+        }
+      }
+
+      if (exitEditMode) {
+        setIsEditing(false);
+      }
+    },
+    [editContent, onContentChange, onSave],
+  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {

@@ -8,7 +8,7 @@ const meta: Meta<typeof IndustryZoomableMermaidDiagram> = {
   title: 'IndustryMarkdown/FullPageMermaid',
   component: IndustryZoomableMermaidDiagram,
   decorators: [
-    (Story) => (
+    Story => (
       <ThemeProvider theme={defaultTheme}>
         <div style={{ width: '100vw', height: '100vh', position: 'absolute', top: 0, left: 0 }}>
           <Story />

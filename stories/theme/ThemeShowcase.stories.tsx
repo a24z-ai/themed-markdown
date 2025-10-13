@@ -7,18 +7,20 @@ import {
   matrixTheme,
   regalTheme,
   slateTheme,
-  terminalTheme
+  terminalTheme,
 } from '@a24z/industry-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 
 // Interactive theme editor demo
 const InteractiveThemeEditor = () => {
-  const [selectedTheme, setSelectedTheme] = useState<'terminal' | 'regal' | 'glassmorphism' | 'slate' | 'matrix' | 'matrixMinimal'>('slate');
+  const [selectedTheme, setSelectedTheme] = useState<
+    'terminal' | 'regal' | 'glassmorphism' | 'slate' | 'matrix' | 'matrixMinimal'
+  >('slate');
   const [showValues, setShowValues] = useState(true);
-  const [sections, setSections] = useState<('colors' | 'typography' | 'spacing' | 'shadows' | 'radii')[]>([
-    'colors', 'typography', 'spacing', 'shadows', 'radii'
-  ]);
+  const [sections, setSections] = useState<
+    ('colors' | 'typography' | 'spacing' | 'shadows' | 'radii')[]
+  >(['colors', 'typography', 'spacing', 'shadows', 'radii']);
 
   const themes = {
     terminal: terminalTheme,
@@ -34,29 +36,43 @@ const InteractiveThemeEditor = () => {
   return (
     <div>
       {/* Control Panel */}
-      <div style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        padding: '20px',
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'flex',
-          gap: '20px',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-        }}>
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          padding: '20px',
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'flex',
+            gap: '20px',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
           {/* Theme Selector */}
           <div>
             <label style={{ color: '#fff', marginRight: '10px', fontSize: '14px' }}>Theme:</label>
             <select
               value={selectedTheme}
-              onChange={(e) => setSelectedTheme(e.target.value as 'terminal' | 'regal' | 'glassmorphism' | 'slate' | 'matrix' | 'matrixMinimal')}
+              onChange={e =>
+                setSelectedTheme(
+                  e.target.value as
+                    | 'terminal'
+                    | 'regal'
+                    | 'glassmorphism'
+                    | 'slate'
+                    | 'matrix'
+                    | 'matrixMinimal',
+                )
+              }
               style={{
                 padding: '8px 12px',
                 borderRadius: '4px',
@@ -81,7 +97,7 @@ const InteractiveThemeEditor = () => {
               <input
                 type="checkbox"
                 checked={showValues}
-                onChange={(e) => setShowValues(e.target.checked)}
+                onChange={e => setShowValues(e.target.checked)}
                 style={{ marginRight: '8px' }}
               />
               Show Values
@@ -95,7 +111,7 @@ const InteractiveThemeEditor = () => {
                 <input
                   type="checkbox"
                   checked={sections.includes(section)}
-                  onChange={(e) => {
+                  onChange={e => {
                     if (e.target.checked) {
                       setSections([...sections, section]);
                     } else {
@@ -122,7 +138,6 @@ const InteractiveThemeEditor = () => {
   );
 };
 
-
 // Wrapped in ThemeProvider for proper context
 const ThemedShowcase: React.FC<{ theme: Theme; title: string }> = ({ theme, title }) => (
   <ThemeProvider theme={theme}>
@@ -146,7 +161,8 @@ export const Interactive: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive theme editor with controls to explore different themes and toggle sections.',
+        story:
+          'Interactive theme editor with controls to explore different themes and toggle sections.',
       },
     },
   },
@@ -195,13 +211,7 @@ export const CompactView: Story = {
 };
 
 export const ColorsOnly: Story = {
-  render: () => (
-    <ThemeShowcase
-      theme={regalTheme}
-      title="Colors Only View"
-      sections={['colors']}
-    />
-  ),
+  render: () => <ThemeShowcase theme={regalTheme} title="Colors Only View" sections={['colors']} />,
   parameters: {
     docs: {
       description: {

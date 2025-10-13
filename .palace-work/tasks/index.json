@@ -8,29 +8,21 @@
       "priority": "high",
       "directoryPath": "",
       "senderId": "electron-app",
-      "tags": [
-        "feature",
-        "theming",
-        "customization"
-      ],
+      "tags": ["feature", "theming", "customization"],
       "receivedAt": 1759467987214,
       "updatedAt": 1759467987214,
       "filePath": "active/task-1759467987214-4ipbd1s2i.task.md"
     }
   },
   "byStatus": {
-    "pending": [
-      "task-1759467987214-4ipbd1s2i"
-    ],
+    "pending": ["task-1759467987214-4ipbd1s2i"],
     "acknowledged": [],
     "in_progress": [],
     "completed": [],
     "failed": []
   },
   "bySender": {
-    "electron-app": [
-      "task-1759467987214-4ipbd1s2i"
-    ]
+    "electron-app": ["task-1759467987214-4ipbd1s2i"]
   },
   "byADE": {}
 }

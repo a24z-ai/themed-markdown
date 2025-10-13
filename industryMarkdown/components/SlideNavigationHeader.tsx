@@ -1,5 +1,16 @@
 import { Theme } from '@a24z/industry-theme';
-import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Menu, X, PanelLeftClose, PanelRightClose, Columns, ExternalLink } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+  Menu,
+  X,
+  PanelLeftClose,
+  PanelRightClose,
+  Columns,
+  ExternalLink,
+} from 'lucide-react';
 import React from 'react';
 
 import { FocusLeftIcon, FocusRightIcon } from './FocusLeftIcon';
@@ -44,26 +55,27 @@ const HeaderButton: React.FC<HeaderButtonProps> = ({
         minWidth: minWidth,
         height: '36px',
         padding: padding || (minWidth ? `0 ${theme.space[2]}px` : undefined),
-        backgroundColor: isHovered && !disabled && !active
-          ? theme.colors.backgroundSecondary
-          : active
-          ? theme.colors.primary
-          : 'transparent',
+        backgroundColor:
+          isHovered && !disabled && !active
+            ? theme.colors.backgroundSecondary
+            : active
+              ? theme.colors.primary
+              : 'transparent',
         border: `1px solid ${
           isHovered && !disabled
             ? theme.colors.text
             : active
-            ? theme.colors.primary
-            : theme.colors.border
+              ? theme.colors.primary
+              : theme.colors.border
         }`,
         borderRadius: theme.radii[1],
         color: active
           ? theme.colors.background
           : disabled
-          ? theme.colors.muted
-          : isHovered
-          ? theme.colors.text
-          : theme.colors.textSecondary,
+            ? theme.colors.muted
+            : isHovered
+              ? theme.colors.text
+              : theme.colors.textSecondary,
         cursor: disabled ? 'not-allowed' : 'pointer',
         fontSize: theme.fontSizes[1],
         fontFamily: theme.fonts.body,
@@ -175,7 +187,13 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
             onClick={onCollapseLeft}
             active={collapseRight}
             theme={theme}
-            title={collapseLeft ? 'Expand left panel' : (collapseRight ? 'Show both panels' : 'Focus on left panel')}
+            title={
+              collapseLeft
+                ? 'Expand left panel'
+                : collapseRight
+                  ? 'Show both panels'
+                  : 'Focus on left panel'
+            }
           >
             {collapseLeft ? (
               <PanelLeftClose size={18} style={{ transform: 'rotate(180deg)' }} />
@@ -229,7 +247,13 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
             onClick={onCollapseRight}
             active={collapseLeft}
             theme={theme}
-            title={collapseRight ? 'Expand right panel' : (collapseLeft ? 'Show both panels' : 'Focus on right panel')}
+            title={
+              collapseRight
+                ? 'Expand right panel'
+                : collapseLeft
+                  ? 'Show both panels'
+                  : 'Focus on right panel'
+            }
           >
             {collapseRight ? (
               <PanelRightClose size={18} style={{ transform: 'rotate(180deg)' }} />
@@ -253,20 +277,12 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
         </HeaderButton>
 
         {showPopoutButton && onPopout && !isPopout && (
-          <HeaderButton
-            onClick={onPopout}
-            theme={theme}
-            title="Pop out to new window"
-          >
+          <HeaderButton onClick={onPopout} theme={theme} title="Pop out to new window">
             <ExternalLink size={18} />
           </HeaderButton>
         )}
         {isPopout && onClose && (
-          <HeaderButton
-            onClick={onClose}
-            theme={theme}
-            title="Close window"
-          >
+          <HeaderButton onClick={onClose} theme={theme} title="Close window">
             <X size={18} />
           </HeaderButton>
         )}

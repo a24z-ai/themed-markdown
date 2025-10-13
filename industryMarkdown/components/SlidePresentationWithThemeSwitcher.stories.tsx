@@ -9,29 +9,25 @@ const themeWithAllModes = addMode(
   addMode(
     addMode(
       addMode(
-        addMode(
-          defaultTheme,
-          'preview',
-          {
-            // Preview mode - Warm, rich colors with parchment background
-            text: '#361B1B',
-            background: '#F6F2EA',
-            primary: '#0D3B4A',
-            secondary: '#EFCF83',
-            accent: '#AA5725',
-            highlight: '#F6DEB9',
-            muted: '#8A837A',
-            border: '#C7B9A3',
-            surface: '#FFFFFF',
-            backgroundSecondary: '#EDE9E0',
-            backgroundTertiary: '#DBCEB8',
-            backgroundLight: '#FFFFFF',
-            backgroundHover: '#E9E4DB',
-            textSecondary: '#5C4B4B',
-            textTertiary: '#8A837A',
-            textMuted: '#B0A79A',
-          }
-        ),
+        addMode(defaultTheme, 'preview', {
+          // Preview mode - Warm, rich colors with parchment background
+          text: '#361B1B',
+          background: '#F6F2EA',
+          primary: '#0D3B4A',
+          secondary: '#EFCF83',
+          accent: '#AA5725',
+          highlight: '#F6DEB9',
+          muted: '#8A837A',
+          border: '#C7B9A3',
+          surface: '#FFFFFF',
+          backgroundSecondary: '#EDE9E0',
+          backgroundTertiary: '#DBCEB8',
+          backgroundLight: '#FFFFFF',
+          backgroundHover: '#E9E4DB',
+          textSecondary: '#5C4B4B',
+          textTertiary: '#8A837A',
+          textMuted: '#B0A79A',
+        }),
         'alexandria',
         {
           // Alexandria mode - Minimalist with OKLCH colors
@@ -50,7 +46,7 @@ const themeWithAllModes = addMode(
           textSecondary: '#8e8e8e',
           textTertiary: '#8e8e8e',
           textMuted: '#8e8e8e',
-        }
+        },
       ),
       'dark',
       {
@@ -71,7 +67,7 @@ const themeWithAllModes = addMode(
         textSecondary: '#a1a1aa',
         textTertiary: '#71717a',
         textMuted: '#52525b',
-      }
+      },
     ),
     'cyberpunk',
     {
@@ -92,7 +88,7 @@ const themeWithAllModes = addMode(
       textSecondary: '#d8b4fe',
       textTertiary: '#a78bfa',
       textMuted: '#8b5cf6',
-    }
+    },
   ),
   'high-contrast',
   {
@@ -107,7 +103,7 @@ const themeWithAllModes = addMode(
     textSecondary: '#333333',
     textTertiary: '#666666',
     textMuted: '#999999',
-  }
+  },
 );
 
 // List of available modes
@@ -134,56 +130,61 @@ interface SlidePresentationWithThemeSwitcherProps {
   containerHeight?: string;
 }
 
-const SlidePresentationWithThemeSwitcher = ({ slides, ...props }: SlidePresentationWithThemeSwitcherProps) => {
+const SlidePresentationWithThemeSwitcher = ({
+  slides,
+  ...props
+}: SlidePresentationWithThemeSwitcherProps) => {
   const { theme, mode, setMode } = useTheme();
 
   return (
     <div style={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Theme Switcher Controls */}
-      <div style={{ 
-        padding: '16px', 
-        backgroundColor: theme.colors.backgroundSecondary,
-        borderBottom: `1px solid ${theme.colors.border}`,
-        display: 'flex',
-        gap: '12px',
-        alignItems: 'center',
-        flexWrap: 'wrap'
-      }}>
-        <span style={{ 
-          color: theme.colors.text, 
-          fontWeight: 600,
-          marginRight: '8px'
-        }}>
+      <div
+        style={{
+          padding: '16px',
+          backgroundColor: theme.colors.backgroundSecondary,
+          borderBottom: `1px solid ${theme.colors.border}`,
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+        }}
+      >
+        <span
+          style={{
+            color: theme.colors.text,
+            fontWeight: 600,
+            marginRight: '8px',
+          }}
+        >
           Theme Mode:
         </span>
-        
+
         {/* Mode buttons */}
-        {availableModes.map((modeOption) => (
+        {availableModes.map(modeOption => (
           <button
             key={modeOption.value}
             onClick={() => setMode(modeOption.value)}
             style={{
               padding: '8px 16px',
-              backgroundColor: (mode || '') === modeOption.value 
-                ? theme.colors.primary 
-                : theme.colors.background,
-              color: (mode || '') === modeOption.value 
-                ? theme.colors.background 
-                : theme.colors.text,
-              border: `2px solid ${(mode || '') === modeOption.value 
-                ? theme.colors.primary 
-                : theme.colors.border}`,
+              backgroundColor:
+                (mode || '') === modeOption.value ? theme.colors.primary : theme.colors.background,
+              color:
+                (mode || '') === modeOption.value ? theme.colors.background : theme.colors.text,
+              border: `2px solid ${
+                (mode || '') === modeOption.value ? theme.colors.primary : theme.colors.border
+              }`,
               borderRadius: '6px',
               cursor: 'pointer',
               fontWeight: (mode || '') === modeOption.value ? 600 : 400,
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               if ((mode || '') !== modeOption.value) {
                 e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
               }
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               if ((mode || '') !== modeOption.value) {
                 e.currentTarget.style.backgroundColor = theme.colors.background;
               }
@@ -192,17 +193,19 @@ const SlidePresentationWithThemeSwitcher = ({ slides, ...props }: SlidePresentat
             {modeOption.label}
           </button>
         ))}
-        
+
         {/* Current mode info */}
-        <div style={{ 
-          marginLeft: 'auto',
-          fontSize: '14px',
-          color: theme.colors.textSecondary
-        }}>
+        <div
+          style={{
+            marginLeft: 'auto',
+            fontSize: '14px',
+            color: theme.colors.textSecondary,
+          }}
+        >
           Current: <strong>{mode || 'default'}</strong>
         </div>
       </div>
-      
+
       {/* Slide Presentation */}
       <div style={{ flex: 1, overflow: 'hidden' }}>
         <SlidePresentation slides={slides} {...props} theme={theme} />
@@ -427,7 +430,7 @@ type ThemeMode = 'light' | 'dark';
 
 ---
 
-*Switch between themes using the controls above to see how this presentation adapts!*`
+*Switch between themes using the controls above to see how this presentation adapts!*`,
 ];
 
 export const ThemeSwitcherDemo: Story = {
@@ -456,7 +459,7 @@ This story shows the theme switcher with minimal navigation controls.
 - Clean, focused presentation
 
 Try switching themes to see how the minimal layout adapts!`,
-      
+
       `# Second Slide
 
 Content adapts to the selected theme while maintaining readability.

@@ -44,7 +44,6 @@ export function IndustryMermaidModal({
     return null;
   }
 
-
   const modalContent = (
     <div
       onClick={handleBackdropClick}
@@ -54,7 +53,7 @@ export function IndustryMermaidModal({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.9)',  // Darker backdrop overlay
+        backgroundColor: 'rgba(0, 0, 0, 0.9)', // Darker backdrop overlay
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -67,11 +66,11 @@ export function IndustryMermaidModal({
         onClick={e => e.stopPropagation()}
         style={{
           position: 'relative',
-          backgroundColor: theme.colors.background,  // Keep theme background
+          backgroundColor: theme.colors.background, // Keep theme background
           borderRadius: theme.radii[3],
-          padding: 0,  // No padding to maximize diagram space
+          padding: 0, // No padding to maximize diagram space
           width: '95vw',
-          height: '95vh',  // Use more screen space
+          height: '95vh', // Use more screen space
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -79,7 +78,7 @@ export function IndustryMermaidModal({
         }}
       >
         <button
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             onClose();
           }}
@@ -87,7 +86,7 @@ export function IndustryMermaidModal({
             position: 'absolute',
             top: theme.space[2],
             right: theme.space[2],
-            zIndex: 100,  // Ensure button is above diagram
+            zIndex: 100, // Ensure button is above diagram
             background: theme.colors.background,
             border: `1px solid ${theme.colors.border}`,
             fontSize: theme.fontSizes[4],
@@ -115,13 +114,15 @@ export function IndustryMermaidModal({
         >
           ×
         </button>
-        <div style={{
-          flex: 1,
-          overflow: 'hidden',
-          position: 'relative',
-          backgroundColor: theme.colors.background,
-          padding: `${theme.space[5]}px ${theme.space[2]}px ${theme.space[2]}px ${theme.space[2]}px`  // Add top padding to avoid X button
-        }}>
+        <div
+          style={{
+            flex: 1,
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: theme.colors.background,
+            padding: `${theme.space[5]}px ${theme.space[2]}px ${theme.space[2]}px ${theme.space[2]}px`, // Add top padding to avoid X button
+          }}
+        >
           <IndustryZoomableMermaidDiagram
             id="mermaid-modal-diagram"
             code={mermaidCode}

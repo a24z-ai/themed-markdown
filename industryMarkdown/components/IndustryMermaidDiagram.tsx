@@ -123,9 +123,14 @@ export function IndustryMermaidDiagram({
         // Configure mermaid with theme colors
         // Create a slightly contrasted background for better visibility
         // Use backgroundSecondary for consistency between modal and inline views
-        const diagramBackground = isModalMode ? 'transparent' : theme.colors.backgroundSecondary || theme.colors.background;
-        const nodeBackground = theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || theme.colors.primary + '22';
-        
+        const diagramBackground = isModalMode
+          ? 'transparent'
+          : theme.colors.backgroundSecondary || theme.colors.background;
+        const nodeBackground =
+          theme.colors.backgroundTertiary ||
+          theme.colors.backgroundSecondary ||
+          theme.colors.primary + '22';
+
         mermaid.initialize({
           startOnLoad: false,
           theme: 'base',
@@ -147,7 +152,10 @@ export function IndustryMermaidDiagram({
             altBackground: theme.colors.muted,
 
             // Cluster/Subgraph specific - ensure good contrast
-            clusterBkg: theme.colors.muted || theme.colors.backgroundTertiary || theme.colors.backgroundSecondary,
+            clusterBkg:
+              theme.colors.muted ||
+              theme.colors.backgroundTertiary ||
+              theme.colors.backgroundSecondary,
             clusterBorder: theme.colors.border,
             titleColor: theme.colors.text,
 
@@ -189,7 +197,6 @@ export function IndustryMermaidDiagram({
         // Override mermaid's max-width constraint to allow full container usage
         const svgElement = containerElement.querySelector('svg');
         if (svgElement) {
-
           // Remove mermaid's default constraints
           svgElement.style.maxWidth = 'none';
           svgElement.style.maxHeight = 'none';
@@ -202,7 +209,7 @@ export function IndustryMermaidDiagram({
           if (!svgElement.getAttribute('preserveAspectRatio')) {
             svgElement.setAttribute('preserveAspectRatio', 'xMidYMid meet');
           }
-          
+
           // Smart sizing: ensure diagrams initially fit within height limit
           // Note: Zoom is applied separately in its own useEffect to avoid re-rendering
           if (isFullSlide) {
@@ -287,52 +294,60 @@ ${errorDetails.code}
     }
   };
 
-  const containerStyle: React.CSSProperties = isFullSlide ? {
-    // Full-slide mode: take up entire slide area
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    border: 'none',
-    borderRadius: 0,
-    padding: theme.space[4],
-    margin: 0,
-    overflow: 'auto',
-  } : isModalMode ? {
-    // Modal mode: fill available space
-    position: 'relative',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    border: 'none',
-    borderRadius: 0,
-    padding: 0,
-    margin: 0,
-    overflow: 'visible',
-  } : {
-    // Regular mode: apply constraints
-    position: 'relative',
-    maxHeight: '400px', // Smart height limit - diagrams initially fit within 400px
-    display: 'block',
-    backgroundColor: hasRendered ? theme.colors.backgroundSecondary : theme.colors.backgroundSecondary,
-    border: hasRendered ? `1px solid ${theme.colors.border}` : `1px solid ${theme.colors.border}`,
-    borderRadius: theme.radii[2],
-    padding: hasRendered ? theme.space[3] : theme.space[4],
-    margin: `${theme.space[4]}px 0`,
-    // Enable horizontal scrolling for wide diagrams, vertical for tall ones
-    overflowX: hasRendered ? 'auto' : 'visible',
-    overflowY: hasRendered ? 'auto' : 'visible',
-  };
+  const containerStyle: React.CSSProperties = isFullSlide
+    ? {
+        // Full-slide mode: take up entire slide area
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+        border: 'none',
+        borderRadius: 0,
+        padding: theme.space[4],
+        margin: 0,
+        overflow: 'auto',
+      }
+    : isModalMode
+      ? {
+          // Modal mode: fill available space
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'transparent',
+          border: 'none',
+          borderRadius: 0,
+          padding: 0,
+          margin: 0,
+          overflow: 'visible',
+        }
+      : {
+          // Regular mode: apply constraints
+          position: 'relative',
+          maxHeight: '400px', // Smart height limit - diagrams initially fit within 400px
+          display: 'block',
+          backgroundColor: hasRendered
+            ? theme.colors.backgroundSecondary
+            : theme.colors.backgroundSecondary,
+          border: hasRendered
+            ? `1px solid ${theme.colors.border}`
+            : `1px solid ${theme.colors.border}`,
+          borderRadius: theme.radii[2],
+          padding: hasRendered ? theme.space[3] : theme.space[4],
+          margin: `${theme.space[4]}px 0`,
+          // Enable horizontal scrolling for wide diagrams, vertical for tall ones
+          overflowX: hasRendered ? 'auto' : 'visible',
+          overflowY: hasRendered ? 'auto' : 'visible',
+        };
 
   const placeholderStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -367,7 +382,14 @@ ${errorDetails.code}
               margin: '0 auto',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: theme.space[2] }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                marginBottom: theme.space[2],
+              }}
+            >
               <div style={{ fontWeight: theme.fontWeights.bold }}>
                 Failed to render Mermaid diagram
               </div>
@@ -375,7 +397,9 @@ ${errorDetails.code}
                 onClick={handleCopyError}
                 style={{
                   padding: theme.space[1],
-                  backgroundColor: copiedError ? theme.colors.success : theme.colors.backgroundSecondary,
+                  backgroundColor: copiedError
+                    ? theme.colors.success
+                    : theme.colors.backgroundSecondary,
                   border: `1px solid ${copiedError ? theme.colors.success : theme.colors.border}`,
                   borderRadius: theme.radii[1],
                   color: copiedError ? theme.colors.background : theme.colors.text,
@@ -402,7 +426,14 @@ ${errorDetails.code}
                 )}
               </button>
             </div>
-            <div style={{ fontSize: theme.fontSizes[0], opacity: 0.8, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+            <div
+              style={{
+                fontSize: theme.fontSizes[0],
+                opacity: 0.8,
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+              }}
+            >
               {errorDetails.message}
             </div>
           </div>
@@ -415,16 +446,18 @@ ${errorDetails.code}
     <div style={{ position: 'relative', width: '100%' }}>
       <div style={{ position: 'relative', width: '100%' }}>
         {hasRendered && !isModalMode && onExpandClick && !errorDetails && (
-          <div style={{
-            position: 'absolute',
-            top: theme.space[2],
-            right: theme.space[2],
-            zIndex: 10,
-            display: 'flex',
-            gap: theme.space[1],
-          }}>
+          <div
+            style={{
+              position: 'absolute',
+              top: theme.space[2],
+              right: theme.space[2],
+              zIndex: 10,
+              display: 'flex',
+              gap: theme.space[1],
+            }}
+          >
             <button
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 onExpandClick();
               }}
@@ -451,7 +484,9 @@ ${errorDetails.code}
           {!hasRendered && (
             <div style={placeholderStyle}>
               <div>📊 Mermaid Diagram</div>
-              <div style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}>
+              <div
+                style={{ fontSize: theme.fontSizes[1], marginTop: theme.space[2], opacity: 0.7 }}
+              >
                 {isIntersecting ? 'Loading...' : 'Scroll to view'}
               </div>
             </div>
@@ -468,7 +503,14 @@ ${errorDetails.code}
                 fontSize: theme.fontSizes[1],
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: theme.space[2] }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: theme.space[2],
+                }}
+              >
                 <div style={{ fontWeight: theme.fontWeights.bold }}>
                   Failed to render Mermaid diagram
                 </div>
@@ -476,7 +518,9 @@ ${errorDetails.code}
                   onClick={handleCopyError}
                   style={{
                     padding: theme.space[1],
-                    backgroundColor: copiedError ? theme.colors.success : theme.colors.backgroundSecondary,
+                    backgroundColor: copiedError
+                      ? theme.colors.success
+                      : theme.colors.backgroundSecondary,
                     border: `1px solid ${copiedError ? theme.colors.success : theme.colors.border}`,
                     borderRadius: theme.radii[1],
                     color: copiedError ? theme.colors.background : theme.colors.text,
@@ -503,7 +547,14 @@ ${errorDetails.code}
                   )}
                 </button>
               </div>
-              <div style={{ fontSize: theme.fontSizes[0], opacity: 0.8, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+              <div
+                style={{
+                  fontSize: theme.fontSizes[0],
+                  opacity: 0.8,
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                }}
+              >
                 {errorDetails.message}
               </div>
             </div>

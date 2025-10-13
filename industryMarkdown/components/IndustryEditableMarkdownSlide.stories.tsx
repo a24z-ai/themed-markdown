@@ -80,7 +80,7 @@ export const Default: Story = {
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1000,
-    onContentChange: (newContent) => {
+    onContentChange: newContent => {
       console.log('Content changed:', newContent);
     },
   },
@@ -113,7 +113,7 @@ You'll see "Saving..." appear briefly when auto-save triggers, but you'll remain
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
-    onSave: async (content) => {
+    onSave: async content => {
       console.log('Auto-saving content...');
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -181,7 +181,7 @@ This slide has auto-save disabled. You must manually save your changes.
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0,
-    onContentChange: (newContent) => {
+    onContentChange: newContent => {
       console.log('Content changed (not auto-saved):', newContent);
     },
   },
@@ -200,27 +200,23 @@ This example demonstrates state management with the editable slide.
 - Last saved: Never
 
 Try editing and saving to see the counters update!`);
-  
+
   const [saveCount, setSaveCount] = useState(0);
 
   const handleSave = async (newContent: string) => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const count = saveCount + 1;
     const time = new Date().toLocaleTimeString();
-    
+
     setSaveCount(count);
-    
+
     // Update the content with new metadata
-    const updatedContent = newContent.replace(
-      /- Save count: \d+/,
-      `- Save count: ${count}`
-    ).replace(
-      /- Last saved: .*/,
-      `- Last saved: ${time}`
-    );
-    
+    const updatedContent = newContent
+      .replace(/- Save count: \d+/, `- Save count: ${count}`)
+      .replace(/- Last saved: .*/, `- Last saved: ${time}`);
+
     setContent(updatedContent);
     console.log(`Save #${count} at ${time}`);
   };
@@ -345,15 +341,15 @@ Try editing and saving multiple times to see both success and failure cases.`,
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0, // Manual save only for testing
-    onSave: async (content) => {
+    onSave: async content => {
       // Simulate alternating success/failure
       const shouldFail = Math.random() > 0.5;
-      
+
       if (shouldFail) {
         console.error('Save failed (simulated error)');
         throw new Error('Failed to save content to server');
       }
-      
+
       console.log('Save successful:', content);
     },
   },
@@ -402,13 +398,13 @@ Below is a **separate** editable Mermaid diagram with its own **Edit Diagram** b
           showEditButton={true}
           autoSaveDelay={2000}
           onContentChange={setMarkdownContent}
-          onSave={async (content) => {
+          onSave={async content => {
             console.log('Markdown slide saved:', content);
             await new Promise(resolve => setTimeout(resolve, 300));
           }}
         />
       </div>
-      
+
       {/* Individual Editable Mermaid Diagram */}
       <div style={{ height: '400px', border: '2px solid #e0e0e0', borderRadius: '8px' }}>
         <IndustryEditableMermaidDiagram
@@ -419,7 +415,7 @@ Below is a **separate** editable Mermaid diagram with its own **Edit Diagram** b
           showEditButton={true}
           autoSaveDelay={2000}
           onCodeChange={setDiagramCode}
-          onSave={async (code) => {
+          onSave={async code => {
             console.log('Mermaid diagram saved:', code);
             await new Promise(resolve => setTimeout(resolve, 300));
           }}

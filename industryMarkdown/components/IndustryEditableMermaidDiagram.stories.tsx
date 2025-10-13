@@ -103,7 +103,7 @@ export const Default: Story = {
     editable: true,
     showEditButton: true,
     autoSaveDelay: 1000,
-    onCodeChange: (newCode) => {
+    onCodeChange: newCode => {
       console.log('Code changed:', newCode);
     },
   },
@@ -122,7 +122,7 @@ export const WithAutoSave: Story = {
     editable: true,
     showEditButton: true,
     autoSaveDelay: 2000,
-    onSave: async (code) => {
+    onSave: async code => {
       console.log('Auto-saving Mermaid code...');
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -166,7 +166,7 @@ export const NoAutoSave: Story = {
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0,
-    onCodeChange: (newCode) => {
+    onCodeChange: newCode => {
       console.log('Code changed (not auto-saved):', newCode);
     },
   },
@@ -178,7 +178,7 @@ const InteractiveExample = () => {
     A[Interactive Example] --> B[Edit Count: 0]
     B --> C[Save Count: 0]
     C --> D[Last Saved: Never]`);
-  
+
   const [saveCount, setSaveCount] = useState(0);
   const [editCount, setEditCount] = useState(0);
   const [lastSaved, setLastSaved] = useState<string>('Never');
@@ -190,25 +190,25 @@ const InteractiveExample = () => {
       .replace(/Edit Count: \d+/, `Edit Count: ${editCount + 1}`)
       .replace(/Save Count: \d+/, `Save Count: ${saveCount}`)
       .replace(/Last Saved: .*/, `Last Saved: ${lastSaved}`);
-    
+
     setCode(updatedCode);
   };
 
   const handleSave = async (newCode: string) => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const count = saveCount + 1;
     const time = new Date().toLocaleTimeString();
-    
+
     setSaveCount(count);
     setLastSaved(time);
-    
+
     // Update the code with new metadata
     const updatedCode = newCode
       .replace(/Save Count: \d+/, `Save Count: ${count}`)
       .replace(/Last Saved: .*/, `Last Saved: ${time}`);
-    
+
     setCode(updatedCode);
     console.log(`Save #${count} at ${time}`);
   };
@@ -302,15 +302,15 @@ export const ErrorHandling: Story = {
     editable: true,
     showEditButton: true,
     autoSaveDelay: 0, // Manual save only for testing
-    onSave: async (code) => {
+    onSave: async code => {
       // Simulate alternating success/failure
       const shouldFail = Math.random() > 0.5;
-      
+
       if (shouldFail) {
         console.error('Save failed (simulated error)');
         throw new Error('Failed to save Mermaid diagram to server');
       }
-      
+
       console.log('Save successful:', code);
     },
   },

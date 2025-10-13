@@ -75,13 +75,10 @@ export type {
 // Theme system exports
 export type { Theme } from '@a24z/industry-theme';
 export { theme as defaultTheme } from '@a24z/industry-theme';
-export {
-  ThemeProvider,
-  withTheme
-} from '@a24z/industry-theme';
+export { ThemeProvider, withTheme } from '@a24z/industry-theme';
 export {
   scaleThemeFonts,
   increaseFontScale,
   decreaseFontScale,
-  resetFontScale
+  resetFontScale,
 } from '@a24z/industry-theme';

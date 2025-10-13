@@ -36,7 +36,10 @@ export interface SlidePresentationBookProps {
   enableHtmlPopout?: boolean;
   enableKeyboardScrolling?: boolean;
   onLinkClick?: (href: string, event?: MouseEvent) => void;
-  handleRunBashCommand?: (command: string, options?: BashCommandOptions) => Promise<BashCommandResult>;
+  handleRunBashCommand?: (
+    command: string,
+    options?: BashCommandOptions,
+  ) => Promise<BashCommandResult>;
   handlePromptCopy?: (filledPrompt: string) => void;
   fontSizeScale?: number;
   theme: Theme;
@@ -66,7 +69,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
   theme,
 }) => {
   // Ensure initial slide is even in book mode for proper page pairing
-  const adjustedInitialSlide = viewMode === 'book' ? Math.floor(initialSlide / 2) * 2 : initialSlide;
+  const adjustedInitialSlide =
+    viewMode === 'book' ? Math.floor(initialSlide / 2) * 2 : initialSlide;
   const [currentSlide, setCurrentSlide] = useState(adjustedInitialSlide);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showTOC, setShowTOC] = useState(false);
@@ -131,7 +135,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
       if (currentSearchResult === -1) {
         newIndex = resultIndex < 0 ? searchResults.length - 1 : 0;
       } else {
-        newIndex = ((resultIndex % searchResults.length) + searchResults.length) % searchResults.length;
+        newIndex =
+          ((resultIndex % searchResults.length) + searchResults.length) % searchResults.length;
       }
 
       setCurrentSearchResult(newIndex);
@@ -141,7 +146,7 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
         navigateToSlide(targetSlide);
       }
     },
-    [searchResults, navigateToSlide, currentSlide, currentSearchResult]
+    [searchResults, navigateToSlide, currentSlide, currentSearchResult],
   );
 
   const closeSearch = useCallback(() => {
@@ -209,7 +214,10 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
-        if (showSearch && (event.key === 'Tab' || event.key === 'Enter' || event.key === 'Escape')) {
+        if (
+          showSearch &&
+          (event.key === 'Tab' || event.key === 'Enter' || event.key === 'Escape')
+        ) {
           // Continue to handle these keys
         } else {
           return;
@@ -322,7 +330,19 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToPreviousSlide, goToNextSlide, navigateToSlide, slides.length, toggleFullscreen, showTOC, showSearch, closeSearch, navigateToSearchResult, currentSearchResult, searchResults]);
+  }, [
+    goToPreviousSlide,
+    goToNextSlide,
+    navigateToSlide,
+    slides.length,
+    toggleFullscreen,
+    showTOC,
+    showSearch,
+    closeSearch,
+    navigateToSearchResult,
+    currentSearchResult,
+    searchResults,
+  ]);
 
   // Update state when slides change externally
   useEffect(() => {
@@ -436,9 +456,10 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
           {/* TOC Items */}
           <div style={{ padding: theme.space[2] }}>
             {slideTitles.map((title, index) => {
-              const isCurrentPage = viewMode === 'book'
-                ? (index === leftSlideIndex || index === rightSlideIndex)
-                : index === currentSlide;
+              const isCurrentPage =
+                viewMode === 'book'
+                  ? index === leftSlideIndex || index === rightSlideIndex
+                  : index === currentSlide;
 
               return (
                 <button
@@ -503,7 +524,9 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                         transform: 'translateY(-50%)',
                         width: '3px',
                         height: '60%',
-                        backgroundColor: isCurrentPage ? theme.colors.background : theme.colors.primary,
+                        backgroundColor: isCurrentPage
+                          ? theme.colors.background
+                          : theme.colors.primary,
                         borderRadius: '0 2px 2px 0',
                       }}
                     />
@@ -575,28 +598,28 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                         bottom: 0,
                       }}
                     >
-                    <IndustryMarkdownSlide
-                      content={slides[leftSlideIndex] || ''}
-                      slideIdPrefix={`${slideIdPrefix}-${leftSlideIndex}`}
-                      slideIndex={leftSlideIndex}
-                      isVisible={true}
-                      theme={theme}
-                      onCheckboxChange={onCheckboxChange}
-                      enableHtmlPopout={enableHtmlPopout}
-                      enableKeyboardScrolling={enableKeyboardScrolling}
-                      onLinkClick={onLinkClick}
-                      handleRunBashCommand={handleRunBashCommand}
-                      handlePromptCopy={handlePromptCopy}
-                      fontSizeScale={fontSizeScale}
-                      searchQuery={showSearch ? searchQuery : undefined}
-                      transparentBackground={true}
-                      additionalPadding={{
-                        left: `${theme.space[4]}px`,
-                        right: `${theme.space[2]}px`,
-                        top: `${theme.space[3]}px`,
-                      }}
-                      disableScroll={false}
-                    />
+                      <IndustryMarkdownSlide
+                        content={slides[leftSlideIndex] || ''}
+                        slideIdPrefix={`${slideIdPrefix}-${leftSlideIndex}`}
+                        slideIndex={leftSlideIndex}
+                        isVisible={true}
+                        theme={theme}
+                        onCheckboxChange={onCheckboxChange}
+                        enableHtmlPopout={enableHtmlPopout}
+                        enableKeyboardScrolling={enableKeyboardScrolling}
+                        onLinkClick={onLinkClick}
+                        handleRunBashCommand={handleRunBashCommand}
+                        handlePromptCopy={handlePromptCopy}
+                        fontSizeScale={fontSizeScale}
+                        searchQuery={showSearch ? searchQuery : undefined}
+                        transparentBackground={true}
+                        additionalPadding={{
+                          left: `${theme.space[4]}px`,
+                          right: `${theme.space[2]}px`,
+                          top: `${theme.space[3]}px`,
+                        }}
+                        disableScroll={false}
+                      />
                     </div>
                   </div>
                 }
@@ -626,28 +649,28 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                           bottom: 0,
                         }}
                       >
-                      <IndustryMarkdownSlide
-                        content={slides[rightSlideIndex] || ''}
-                        slideIdPrefix={`${slideIdPrefix}-${rightSlideIndex}`}
-                        slideIndex={rightSlideIndex}
-                        isVisible={true}
-                        theme={theme}
-                        onCheckboxChange={onCheckboxChange}
-                        enableHtmlPopout={enableHtmlPopout}
-                        enableKeyboardScrolling={enableKeyboardScrolling}
-                        onLinkClick={onLinkClick}
-                        handleRunBashCommand={handleRunBashCommand}
-                        handlePromptCopy={handlePromptCopy}
-                        fontSizeScale={fontSizeScale}
-                        searchQuery={showSearch ? searchQuery : undefined}
-                        transparentBackground={true}
-                        additionalPadding={{
-                          left: `${theme.space[2]}px`,
-                          right: `${theme.space[4]}px`,
-                          top: `${theme.space[3]}px`,
-                        }}
-                        disableScroll={false}
-                      />
+                        <IndustryMarkdownSlide
+                          content={slides[rightSlideIndex] || ''}
+                          slideIdPrefix={`${slideIdPrefix}-${rightSlideIndex}`}
+                          slideIndex={rightSlideIndex}
+                          isVisible={true}
+                          theme={theme}
+                          onCheckboxChange={onCheckboxChange}
+                          enableHtmlPopout={enableHtmlPopout}
+                          enableKeyboardScrolling={enableKeyboardScrolling}
+                          onLinkClick={onLinkClick}
+                          handleRunBashCommand={handleRunBashCommand}
+                          handlePromptCopy={handlePromptCopy}
+                          fontSizeScale={fontSizeScale}
+                          searchQuery={showSearch ? searchQuery : undefined}
+                          transparentBackground={true}
+                          additionalPadding={{
+                            left: `${theme.space[2]}px`,
+                            right: `${theme.space[4]}px`,
+                            top: `${theme.space[3]}px`,
+                          }}
+                          disableScroll={false}
+                        />
                       </div>
                     </div>
                   ) : (
@@ -696,24 +719,28 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
                   position: 'relative',
                   width: '100%',
                   // Center the single slide in book mode
-                  ...(viewMode === 'book' && slides.length === 1 ? {
-                    display: 'flex',
-                    justifyContent: 'center',
-                  } : {}),
+                  ...(viewMode === 'book' && slides.length === 1
+                    ? {
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }
+                    : {}),
                 }}
               >
                 <div
                   style={{
                     // In book mode with 1 slide, constrain width to look like a single page
-                    ...(viewMode === 'book' && slides.length === 1 ? {
-                      width: '50%',
-                      maxWidth: '800px',
-                      minWidth: '400px',
-                      height: '100%',
-                    } : {
-                      width: '100%',
-                      height: '100%',
-                    }),
+                    ...(viewMode === 'book' && slides.length === 1
+                      ? {
+                          width: '50%',
+                          maxWidth: '800px',
+                          minWidth: '400px',
+                          height: '100%',
+                        }
+                      : {
+                          width: '100%',
+                          height: '100%',
+                        }),
                   }}
                 >
                   <IndustryMarkdownSlide

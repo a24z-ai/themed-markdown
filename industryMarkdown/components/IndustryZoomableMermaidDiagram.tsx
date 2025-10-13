@@ -4,7 +4,21 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
-type AnimationType = 'linear' | 'easeOut' | 'easeInQuad' | 'easeOutQuad' | 'easeInOutQuad' | 'easeInCubic' | 'easeOutCubic' | 'easeInOutCubic' | 'easeInQuart' | 'easeOutQuart' | 'easeInOutQuart' | 'easeInQuint' | 'easeOutQuint' | 'easeInOutQuint';
+type AnimationType =
+  | 'linear'
+  | 'easeOut'
+  | 'easeInQuad'
+  | 'easeOutQuad'
+  | 'easeInOutQuad'
+  | 'easeInCubic'
+  | 'easeOutCubic'
+  | 'easeInOutCubic'
+  | 'easeInQuart'
+  | 'easeOutQuart'
+  | 'easeInOutQuart'
+  | 'easeInQuint'
+  | 'easeOutQuint'
+  | 'easeInOutQuint';
 
 interface IndustryZoomableMermaidDiagramProps {
   code: string;
@@ -19,7 +33,7 @@ export function IndustryZoomableMermaidDiagram({
   id,
   theme: themeOverride,
   fitStrategy = 'contain',
-  padding = 0.9,  // Use 90% of available space to leave some breathing room
+  padding = 0.9, // Use 90% of available space to leave some breathing room
 }: IndustryZoomableMermaidDiagramProps) {
   // Get theme from context or use override
   const theme = themeOverride ?? defaultTheme;
@@ -31,7 +45,7 @@ export function IndustryZoomableMermaidDiagram({
   const [isCalculating, setIsCalculating] = useState(true);
   const transformRef = useRef<{
     centerView: (scale?: number, animationTime?: number, animationType?: AnimationType) => void;
-    instance: { transformState: { scale: number } }
+    instance: { transformState: { scale: number } };
   } | null>(null);
 
   useEffect(() => {
@@ -160,7 +174,15 @@ export function IndustryZoomableMermaidDiagram({
   };
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative', backgroundColor: theme.colors.background }}>
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        backgroundColor: theme.colors.background,
+      }}
+    >
       <TransformWrapper
         limitToBounds={true}
         doubleClick={{ disabled: true }}
@@ -178,71 +200,71 @@ export function IndustryZoomableMermaidDiagram({
           // Store the transform instance for use in useEffect
           transformRef.current = { centerView, instance };
           return (
-          <>
-            <div
-              style={{
-                position: 'absolute',
-                top: theme.space[3],
-                right: theme.space[3],
-                zIndex: 10,
-                display: 'flex',
-                gap: theme.space[2],
-              }}
-            >
-              <button
-                onClick={() => {
-                  // Reset to initial calculated scale and center
-                  centerView(calculatedScale, 200, 'easeOut');
-                }}
-                style={buttonStyle}
-                onMouseEnter={handleButtonHover}
-                onMouseLeave={handleButtonLeave}
-                title="Reset view"
-              >
-                ⟲
-              </button>
-              {isCalculating && (
-                <span
-                  style={{
-                    padding: `${theme.space[1]}px ${theme.space[2]}px`,
-                    fontSize: theme.fontSizes[1],
-                    color: theme.colors.textMuted,
-                    fontFamily: theme.fonts.body,
-                  }}
-                >
-                  Optimizing view...
-                </span>
-              )}
-            </div>
-            <TransformComponent
-              wrapperStyle={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: theme.colors.background,
-                overflow: 'hidden', // Contain the content
-              }}
-              contentStyle={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            <>
               <div
-                ref={diagramRef}
                 style={{
+                  position: 'absolute',
+                  top: theme.space[3],
+                  right: theme.space[3],
+                  zIndex: 10,
+                  display: 'flex',
+                  gap: theme.space[2],
+                }}
+              >
+                <button
+                  onClick={() => {
+                    // Reset to initial calculated scale and center
+                    centerView(calculatedScale, 200, 'easeOut');
+                  }}
+                  style={buttonStyle}
+                  onMouseEnter={handleButtonHover}
+                  onMouseLeave={handleButtonLeave}
+                  title="Reset view"
+                >
+                  ⟲
+                </button>
+                {isCalculating && (
+                  <span
+                    style={{
+                      padding: `${theme.space[1]}px ${theme.space[2]}px`,
+                      fontSize: theme.fontSizes[1],
+                      color: theme.colors.textMuted,
+                      fontFamily: theme.fonts.body,
+                    }}
+                  >
+                    Optimizing view...
+                  </span>
+                )}
+              </div>
+              <TransformComponent
+                wrapperStyle={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: theme.colors.background,
+                  overflow: 'hidden', // Contain the content
+                }}
+                contentStyle={{
+                  width: '100%',
+                  height: '100%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '100%',
-                  height: '100%',
                 }}
               >
-                <IndustryMermaidDiagram code={code} id={id} isModalMode={true} theme={theme} />
-              </div>
-            </TransformComponent>
-          </>
+                <div
+                  ref={diagramRef}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                >
+                  <IndustryMermaidDiagram code={code} id={id} isModalMode={true} theme={theme} />
+                </div>
+              </TransformComponent>
+            </>
           );
         }}
       </TransformWrapper>

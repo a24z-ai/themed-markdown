@@ -6,7 +6,11 @@ interface FocusIconProps {
   style?: React.CSSProperties;
 }
 
-export const FocusLeftIcon: React.FC<FocusIconProps> = ({ size = 18, color = 'currentColor', style }) => (
+export const FocusLeftIcon: React.FC<FocusIconProps> = ({
+  size = 18,
+  color = 'currentColor',
+  style,
+}) => (
   <svg
     width={size}
     height={size}
@@ -25,7 +29,11 @@ export const FocusLeftIcon: React.FC<FocusIconProps> = ({ size = 18, color = 'cu
   </svg>
 );
 
-export const FocusRightIcon: React.FC<FocusIconProps> = ({ size = 18, color = 'currentColor', style }) => (
+export const FocusRightIcon: React.FC<FocusIconProps> = ({
+  size = 18,
+  color = 'currentColor',
+  style,
+}) => (
   <svg
     width={size}
     height={size}

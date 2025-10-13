@@ -1,7 +1,6 @@
 import { Theme } from '@a24z/industry-theme';
 import { Pencil, Save, X } from 'lucide-react';
 
-
 import { IndustryMermaidDiagram } from './IndustryMermaidDiagram';
 
 export interface IndustryEditableMermaidDiagramProps {
@@ -76,26 +75,29 @@ export const IndustryEditableMermaidDiagram: React.FC<IndustryEditableMermaidDia
     setIsEditing(false);
   }, [code]);
 
-  const handleSave = useCallback(async (exitEditMode = true) => {
-    if (onCodeChange) {
-      onCodeChange(editCode);
-    }
-
-    if (onSave) {
-      setIsSaving(true);
-      try {
-        await onSave(editCode);
-      } catch (error) {
-        console.error('Failed to save:', error);
-      } finally {
-        setIsSaving(false);
+  const handleSave = useCallback(
+    async (exitEditMode = true) => {
+      if (onCodeChange) {
+        onCodeChange(editCode);
       }
-    }
 
-    if (exitEditMode) {
-      setIsEditing(false);
-    }
-  }, [editCode, onCodeChange, onSave]);
+      if (onSave) {
+        setIsSaving(true);
+        try {
+          await onSave(editCode);
+        } catch (error) {
+          console.error('Failed to save:', error);
+        } finally {
+          setIsSaving(false);
+        }
+      }
+
+      if (exitEditMode) {
+        setIsEditing(false);
+      }
+    },
+    [editCode, onCodeChange, onSave],
+  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
