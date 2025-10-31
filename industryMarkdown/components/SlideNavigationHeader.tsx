@@ -100,6 +100,7 @@ export interface SlideNavigationHeaderProps {
   isPopout?: boolean;
   theme: Theme;
   viewMode?: 'single' | 'book';
+  tocDisplayMode?: 'overlay' | 'sidebar';
   collapseLeft?: boolean;
   collapseRight?: boolean;
   onPrevious: () => void;
@@ -125,6 +126,7 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
   isPopout = false,
   theme,
   viewMode = 'single',
+  tocDisplayMode = 'overlay',
   collapseLeft = false,
   collapseRight = false,
   onPrevious,
@@ -165,7 +167,15 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
           onClick={onToggleTOC}
           active={showTOC}
           theme={theme}
-          title={showTOC ? 'Close table of contents (Esc)' : 'Open table of contents (T)'}
+          title={
+            tocDisplayMode === 'sidebar'
+              ? showTOC
+                ? 'Hide table of contents (T)'
+                : 'Show table of contents (T)'
+              : showTOC
+                ? 'Close table of contents (Esc)'
+                : 'Open table of contents (T)'
+          }
         >
           {showTOC ? <X size={18} /> : <Menu size={18} />}
         </HeaderButton>

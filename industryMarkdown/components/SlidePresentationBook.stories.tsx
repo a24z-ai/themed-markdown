@@ -453,3 +453,71 @@ export const BookModePopoutMode: Story = {
     },
   },
 };
+
+export const SingleModeWithSidebarTOCLeft: Story = {
+  args: {
+    slides: presentationSlides,
+    viewMode: 'single',
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    // tocDisplayMode defaults to 'sidebar' in single view
+    tocSidebarPosition: 'left',
+    slideIdPrefix: 'single-sidebar-toc-left',
+  },
+};
+
+export const SingleModeWithSidebarTOCRight: Story = {
+  args: {
+    slides: presentationSlides,
+    viewMode: 'single',
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    // tocDisplayMode defaults to 'sidebar' in single view
+    tocSidebarPosition: 'right',
+    slideIdPrefix: 'single-sidebar-toc-right',
+  },
+};
+
+export const BookModeWithOverlayTOC: Story = {
+  args: {
+    slides: presentationSlides,
+    viewMode: 'book',
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    // tocDisplayMode defaults to 'overlay' in book view
+    slideIdPrefix: 'book-overlay-toc',
+  },
+};
+
+export const SingleModeWithSidebarClosedByDefault: Story = {
+  args: {
+    slides: presentationSlides,
+    viewMode: 'single',
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    tocSidebarPosition: 'left',
+    initialTocOpen: false,
+    slideIdPrefix: 'single-sidebar-closed',
+  },
+};
+
+export const BookModeWithOverlayOpenByDefault: Story = {
+  args: {
+    slides: presentationSlides,
+    viewMode: 'book',
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    initialTocOpen: true,
+    slideIdPrefix: 'book-overlay-open',
+  },
+};

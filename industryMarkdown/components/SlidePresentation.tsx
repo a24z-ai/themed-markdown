@@ -1,5 +1,6 @@
 import { Theme } from '@a24z/industry-theme';
 import { BashCommandOptions, BashCommandResult } from '@a24z/markdown-utils';
+import { AnimatedResizableLayout } from '@a24z/panels';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
 import { extractAllSlideTitles } from '../utils/extractSlideTitles';
@@ -24,6 +25,11 @@ export interface SlidePresentationProps {
   showPopoutButton?: boolean;
   isPopout?: boolean;
   containerHeight?: string;
+
+  // TOC options
+  tocDisplayMode?: 'overlay' | 'sidebar';
+  tocSidebarPosition?: 'left' | 'right';
+  initialTocOpen?: boolean;
 
   // Pop-out handlers
   onPopout?: () => void;
@@ -54,6 +60,9 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   showPopoutButton = false,
   isPopout = false,
   containerHeight = '100%',
+  tocDisplayMode = 'overlay',
+  tocSidebarPosition = 'left',
+  initialTocOpen,
   onPopout,
   onClose,
   slideIdPrefix = 'slide',
@@ -65,9 +74,11 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
   fontSizeScale,
   theme,
 }) => {
+  // Smart default: open by default in sidebar mode, closed in overlay mode
+  const defaultTocOpen = initialTocOpen ?? (tocDisplayMode === 'sidebar');
   const [currentSlide, setCurrentSlide] = useState(initialSlide);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showTOC, setShowTOC] = useState(false);
+  const [showTOC, setShowTOC] = useState(defaultTocOpen);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -84,11 +95,14 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
       if (slideIndex >= 0 && slideIndex < slides.length) {
         setCurrentSlide(slideIndex);
         onSlideChange?.(slideIndex);
-        // Close TOC when navigating to a slide
-        setShowTOC(false);
+        // In overlay mode, close TOC when navigating
+        // In sidebar mode, keep TOC open for easy navigation
+        if (tocDisplayMode === 'overlay') {
+          setShowTOC(false);
+        }
       }
     },
-    [slides.length, onSlideChange],
+    [slides.length, onSlideChange, tocDisplayMode],
   );
 
   // Search functionality - only rebuild when query or slides change, not currentSlide
@@ -321,6 +335,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
     closeSearch,
     navigateToSearchResult,
     currentSearchResult,
+    tocDisplayMode,
   ]);
 
   // Update state when slides change externally
@@ -353,6 +368,7 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
           showPopoutButton={showPopoutButton}
           isPopout={isPopout}
           theme={theme}
+          tocDisplayMode={tocDisplayMode}
           onPrevious={goToPreviousSlide}
           onNext={goToNextSlide}
           onToggleTOC={() => setShowTOC(prev => !prev)}
@@ -371,23 +387,495 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
           display: 'flex',
         }}
       >
-        {/* Table of Contents Sidebar */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            width: '300px',
-            backgroundColor: theme.colors.backgroundSecondary,
-            borderRight: `1px solid ${theme.colors.border}`,
-            transform: showTOC ? 'translateX(0)' : 'translateX(-100%)',
-            transition: 'transform 0.3s ease',
-            zIndex: 10,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          }}
-        >
+        {tocDisplayMode === 'sidebar' ? (
+          // Sidebar Mode with AnimatedResizableLayout
+          <AnimatedResizableLayout
+            key={`toc-${tocSidebarPosition}`}
+            collapsed={!showTOC}
+            collapsibleSide={tocSidebarPosition}
+            leftPanel={
+              tocSidebarPosition === 'left' ? (
+                // TOC on left
+                <div
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: theme.colors.backgroundSecondary,
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                  }}
+                >
+                  {/* TOC Header */}
+                  <div
+                    style={{
+                      padding: theme.space[3],
+                      borderBottom: `1px solid ${theme.colors.border}`,
+                      backgroundColor: theme.colors.background,
+                      position: 'sticky',
+                      top: 0,
+                      zIndex: 1,
+                    }}
+                  >
+                    <h3
+                      style={{
+                        margin: 0,
+                        fontSize: theme.fontSizes[3],
+                        fontFamily: theme.fonts.heading,
+                        color: theme.colors.text,
+                        fontWeight: 600,
+                      }}
+                    >
+                      Table of Contents
+                    </h3>
+                    <p
+                      style={{
+                        margin: `${theme.space[1]}px 0 0 0`,
+                        fontSize: theme.fontSizes[0],
+                        color: theme.colors.textSecondary,
+                        fontFamily: theme.fonts.body,
+                      }}
+                    >
+                      {slides.length} {slides.length === 1 ? 'slide' : 'slides'}
+                    </p>
+                  </div>
+
+                  {/* TOC Items */}
+                  <div style={{ padding: theme.space[2] }}>
+                    {slideTitles.map((title, index) => (
+                      <button
+                        key={index}
+                        onClick={() => navigateToSlide(index)}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: `${theme.space[2]}px ${theme.space[3]}px`,
+                          marginBottom: theme.space[1],
+                          backgroundColor:
+                            currentSlide === index ? theme.colors.primary : 'transparent',
+                          border: 'none',
+                          borderRadius: theme.radii[1],
+                          color:
+                            currentSlide === index ? theme.colors.background : theme.colors.text,
+                          fontSize: theme.fontSizes[1],
+                          fontFamily: theme.fonts.body,
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          position: 'relative',
+                        }}
+                        onMouseOver={e => {
+                          if (currentSlide !== index) {
+                            e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
+                          }
+                        }}
+                        onMouseOut={e => {
+                          if (currentSlide !== index) {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: theme.space[2] }}>
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              minWidth: '24px',
+                              fontSize: theme.fontSizes[0],
+                              fontFamily: theme.fonts.monospace,
+                              opacity: 0.6,
+                            }}
+                          >
+                            {index + 1}.
+                          </span>
+                          <span
+                            style={{
+                              flex: 1,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {title}
+                          </span>
+                        </div>
+                        {currentSlide === index && (
+                          <div
+                            style={{
+                              position: 'absolute',
+                              left: 0,
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              width: '3px',
+                              height: '60%',
+                              backgroundColor:
+                                currentSlide === index
+                                  ? theme.colors.background
+                                  : theme.colors.primary,
+                              borderRadius: '0 2px 2px 0',
+                            }}
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                // Content on left
+                <div style={{ height: '100%', width: '100%', position: 'relative' }}>
+                  {slides.length > 0 ? (
+                    <IndustryMarkdownSlide
+                      content={slides[currentSlide] || ''}
+                      slideIdPrefix={`${slideIdPrefix}-${currentSlide}`}
+                      slideIndex={currentSlide}
+                      isVisible={true}
+                      theme={theme}
+                      onCheckboxChange={onCheckboxChange}
+                      enableHtmlPopout={enableHtmlPopout}
+                      enableKeyboardScrolling={enableKeyboardScrolling}
+                      onLinkClick={onLinkClick}
+                      handleRunBashCommand={handleRunBashCommand}
+                      handlePromptCopy={handlePromptCopy}
+                      fontSizeScale={fontSizeScale}
+                      searchQuery={showSearch ? searchQuery : undefined}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: theme.colors.muted,
+                        fontSize: theme.fontSizes[2],
+                        fontFamily: theme.fonts.body,
+                      }}
+                    >
+                      No slides available
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            rightPanel={
+              tocSidebarPosition === 'right' ? (
+                // TOC on right
+                <div
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: theme.colors.backgroundSecondary,
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                  }}
+                >
+                  {/* TOC Header */}
+                  <div
+                    style={{
+                      padding: theme.space[3],
+                      borderBottom: `1px solid ${theme.colors.border}`,
+                      backgroundColor: theme.colors.background,
+                      position: 'sticky',
+                      top: 0,
+                      zIndex: 1,
+                    }}
+                  >
+                    <h3
+                      style={{
+                        margin: 0,
+                        fontSize: theme.fontSizes[3],
+                        fontFamily: theme.fonts.heading,
+                        color: theme.colors.text,
+                        fontWeight: 600,
+                      }}
+                    >
+                      Table of Contents
+                    </h3>
+                    <p
+                      style={{
+                        margin: `${theme.space[1]}px 0 0 0`,
+                        fontSize: theme.fontSizes[0],
+                        color: theme.colors.textSecondary,
+                        fontFamily: theme.fonts.body,
+                      }}
+                    >
+                      {slides.length} {slides.length === 1 ? 'slide' : 'slides'}
+                    </p>
+                  </div>
+
+                  {/* TOC Items */}
+                  <div style={{ padding: theme.space[2] }}>
+                    {slideTitles.map((title, index) => (
+                      <button
+                        key={index}
+                        onClick={() => navigateToSlide(index)}
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          padding: `${theme.space[2]}px ${theme.space[3]}px`,
+                          marginBottom: theme.space[1],
+                          backgroundColor:
+                            currentSlide === index ? theme.colors.primary : 'transparent',
+                          border: 'none',
+                          borderRadius: theme.radii[1],
+                          color:
+                            currentSlide === index ? theme.colors.background : theme.colors.text,
+                          fontSize: theme.fontSizes[1],
+                          fontFamily: theme.fonts.body,
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          position: 'relative',
+                        }}
+                        onMouseOver={e => {
+                          if (currentSlide !== index) {
+                            e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
+                          }
+                        }}
+                        onMouseOut={e => {
+                          if (currentSlide !== index) {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: theme.space[2] }}>
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              minWidth: '24px',
+                              fontSize: theme.fontSizes[0],
+                              fontFamily: theme.fonts.monospace,
+                              opacity: 0.6,
+                            }}
+                          >
+                            {index + 1}.
+                          </span>
+                          <span
+                            style={{
+                              flex: 1,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {title}
+                          </span>
+                        </div>
+                        {currentSlide === index && (
+                          <div
+                            style={{
+                              position: 'absolute',
+                              left: 0,
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              width: '3px',
+                              height: '60%',
+                              backgroundColor:
+                                currentSlide === index
+                                  ? theme.colors.background
+                                  : theme.colors.primary,
+                              borderRadius: '0 2px 2px 0',
+                            }}
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                // Content on right
+                <div style={{ height: '100%', width: '100%', position: 'relative' }}>
+                  {slides.length > 0 ? (
+                    <IndustryMarkdownSlide
+                      content={slides[currentSlide] || ''}
+                      slideIdPrefix={`${slideIdPrefix}-${currentSlide}`}
+                      slideIndex={currentSlide}
+                      isVisible={true}
+                      theme={theme}
+                      onCheckboxChange={onCheckboxChange}
+                      enableHtmlPopout={enableHtmlPopout}
+                      enableKeyboardScrolling={enableKeyboardScrolling}
+                      onLinkClick={onLinkClick}
+                      handleRunBashCommand={handleRunBashCommand}
+                      handlePromptCopy={handlePromptCopy}
+                      fontSizeScale={fontSizeScale}
+                      searchQuery={showSearch ? searchQuery : undefined}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: theme.colors.muted,
+                        fontSize: theme.fontSizes[2],
+                        fontFamily: theme.fonts.body,
+                      }}
+                    >
+                      No slides available
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            defaultSize={tocSidebarPosition === 'left' ? 20 : 80}
+            minSize={15}
+            showCollapseButton={false}
+            theme={{
+              background: theme.colors.background,
+              border: theme.colors.border,
+              handle: theme.colors.border,
+              handleHover: theme.colors.text,
+              handleActive: theme.colors.primary,
+            }}
+          />
+        ) : (
+          // Overlay Mode - original implementation
+          <>
+            {/* Table of Contents Overlay */}
+            {showTOC && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  width: '300px',
+                  backgroundColor: theme.colors.backgroundSecondary,
+                  borderRight: `1px solid ${theme.colors.border}`,
+                  zIndex: 10,
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
+                }}
+              >
+            {/* TOC Header */}
+            <div
+              style={{
+                padding: theme.space[3],
+                borderBottom: `1px solid ${theme.colors.border}`,
+                backgroundColor: theme.colors.background,
+                position: 'sticky',
+                top: 0,
+                zIndex: 1,
+              }}
+            >
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: theme.fontSizes[3],
+                  fontFamily: theme.fonts.heading,
+                  color: theme.colors.text,
+                  fontWeight: 600,
+                }}
+              >
+                Table of Contents
+              </h3>
+              <p
+                style={{
+                  margin: `${theme.space[1]}px 0 0 0`,
+                  fontSize: theme.fontSizes[0],
+                  color: theme.colors.textSecondary,
+                  fontFamily: theme.fonts.body,
+                }}
+              >
+                {slides.length} {slides.length === 1 ? 'slide' : 'slides'}
+              </p>
+            </div>
+
+            {/* TOC Items */}
+            <div style={{ padding: theme.space[2] }}>
+              {slideTitles.map((title, index) => (
+                <button
+                  key={index}
+                  onClick={() => navigateToSlide(index)}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: `${theme.space[2]}px ${theme.space[3]}px`,
+                    marginBottom: theme.space[1],
+                    backgroundColor: currentSlide === index ? theme.colors.primary : 'transparent',
+                    border: 'none',
+                    borderRadius: theme.radii[1],
+                    color: currentSlide === index ? theme.colors.background : theme.colors.text,
+                    fontSize: theme.fontSizes[1],
+                    fontFamily: theme.fonts.body,
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    position: 'relative',
+                  }}
+                  onMouseOver={e => {
+                    if (currentSlide !== index) {
+                      e.currentTarget.style.backgroundColor = theme.colors.backgroundHover;
+                    }
+                  }}
+                  onMouseOut={e => {
+                    if (currentSlide !== index) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: theme.space[2] }}>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        minWidth: '24px',
+                        fontSize: theme.fontSizes[0],
+                        fontFamily: theme.fonts.monospace,
+                        opacity: 0.6,
+                      }}
+                    >
+                      {index + 1}.
+                    </span>
+                    <span
+                      style={{
+                        flex: 1,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {title}
+                    </span>
+                  </div>
+                  {currentSlide === index && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '3px',
+                        height: '60%',
+                        backgroundColor:
+                          currentSlide === index ? theme.colors.background : theme.colors.primary,
+                        borderRadius: '0 2px 2px 0',
+                      }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Table of Contents Sidebar (Overlay Mode) */}
+        {tocDisplayMode === 'overlay' && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: '300px',
+              backgroundColor: theme.colors.backgroundSecondary,
+              borderRight: `1px solid ${theme.colors.border}`,
+              transform: showTOC ? 'translateX(0)' : 'translateX(-100%)',
+              transition: 'transform 0.3s ease',
+              zIndex: 10,
+              overflowY: 'auto',
+              overflowX: 'hidden',
+            }}
+          >
           {/* TOC Header */}
           <div
             style={{
@@ -497,9 +985,10 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
             ))}
           </div>
         </div>
+        )}
 
-        {/* Overlay to close TOC when clicking outside */}
-        {showTOC && (
+        {/* Overlay to close TOC when clicking outside (Overlay Mode Only) */}
+        {tocDisplayMode === 'overlay' && showTOC && (
           <div
             onClick={() => setShowTOC(false)}
             style={{
@@ -554,6 +1043,8 @@ export const SlidePresentation: React.FC<SlidePresentationProps> = ({
             </div>
           )}
         </div>
+          </>
+        )}
       </div>
 
       {/* Progress bar */}

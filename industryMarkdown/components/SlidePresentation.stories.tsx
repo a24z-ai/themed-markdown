@@ -620,3 +620,68 @@ export const PopoutMode: Story = {
     },
   },
 };
+
+export const WithSidebarTOCLeft: Story = {
+  args: {
+    slides: presentationSlides,
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    tocDisplayMode: 'sidebar',
+    tocSidebarPosition: 'left',
+    slideIdPrefix: 'sidebar-toc-left',
+  },
+};
+
+export const WithSidebarTOCRight: Story = {
+  args: {
+    slides: presentationSlides,
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    tocDisplayMode: 'sidebar',
+    tocSidebarPosition: 'right',
+    slideIdPrefix: 'sidebar-toc-right',
+  },
+};
+
+export const OverlayTOC: Story = {
+  args: {
+    slides: presentationSlides,
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    tocDisplayMode: 'overlay',
+    slideIdPrefix: 'overlay-toc',
+  },
+};
+
+export const OverlayTOCOpenByDefault: Story = {
+  args: {
+    slides: presentationSlides,
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    tocDisplayMode: 'overlay',
+    initialTocOpen: true,
+    slideIdPrefix: 'overlay-toc-open',
+  },
+};
+
+export const SidebarTOCClosedByDefault: Story = {
+  args: {
+    slides: presentationSlides,
+    initialSlide: 0,
+    showNavigation: true,
+    showSlideCounter: true,
+    showFullscreenButton: true,
+    tocDisplayMode: 'sidebar',
+    tocSidebarPosition: 'left',
+    initialTocOpen: false,
+    slideIdPrefix: 'sidebar-toc-closed',
+  },
+};
