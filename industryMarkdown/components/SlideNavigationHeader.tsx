@@ -5,11 +5,11 @@ import {
   Maximize2,
   Minimize2,
   Menu,
-  X,
   PanelLeftClose,
   PanelRightClose,
   Columns,
   ExternalLink,
+  X,
 } from 'lucide-react';
 import React from 'react';
 
@@ -177,7 +177,7 @@ export const SlideNavigationHeader: React.FC<SlideNavigationHeaderProps> = ({
                 : 'Open table of contents (T)'
           }
         >
-          {showTOC ? <X size={18} /> : <Menu size={18} />}
+          <Menu size={18} />
         </HeaderButton>
 
         <HeaderButton

@@ -78,8 +78,8 @@ export const SlidePresentationBook: React.FC<SlidePresentationBookProps> = ({
 }) => {
   // Smart default: sidebar for single view, overlay for book view
   const effectiveTocDisplayMode = tocDisplayMode ?? (viewMode === 'single' ? 'sidebar' : 'overlay');
-  // Smart default: open by default in sidebar mode, closed in overlay mode
-  const defaultTocOpen = initialTocOpen ?? (effectiveTocDisplayMode === 'sidebar');
+  // Default to closed for both sidebar and overlay modes
+  const defaultTocOpen = initialTocOpen ?? false;
   // Ensure initial slide is even in book mode for proper page pairing
   const adjustedInitialSlide =
     viewMode === 'book' ? Math.floor(initialSlide / 2) * 2 : initialSlide;
